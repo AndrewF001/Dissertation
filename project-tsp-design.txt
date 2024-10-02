@@ -1,0 +1,50 @@
+Options:
+Tour types = {Symmetric TSP}
+Cities types = {2D graph, 3D graph, 3D globe, 2D weighted Matrix}
+Tour Construction = {Convex hull lookahead insertion, random Route(deterministic and nondeterministic), closest neighbour, shortest insertion, Greedy, Convex Hull insertion, Christofides?, Convex hull inverse insertion}
+Tour Optiomization = {None, vertices overlap, Lin-Kernighan, 2-opt, 3-opt(or k-opt)}
+Caching = {true, false}
+Partition = {None, Quad-Tree, Grid-based, Cluster First, Sweep Algorithm}
+
+optimization:
+add multi-threaded version of algorithm if permitted
+dynamically change if additions are made from route or unvisited points based on route size?
+
+Test data:
+https://github.com/mastqe/tsplib
+https://www.math.uwaterloo.ca/tsp/world/
+
+TSP-Generation: {Randon Rectangle, Random Circle, Random area code(x)}
+
+
+Convex hull lookahead insertion:
+1. Do convex hull
+2. For each unvisited points
+3. Do shortest insertion and save the visited node index
+4. Add point to a virtual visited node list
+5. For i = 1 until i == depth
+6. For each node in virtual visited do shortest insertion
+7. For the shorest add node in order for virtual visited list and accumulate total length
+8. Repeat step 5
+9. For the lowest total route addition, add node in step 2 at index saved in step 3 to the real visited list
+10. repeat step 2 until all nodes are in visited list
+
+Convex hull inverse insertion:
+1. DO convex hull
+2. For each unreached point find the sqaure distance from each reached point, plus the shortest distance
+3. Do insertion sort for the point with the lowest distance
+4. repeat step 2-4 until every point in reached
+
+Both: Accepts TSP files, generate TSP Files, select any combination of options(above), run, benchmark, and validate a algorithm
+CLI: runs multiple iteration tests, used for averaged benchmarking
+GUI: Animates algorithm, zoomable and pannable canvas, users can click to add and remove cities
+
+stretch targets: overlapping results, running 2 algorithms at the same time, 
+
+Tech stack:
+MSVC++ 20
+QT6 GUI and Charts
+OpenMP and STD multi-threading
+Only for Windows(Stretch compile it for Linux and MacOS)
+
+Git Submodules: {}
