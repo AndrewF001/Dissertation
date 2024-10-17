@@ -1,9 +1,9 @@
 Options:
 Tour types = {Symmetric TSP}
 Cities types = {2D graph, 3D graph, 3D globe, 2D weighted Matrix}
-Tour Construction = {Convex hull lookahead insertion, random Route(deterministic and nondeterministic), closest neighbour, shortest insertion, Greedy, Convex Hull insertion, Christofides?, Convex hull inverse insertion}
+Tour Construction = {Static Lookahead Convex Hull Insertion, Dynamic Lookahead Convex Hull Insertion, random Route(deterministic and nondeterministic), closest neighbour, shortest insertion, Greedy, Convex Hull insertion, Christofides?, Convex hull inverse insertion}
 Tour Optiomization = {None, vertices overlap, Lin-Kernighan, 2-opt, 3-opt(or k-opt)}
-Caching = {true, false}
+Caching = {Full, Partial, None}
 Partition = {None, Quad-Tree, Grid-based, Cluster First, Sweep Algorithm}
 
 optimization:
@@ -39,7 +39,7 @@ Both: Accepts TSP files, generate TSP Files, select any combination of options(a
 CLI: runs multiple iteration tests, used for averaged benchmarking
 GUI: Animates algorithm, zoomable and pannable canvas, users can click to add and remove cities
 
-stretch targets: overlapping results, running 2 algorithms at the same time, 
+stretch targets: GUI overlapping results, running 2 algorithms at the same time, 
 
 Tech stack:
 MSVC++ 20
