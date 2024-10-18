@@ -11,10 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TSP_Data\TSP_Data.h" />
+    <ClInclude Include="TSP_Data\TSP_Data\TSP_Types.h" />
     <ClInclude Include="TSP_Data\Partitioning\Partitioning_Base.h" />
     <ClInclude Include="Private_Impl\Base_Sources.h" />
-    <ClInclude Include="TSP_Data\TSP_Data.h" />
-    <ClInclude Include="TSP_Data\Data_Base.h" />
+    <ClInclude Include="TSP_Data\TSP_Data\TSP_Data.h" />
+    <ClInclude Include="TSP_Data\Data_Types\Data_Base.h" />
     <ClInclude Include="Tour_Optimisation\Optimisation_Base.h" />
     <ClInclude Include="Tour_Construction\Construction_Base.h" />
     <ClInclude Include="Runtime_TSP_Library.h" />
@@ -24,8 +26,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TSP_Data\Partitioning\Partitioning_Base.cpp" />
-    <ClCompile Include="TSP_Data\TSP_Data.cpp" />
-    <ClCompile Include="TSP_Data\Data_Base.cpp" />
+    <ClCompile Include="TSP_Data\TSP_Data\TSP_Data.cpp" />
+    <ClCompile Include="TSP_Data\Data_Types\Data_Base.cpp" />
     <ClCompile Include="Tour_Optimisation\Optimisation_Base.cpp" />
     <ClCompile Include="Tour_Construction\Construction_Base.cpp" />
     <ClCompile Include="Private_Impl\R_TSP.cpp" />
