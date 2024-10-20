@@ -2,7 +2,9 @@
 #include <vector>
 
 template<class T, CachingType C, class P>
-void TSP_Data<T, C, P>::AddCity(const T& city) {}
+void TSP_Data<T, C, P>::AddCity(const T& city) {
+	m_cities.push_back(city);
+}
 
 template<class T, CachingType C, class P>
 void TSP_Data<T, C, P>::AddCities(const std::vector<T> &cities) {

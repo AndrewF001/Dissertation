@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TSP_Data\Data_Types\Data_2d.h" />
     <ClInclude Include="TSP_Data\TSP_Data.h" />
     <ClInclude Include="TSP_Data\TSP_Data\TSP_Types.h" />
     <ClInclude Include="TSP_Data\Partitioning\Partitioning_Base.h" />
@@ -25,6 +26,7 @@
     <ClInclude Include="Private_Impl\T_TSP.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TSP_Data\Data_Types\Data_2d.cpp" />
     <ClCompile Include="TSP_Data\Partitioning\Partitioning_Base.cpp" />
     <ClCompile Include="TSP_Data\TSP_Data\TSP_Data.cpp" />
     <ClCompile Include="TSP_Data\Data_Types\Data_Base.cpp" />
