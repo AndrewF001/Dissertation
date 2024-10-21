@@ -5,14 +5,14 @@
 #include "TSP_Types.h"
 
 template <class TSPType, CachingType Caching, class Partitioning>
-class TSP_Data {
+class T_TSP_Data {
 	// Type checking
 	//static_assert(std::is_base_of<Data_Base, TSPType>::value, "TSPType must be a derived class of TSPType in TSP_Data<T,C,P>");
 	//static_assert(std::is_base_of<Partitioning_Base, Partitioning>::value, "Partitioning must be a derived class of Partitioning_Base in TSP_Data<T,C,P>");
 public:	
 	// Constructors
-	TSP_Data() = default;
-	~TSP_Data() = default;
+	T_TSP_Data() = default;
+	~T_TSP_Data() = default;
 
 	// Methods
 	// Adders

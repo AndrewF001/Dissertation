@@ -11,6 +11,6 @@ public:
 	const unsigned int m_id;
 
 	// Methods
-	virtual double getDistance(const Data_Base& p) = 0;
+	virtual double getDistance(const Data_Base& p) const = 0;
 };
 

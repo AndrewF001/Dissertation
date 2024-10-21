@@ -39,7 +39,7 @@
     <ClInclude Include="Private_Impl\Base_Sources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\TSP_Data\TSP_Data.h">
+    <ClInclude Include="TSP_Data\TSP_Data\T_TSP_Data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TSP_Data\Partitioning\Partitioning_Base.h">
@@ -52,6 +52,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TSP_Data\Data_Types\Data_2d.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TSP_Data\TSP_Data\R_TSP_Data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,13 +74,16 @@
     <ClCompile Include="TSP_Data\Data_Types\Data_Base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TSP_Data\TSP_Data\TSP_Data.cpp">
+    <ClCompile Include="TSP_Data\TSP_Data\T_TSP_Data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TSP_Data\Partitioning\Partitioning_Base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TSP_Data\Data_Types\Data_2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TSP_Data\TSP_Data\R_TSP_Data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

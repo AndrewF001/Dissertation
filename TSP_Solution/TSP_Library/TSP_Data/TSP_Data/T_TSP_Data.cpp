@@ -1,28 +1,28 @@
-#include "TSP_Data.h"
+#include "T_TSP_Data.h"
 #include <vector>
 
 template<class T, CachingType C, class P>
-void TSP_Data<T, C, P>::AddCity(const T& city) {
+void T_TSP_Data<T, C, P>::AddCity(const T& city) {
 	m_cities.push_back(city);
 }
 
 template<class T, CachingType C, class P>
-void TSP_Data<T, C, P>::AddCities(const std::vector<T> &cities) {
+void T_TSP_Data<T, C, P>::AddCities(const std::vector<T> &cities) {
 	m_cities.insert(m_cities.end(), cities.begin(), cities.end());
 }
 
 template<class T, CachingType C, class P>
-inline unsigned int const TSP_Data<T, C, P>::GetNumberOfCities() const {
+inline unsigned int const T_TSP_Data<T, C, P>::GetNumberOfCities() const {
 	return m_cities.size();
 }
 
 template<class T, CachingType C, class P>
-const std::vector<T>& TSP_Data<T, C, P>::GetAllCities() const {
+const std::vector<T>&T_TSP_Data<T, C, P>::GetAllCities() const {
 	return m_cities;
 }
 
 template<class T, CachingType C, class P>
-std::vector<T> TSP_Data<T, C, P>::GetCities(const square &s) const {
+std::vector<T> T_TSP_Data<T, C, P>::GetCities(const square &s) const {
 	std::vector<T> output;
 	output.reserve(m_cities.size());
 
@@ -30,7 +30,7 @@ std::vector<T> TSP_Data<T, C, P>::GetCities(const square &s) const {
 }
 
 template<class T, CachingType C, class P>
-double TSP_Data<T, C, P>::GetDistance(const T& city1, const T& city2) const {
+double T_TSP_Data<T, C, P>::GetDistance(const T& city1, const T& city2) const {
 	if (C == CachingType::Full)						// C is constexpr, so this is optimized out
 		return m_cache[city1.m_id][city2.m_id];
 	 
@@ -49,6 +49,6 @@ double TSP_Data<T, C, P>::GetDistance(const T& city1, const T& city2) const {
 }
 
 template<class T, CachingType C, class P>
-void TSP_Data<T, C, P>::GenerateRandomCities(const GenerationType type, const int num_cities, const int seed, square size) {
+void T_TSP_Data<T, C, P>::GenerateRandomCities(const GenerationType type, const int num_cities, const int seed, square size) {
 
 }

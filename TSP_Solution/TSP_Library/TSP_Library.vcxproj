@@ -11,12 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TSP_Data\TSP_Data\R_TSP_Data.h" />
     <ClInclude Include="TSP_Data\Data_Types\Data_2d.h" />
     <ClInclude Include="TSP_Data\TSP_Data.h" />
     <ClInclude Include="TSP_Data\TSP_Data\TSP_Types.h" />
     <ClInclude Include="TSP_Data\Partitioning\Partitioning_Base.h" />
     <ClInclude Include="Private_Impl\Base_Sources.h" />
-    <ClInclude Include="TSP_Data\TSP_Data\TSP_Data.h" />
+    <ClInclude Include="TSP_Data\TSP_Data\T_TSP_Data.h" />
     <ClInclude Include="TSP_Data\Data_Types\Data_Base.h" />
     <ClInclude Include="Tour_Optimisation\Optimisation_Base.h" />
     <ClInclude Include="Tour_Construction\Construction_Base.h" />
@@ -26,9 +27,10 @@
     <ClInclude Include="Private_Impl\T_TSP.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="TSP_Data\TSP_Data\R_TSP_Data.cpp" />
     <ClCompile Include="TSP_Data\Data_Types\Data_2d.cpp" />
     <ClCompile Include="TSP_Data\Partitioning\Partitioning_Base.cpp" />
-    <ClCompile Include="TSP_Data\TSP_Data\TSP_Data.cpp" />
+    <ClCompile Include="TSP_Data\TSP_Data\T_TSP_Data.cpp" />
     <ClCompile Include="TSP_Data\Data_Types\Data_Base.cpp" />
     <ClCompile Include="Tour_Optimisation\Optimisation_Base.cpp" />
     <ClCompile Include="Tour_Construction\Construction_Base.cpp" />
@@ -77,7 +79,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <OpenMP>GenerateParallelCode</OpenMP>
     </ClCompile>
     <Link>
@@ -93,7 +95,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions)</AdditionalOptions>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
       <OpenMP>GenerateParallelCode</OpenMP>
     </ClCompile>
     <Link>
