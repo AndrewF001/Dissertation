@@ -1,4 +1,4 @@
 #pragma once
 
-class Optimisation_Base {};
+class OptimisationBase {};
 

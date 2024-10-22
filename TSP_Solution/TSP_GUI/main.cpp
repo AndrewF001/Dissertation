@@ -1,6 +1,6 @@
 #include "TSP_GUI.h"
 #include <QtWidgets/QApplication>
-#include "Runtime_TSP_Library.h"
+#include "tsp_library_realtime.h"
 
 int main(int argc, char *argv[])
 {

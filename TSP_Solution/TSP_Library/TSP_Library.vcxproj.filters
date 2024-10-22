@@ -15,75 +15,75 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Runtime_TSP_Library.h">
+    <ClInclude Include="tsp_library_realtime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Compiled_TSP_Library.h">
+    <ClInclude Include="tsp_library_template.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Private_Impl\R_TSP.h">
+    <ClInclude Include="private_impl\tsp_realtime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Private_Impl\T_TSP.h">
+    <ClInclude Include="private_impl\tsp_template.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tour_Construction\Construction_Base.h">
+    <ClInclude Include="tour_construction\construction_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tour_Optimisation\Optimisation_Base.h">
+    <ClInclude Include="tour_optimisation\optimisation_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\Data_Types\Data_Base.h">
+    <ClInclude Include="tsp_data\types\type_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Private_Impl\Base_Sources.h">
+    <ClInclude Include="private_impl\base_sources.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\TSP_Data\T_TSP_Data.h">
+    <ClInclude Include="tsp_data\data\tsp_data_template.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\Partitioning\Partitioning_Base.h">
+    <ClInclude Include="tsp_data\partitioning\partitioning_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\TSP_Data\TSP_Types.h">
+    <ClInclude Include="tsp_data\data\tsp_constructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\TSP_Data.h">
+    <ClInclude Include="tsp_data\tsp_data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\Data_Types\Data_2d.h">
+    <ClInclude Include="tsp_data\types\2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TSP_Data\TSP_Data\R_TSP_Data.h">
+    <ClInclude Include="tsp_data\data\tsp_data_realtime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Private_Impl\R_TSP.cpp">
+    <ClCompile Include="private_impl\tsp_realtime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Private_Impl\T_TSP.cpp">
+    <ClCompile Include="private_impl\tsp_template.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tour_Construction\Construction_Base.cpp">
+    <ClCompile Include="tour_construction\construction_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tour_Optimisation\Optimisation_Base.cpp">
+    <ClCompile Include="tour_optimisation\optimisation_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TSP_Data\Data_Types\Data_Base.cpp">
+    <ClCompile Include="tsp_data\types\type_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TSP_Data\TSP_Data\T_TSP_Data.cpp">
+    <ClCompile Include="tsp_data\data\tsp_data_template.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TSP_Data\Partitioning\Partitioning_Base.cpp">
+    <ClCompile Include="tsp_data\partitioning\partitioning_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TSP_Data\Data_Types\Data_2d.cpp">
+    <ClCompile Include="tsp_data\types\2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TSP_Data\TSP_Data\R_TSP_Data.cpp">
+    <ClCompile Include="tsp_data\data\tsp_data_realtime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

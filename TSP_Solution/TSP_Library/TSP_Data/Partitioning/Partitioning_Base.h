@@ -1,6 +1,4 @@
 #pragma once
 
-
-
-class Partitioning_Base {};
+class PartitioningBase {};
 

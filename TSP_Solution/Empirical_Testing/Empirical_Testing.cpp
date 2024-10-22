@@ -1,12 +1,12 @@
-#include "Compiled_TSP_Library.h"
-#include "Runtime_TSP_Library.h"
+#include "tsp_library_realtime.h"
+#include "tsp_library_template.h"
 
 int main(int argc, char* argv[]) {
 	
-	T_TSP< Data_2d, CachingType::None, int> T;
-	T.t.AddCity({0u});
-	T.t.AddCity({1u});
-	auto v = T.t.GetAllCities();
+	TspTemplate<Type2d, CachingType::None, int> T;
+	T.t.addCity({0u});
+	T.t.addCity({1u});
+	auto v = T.t.getAllCities();
 	std::cout << v.size();
 	v[0].getDistance(v[1]);
 	

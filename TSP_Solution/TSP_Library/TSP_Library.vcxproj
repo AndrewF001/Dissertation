@@ -11,31 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="TSP_Data\TSP_Data\R_TSP_Data.h" />
-    <ClInclude Include="TSP_Data\Data_Types\Data_2d.h" />
-    <ClInclude Include="TSP_Data\TSP_Data.h" />
-    <ClInclude Include="TSP_Data\TSP_Data\TSP_Types.h" />
-    <ClInclude Include="TSP_Data\Partitioning\Partitioning_Base.h" />
-    <ClInclude Include="Private_Impl\Base_Sources.h" />
-    <ClInclude Include="TSP_Data\TSP_Data\T_TSP_Data.h" />
-    <ClInclude Include="TSP_Data\Data_Types\Data_Base.h" />
-    <ClInclude Include="Tour_Optimisation\Optimisation_Base.h" />
-    <ClInclude Include="Tour_Construction\Construction_Base.h" />
-    <ClInclude Include="Runtime_TSP_Library.h" />
-    <ClInclude Include="Private_Impl\R_TSP.h" />
-    <ClInclude Include="Compiled_TSP_Library.h" />
-    <ClInclude Include="Private_Impl\T_TSP.h" />
+    <ClInclude Include="tsp_data\data\tsp_data_realtime.h" />
+    <ClInclude Include="tsp_data\types\2d.h" />
+    <ClInclude Include="tsp_data\tsp_data.h" />
+    <ClInclude Include="tsp_data\data\tsp_constructs.h" />
+    <ClInclude Include="tsp_data\partitioning\partitioning_base.h" />
+    <ClInclude Include="private_impl\base_sources.h" />
+    <ClInclude Include="tsp_data\data\tsp_data_template.h" />
+    <ClInclude Include="tsp_data\types\type_base.h" />
+    <ClInclude Include="tour_optimisation\optimisation_base.h" />
+    <ClInclude Include="tour_construction\construction_base.h" />
+    <ClInclude Include="tsp_library_realtime.h" />
+    <ClInclude Include="private_impl\tsp_realtime.h" />
+    <ClInclude Include="tsp_library_template.h" />
+    <ClInclude Include="private_impl\tsp_template.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TSP_Data\TSP_Data\R_TSP_Data.cpp" />
-    <ClCompile Include="TSP_Data\Data_Types\Data_2d.cpp" />
-    <ClCompile Include="TSP_Data\Partitioning\Partitioning_Base.cpp" />
-    <ClCompile Include="TSP_Data\TSP_Data\T_TSP_Data.cpp" />
-    <ClCompile Include="TSP_Data\Data_Types\Data_Base.cpp" />
-    <ClCompile Include="Tour_Optimisation\Optimisation_Base.cpp" />
-    <ClCompile Include="Tour_Construction\Construction_Base.cpp" />
-    <ClCompile Include="Private_Impl\R_TSP.cpp" />
-    <ClCompile Include="Private_Impl\T_TSP.cpp" />
+    <ClCompile Include="tsp_data\data\tsp_data_realtime.cpp" />
+    <ClCompile Include="tsp_data\types\2d.cpp" />
+    <ClCompile Include="tsp_data\partitioning\partitioning_base.cpp" />
+    <ClCompile Include="tsp_data\data\tsp_data_template.cpp" />
+    <ClCompile Include="tsp_data\types\type_base.cpp" />
+    <ClCompile Include="tour_optimisation\optimisation_base.cpp" />
+    <ClCompile Include="tour_construction\construction_base.cpp" />
+    <ClCompile Include="private_impl\tsp_realtime.cpp" />
+    <ClCompile Include="private_impl\tsp_template.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{17840673-d844-48b3-8a3c-6d5447bbd81f}</ProjectGuid>

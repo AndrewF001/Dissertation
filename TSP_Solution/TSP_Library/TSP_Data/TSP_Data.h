@@ -1,14 +1,14 @@
 #pragma once
 // Bases
-#include "TSP_Data/T_TSP_Data.h"
-#include "TSP_Data/T_TSP_Data.cpp"
-#include "TSP_Data/R_TSP_Data.h"
-#include "TSP_Data/TSP_Types.h"
-#include "Data_Types/Data_Base.h"
-#include "Partitioning/Partitioning_Base.h"
-#include "Data_Types/Data_2d.h"
-#include "Data_Types/Data_2d.cpp"	// WHY is this nessecary!?
+#include "data/tsp_data_template.h"
+#include "data/tsp_data_template.cpp"
+#include "data/tsp_data_realtime.h"
+#include "data/tsp_constructs.h"
+#include "partitioning/partitioning_base.h"
+#include "types/type_base.h"
+#include "types/2d.h"
+#include "types/2d.cpp"
 
 // Derived explicit instantiations
 
-//template class TSP_Data<Data_Base, CachingType::None, Partitioning_Base>;	
+//template class TspDataTemplate<Type2d, CachingType::None, int>;	
