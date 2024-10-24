@@ -5,11 +5,16 @@
 int main(int argc, char* argv[]) {
 	
 	TspTemplate<Type2d, CachingType::None, int> T;
-	T.t.addCity({0u, {2, 2, 2}});
-	T.t.addCity({1u, {0, 0, 0}});
+	T.t.addCity({2, 2, 2});
+	T.t.addCity({0, 0, 0});
+	std::mt19937 e2(1);
+	T.t.generateRandomCities(GenerationType::Rectangle, {1, 1, 1}, e2);
+	T.t.generateRandomCities(GenerationType::Rectangle, {1, 1, 1}, e2);
 	auto v = T.t.getAllCities();
-	std::cout << v.size();
-	std::cout << v[0].getDistance(v[1]);
+	for(auto& elm : v) {
+		std::cout << elm.m_point << "\n";
+	}
+	std::cout << v[2].getDistance(v[3]);
 	
 	/*
 	TspRealtime r;
