@@ -1,10 +1,10 @@
 #pragma once
-//#include "../data/tsp_constructs.h"
+#include "../data/tsp_constructs.h"
 
 class TypeBase {
 public: 
 	// Constructor
-	TypeBase(unsigned int i) : m_id(i) {};
+	TypeBase(unsigned int id, Point3D p) : m_id(id) {};
 	virtual ~TypeBase() = default;
 
 	// ID
@@ -12,5 +12,7 @@ public:
 
 	// Methods
 	virtual double getDistance(const TypeBase& p) const = 0;
+	virtual bool contains(const Cube &s) const = 0;
+	virtual bool generateRandomCities(const GenerationType type, const int num_cities, const int seed, Cube size) const = 0;
 };
 

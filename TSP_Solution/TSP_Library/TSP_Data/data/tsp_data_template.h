@@ -21,14 +21,14 @@ public:
 	// Getters
 	inline unsigned int const getNumberOfCities() const;
 	std::vector<TSPType> const& getAllCities() const;
-	std::vector<TSPType> getCities(const Square& s) const;
+	std::vector<TSPType> getCities(const Cube& s) const;
 	double getDistance(const TSPType &city1, const TSPType& city2) const;
 	// Setters
-	void generateRandomCities(const GenerationType type, const int num_cities, const int seed, Square size);
+	void generateRandomCities(const GenerationType type, const int num_cities, const int seed, Cube size);
 
 private:
 	// Members
-	Square m_size;
+	Cube m_size;
 	std::vector<TSPType> m_cities;
 	std::vector<std::vector<double>> m_cache;	// Only 8 bytes of stack memory
 	Partitioning m_partition;

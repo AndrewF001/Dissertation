@@ -6,5 +6,5 @@ class TspTemplate {
 
 public:
 	TspTemplate() = default;
-	TspDataTemplate<TSPType,Caching, Partitioning> t;
+	TspDataTemplate<TSPType, Caching, Partitioning> t;
 };

@@ -3,5 +3,5 @@
 
 class TspRealtime {
 public:
-	runtime::TspDataRealtime data;
+	TspDataRealtime data;
 };

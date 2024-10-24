@@ -23,7 +23,7 @@ const std::vector<T>&TspDataTemplate<T, C, P>::getAllCities() const {
 }
 
 template<class T, CachingType C, class P>
-std::vector<T> TspDataTemplate<T, C, P>::getCities(const Square &s) const {
+std::vector<T> TspDataTemplate<T, C, P>::getCities(const Cube &s) const {
 	std::vector<T> output;
 	output.reserve(m_cities.size());
 
@@ -51,6 +51,6 @@ double TspDataTemplate<TSPType, Caching, Partitioning>::getDistance(const TSPTyp
 }
 
 template<class T, CachingType C, class P>
-void TspDataTemplate<T, C, P>::generateRandomCities(const GenerationType type, const int num_cities, const int seed, Square size) {
+void TspDataTemplate<T, C, P>::generateRandomCities(const GenerationType type, const int num_cities, const int seed, Cube size) {
 
 }
