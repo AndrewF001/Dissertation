@@ -1,17 +1,44 @@
-#include "2d.h"
+//#include <numbers>    // C++20 just doesn't work with DPC++??
 #include <cmath>
+#include "2d.h"
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846     // HOW IS THERE NO PI IN C++ STANDARD LIBRARY!?
+#endif
+
+
+Type2d::Type2d(unsigned int id, Point3D point) : TypeBase(id, point), m_point(point) {}
+
+Type2d::Type2d(unsigned int id, GenerationType type, const Cube &size, std::mt19937 &seed)
+    : TypeBase(id, type, size, seed), m_point(generateRandomCities(type, size, seed)) {}
 
 double Type2d::getDistance(const TypeBase &p) const {
-    const Type2d & p2d = static_cast<const Type2d &>(p);
-    Point2D const &p2 = p2d.m_point;
-
-    return pow(m_point.x - p2.x, 2) + pow(m_point.y - p2.y, 2);
+    const Type2d &p2d = static_cast<const Type2d &>(p);
+    const Point2D &p2 = p2d.m_point;
+    return pow(m_point.x - p2.x, 2) + pow(m_point.y - p2.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
 }
 
 bool Type2d::contains(const Cube &s) const {
     return s.contains(m_point);
 }
 
-bool Type2d::generateRandomCities(const GenerationType type, const int num_cities, const int seed, Cube size) const {
-    return false;
+Point3D Type2d::generateRandomCities(const GenerationType type, const Cube &size, std::mt19937 &seed) const {
+    if (type == GenerationType::Rectangle) {
+        std::uniform_real_distribution<double> x_rnd(0, size.width);
+        std::uniform_real_distribution<double> y_rnd(0, size.height);
+        return Point3D(x_rnd(seed), y_rnd(seed), 0);
+    } else if (type == GenerationType::Circle) {
+        std::uniform_real_distribution<double> angle_rnd(0, M_PI * 2);
+        std::uniform_real_distribution<double> radius_rnd;
+        if (size.height > size.width) {
+            radius_rnd = std::uniform_real_distribution<double>(0, size.width / 2);
+        } else {
+            radius_rnd = std::uniform_real_distribution<double>(0, size.height / 2);
+        }
+        double angle = angle_rnd(seed);
+        double radius = radius_rnd(seed);
+        return Point3D(radius * cos(angle), radius * sin(angle), 0); // Turns Polar coordinates into Cartesian
+    } else if (type == GenerationType::AreaCode) {
+        std::exit(101); // TODO: Not implemented
+    }
 }

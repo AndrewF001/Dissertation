@@ -26,7 +26,9 @@ public:
 class Point2D {
 public:
 	Point2D(double x, double y) : x(x), y(y) {}
-	Point2D(Point3D &p) : x(p.x), y(p.y) {}				// Can downgrade but not upgrade
+	//Point2D(Point3D& p) : x(p.x), y(p.y) {}				// Can downgrade but not upgrade
+	Point2D(Point3D p) : x(p.x), y(p.y) {}				// Can downgrade but not upgrade
+
 	double x, y;
 };
 

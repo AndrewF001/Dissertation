@@ -5,11 +5,11 @@
 int main(int argc, char* argv[]) {
 	
 	TspTemplate<Type2d, CachingType::None, int> T;
-	T.t.addCity({0u, {}});
-	T.t.addCity({1u, {}});
+	T.t.addCity({0u, {2, 2, 2}});
+	T.t.addCity({1u, {0, 0, 0}});
 	auto v = T.t.getAllCities();
 	std::cout << v.size();
-	v[0].getDistance(v[1]);
+	std::cout << v[0].getDistance(v[1]);
 	
 	/*
 	TspRealtime r;
