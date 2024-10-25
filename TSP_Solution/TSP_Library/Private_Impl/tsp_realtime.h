@@ -3,5 +3,5 @@
 
 class TspRealtime {
 public:
-	TspDataRealtime data;
+//	TspDataRealtime data;
 };

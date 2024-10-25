@@ -18,9 +18,10 @@ enum PartitioningType {
 	QuadTree
 };
 
-class Point3D {
+struct Point3D {
 public:
 	Point3D(double x = 0, double y = 0, double z = 0) : x(x), y(y), z(z) {}
+	
 	const double x, y, z;
 
 	friend std::ostream &operator<<(std::ostream &os, const Point3D &point) {
@@ -29,11 +30,11 @@ public:
 	}
 };
 
-class Point2D {
+struct Point2D {
 public:
 	Point2D(double x, double y) : x(x), y(y) {}
-	//Point2D(Point3D& p) : x(p.x), y(p.y) {}				// Can downgrade but not upgrade
-	Point2D(Point3D p) : x(p.x), y(p.y) {}				// Can downgrade but not upgrade
+	Point2D(Point3D& p) : x(p.x), y(p.y) {}				// Can downgrade but not upgrade
+	Point2D(Point3D&& p) : x(p.x), y(p.y) {}			// Can downgrade but not upgrade
 
 	const double x, y;
 

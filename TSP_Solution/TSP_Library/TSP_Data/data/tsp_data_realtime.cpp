@@ -1,3 +1,4 @@
+/*
 #include "tsp_data_realtime.h"
 
 
@@ -5,10 +6,6 @@ void TspDataRealtime::addCity(const unsigned int i) {
 	//m_cities.push_back(std::make_unique<Data_Base>(city));
 }
 
-/*
-void R_TSP_Data::addCities(const std::vector<std::unique_ptr<Data_Base>> &cities) {
-	//m_cities.insert(m_cities.end(), cities.begin(), cities.end());
-}*/
 
 inline unsigned int const TspDataRealtime::getNumberOfCities() const {
 	return m_cities.size();
@@ -46,3 +43,4 @@ double TspDataRealtime::getDistance(const TypeBase &city1, const TypeBase &city2
 void TspDataRealtime::generateRandomCities(const GenerationType type, const int num_cities, const int seed, Cube size) {
 
 }
+*/

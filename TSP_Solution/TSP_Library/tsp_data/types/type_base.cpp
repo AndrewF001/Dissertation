@@ -8,5 +8,8 @@ Point3D TypeBase::generateRandomCities(const GenerationType type, const Cube &si
 			return circleGen(type, size, seed);
 		case GenerationType::AreaCode:
 			std::exit(101); // TODO: Not implemented
+			return Point3D();
 	}
+	// Not possible to reach this point
+	return Point3D();
 }

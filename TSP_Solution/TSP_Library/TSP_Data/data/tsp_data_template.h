@@ -2,7 +2,7 @@
 #include <vector>
 #include "../types/type_base.h"
 #include "../partitioning/partitioning_base.h"
-#include "tsp_constructs.h"
+//#include "tsp_constructs.h"
 
 template <class TSPType, CachingType Caching, class Partitioning>
 class TspDataTemplate {

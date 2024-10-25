@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include <vector>
 #include <memory>
@@ -33,3 +34,4 @@ private:
 	CachingType m_caching;
 
 };
+*/
