@@ -33,7 +33,7 @@ public:
 	};
 
 	std::vector<TSPType> getCities(const Cube& s) const {
-		std::vector<T> output;
+		std::vector<TSPType> output;
 		output.reserve(m_cities.size());
 
 		return output;

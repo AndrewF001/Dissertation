@@ -3,13 +3,23 @@
 #include "tsp_data/data/types/type_base.h"
 #include "tsp_data/data/types/2d.h"
 #include "tsp_data/data/types/2d.cpp"
+#include "tour_construction/lookahead_convex_hull.h"
+#include "tour_optimisation/k_opt.h"
 
-template <class TSPType, CachingType Caching, class Partitioning>
+template <class TSPType, CachingType Caching, class Partitioning, class Construction, class Optimisation>
 class TspTemplate {
 
 public:
-	TspTemplate(const Cube& size) : m_data(size) {};
+	TspTemplate(const Cube& size) : m_data(size), m_construction(m_data), m_optimisation(m_data) {};
 	~TspTemplate() = default;
 
+	void run() {
+		m_construction.constructTour();
+		m_optimisation.optimiseTour();
+	};
+
+public:	// Change to private later
 	TspDataTemplate<TSPType, Caching, Partitioning> m_data;
+	Construction m_construction;
+	Optimisation m_optimisation;
 };
