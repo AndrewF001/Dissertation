@@ -11,31 +11,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tsp_data\data\tsp_data_realtime.h" />
-    <ClInclude Include="tsp_data\types\2d.h" />
-    <ClInclude Include="tsp_data\tsp_data.h" />
+    <ClInclude Include="tsp_data\data\types\2d.h" />
     <ClInclude Include="tsp_data\data\tsp_constructs.h" />
-    <ClInclude Include="tsp_data\partitioning\partitioning_base.h" />
-    <ClInclude Include="private_impl\base_sources.h" />
+    <ClInclude Include="tsp_data\data\partitioning\partitioning_base.h" />
     <ClInclude Include="tsp_data\data\tsp_data_template.h" />
-    <ClInclude Include="tsp_data\types\type_base.h" />
+    <ClInclude Include="tsp_data\data\types\type_base.h" />
     <ClInclude Include="tour_optimisation\optimisation_base.h" />
     <ClInclude Include="tour_construction\construction_base.h" />
-    <ClInclude Include="tsp_library_realtime.h" />
-    <ClInclude Include="private_impl\tsp_realtime.h" />
-    <ClInclude Include="tsp_library_template.h" />
-    <ClInclude Include="private_impl\tsp_template.h" />
+    <ClInclude Include="tsp_template.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tsp_data\data\tsp_data_realtime.cpp" />
-    <ClCompile Include="tsp_data\types\2d.cpp" />
-    <ClCompile Include="tsp_data\partitioning\partitioning_base.cpp" />
-    <ClCompile Include="tsp_data\data\tsp_data_template.cpp" />
-    <ClCompile Include="tsp_data\types\type_base.cpp" />
+    <ClCompile Include="tsp_data\data\types\2d.cpp" />
+    <ClCompile Include="tsp_data\data\partitioning\partitioning_base.cpp" />
+    <ClCompile Include="tsp_data\data\types\type_base.cpp" />
     <ClCompile Include="tour_optimisation\optimisation_base.cpp" />
     <ClCompile Include="tour_construction\construction_base.cpp" />
-    <ClCompile Include="private_impl\tsp_realtime.cpp" />
-    <ClCompile Include="private_impl\tsp_template.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{17840673-d844-48b3-8a3c-6d5447bbd81f}</ProjectGuid>

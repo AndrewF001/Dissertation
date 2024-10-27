@@ -1,9 +1,10 @@
 //#include "tsp_library_realtime.h"
-#include "tsp_library_template.h"
 #include <iostream>
+#include "tsp_template.h"
 
 int main(int argc, char* argv[]) {
 	
+
 	TspTemplate<Type2d, CachingType::None, int> T;
 	T.t.addCity({2, 2, 2});
 	T.t.addCity({0, 0, 0});

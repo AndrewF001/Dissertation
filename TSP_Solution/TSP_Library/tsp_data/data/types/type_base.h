@@ -1,7 +1,6 @@
 #pragma once
-#include "../data/tsp_constructs.h"
 #include <random>
-
+#include "../tsp_constructs.h"
 class TypeBase {
 public: 
 	// Constructor

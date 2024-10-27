@@ -1,8 +1,7 @@
 #pragma once
 #include <vector>
-#include "../types/type_base.h"
-#include "../partitioning/partitioning_base.h"
-//#include "tsp_constructs.h"
+#include <random>
+#include "tsp_constructs.h"
 
 template <class TSPType, CachingType Caching, class Partitioning>
 class TspDataTemplate {
@@ -16,14 +15,47 @@ public:
 
 	// Methods
 	// Adders
-	void addCity(const Point3D& city);
-	void generateRandomCities(GenerationType type, const Cube &size, std::mt19937 &seed);
+	void addCity(const Point3D& city) {
+		m_cities.emplace_back(m_cities.size(), city);
+	};
+
+	void generateRandomCities(GenerationType type, const Cube &size, std::mt19937 &seed) {
+		m_cities.emplace_back(m_cities.size(), type, size, seed);
+	};
 
 	// Getters
-	inline unsigned int const getNumberOfCities() const;
-	std::vector<TSPType> const& getAllCities() const;
-	std::vector<TSPType> getCities(const Cube& s) const;
-	double getDistance(const TSPType &city1, const TSPType& city2) const;
+	inline unsigned int const getNumberOfCities() const {
+		return m_cities.size();
+	};
+
+	std::vector<TSPType> const& getAllCities() const {
+		return m_cities;
+	};
+
+	std::vector<TSPType> getCities(const Cube& s) const {
+		std::vector<T> output;
+		output.reserve(m_cities.size());
+
+		return output;
+	};
+
+	double getDistance(const TSPType &city1, const TSPType& city2) const {
+		if (Caching == CachingType::Full)						// C is constexpr, so this is optimized out
+			return m_cache[city1.m_id][city2.m_id];
+
+		double result;									// Use the same memory later
+		if (Caching == CachingType::Partial) {
+			result = m_cache[city1.m_id][city2.m_id];
+			if (result != DBL_MAX)						// Check if the value is already in the cache
+				return result;
+		}
+
+		result = city1.getDistance(city2);				// Calculate the distance
+		if (Caching == CachingType::Partial)					// Store the result in the cache
+			m_cache[city1.m_id][city2.m_id] = result;
+
+		return result;
+	};
 
 private:
 	// Members
