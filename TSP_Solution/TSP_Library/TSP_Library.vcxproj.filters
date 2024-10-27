@@ -47,9 +47,6 @@
     <ClCompile Include="tour_optimisation\optimisation_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tsp_data\data\types\type_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="tsp_data\data\partitioning\partitioning_base.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

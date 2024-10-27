@@ -23,7 +23,6 @@
   <ItemGroup>
     <ClCompile Include="tsp_data\data\types\2d.cpp" />
     <ClCompile Include="tsp_data\data\partitioning\partitioning_base.cpp" />
-    <ClCompile Include="tsp_data\data\types\type_base.cpp" />
     <ClCompile Include="tour_optimisation\optimisation_base.cpp" />
     <ClCompile Include="tour_construction\construction_base.cpp" />
   </ItemGroup>

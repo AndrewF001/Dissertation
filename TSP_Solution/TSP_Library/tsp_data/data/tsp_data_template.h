@@ -2,15 +2,15 @@
 #include <vector>
 #include <random>
 #include "tsp_constructs.h"
-
+#include "types/type_base.h"
 template <class TSPType, CachingType Caching, class Partitioning>
 class TspDataTemplate {
 	// Type checking
-	//static_assert(std::is_base_of<Data_Base, TSPType>::value, "TSPType must be a derived class of TSPType in TSP_Data<T,C,P>");
+	static_assert(std::is_base_of<TypeBase, TSPType>::value, "TSPType must be a derived class of TSPType in TSP_Data<T,C,P>");
 	//static_assert(std::is_base_of<Partitioning_Base, Partitioning>::value, "Partitioning must be a derived class of Partitioning_Base in TSP_Data<T,C,P>");
 public:	
 	// Constructors
-	TspDataTemplate() = default;
+	TspDataTemplate(const Cube& c) : m_size(c) {};
 	~TspDataTemplate() = default;
 
 	// Methods
