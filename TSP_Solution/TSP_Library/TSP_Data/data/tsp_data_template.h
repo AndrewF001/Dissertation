@@ -1,14 +1,14 @@
 #pragma once
-#include <vector>
+#include <array>
 #include <random>
 #include "tsp_constructs.h"
 #include "types/type_base.h"
-template <class TSPType, CachingType Caching, class Partitioning>
+template <class TSPType, CachingType Caching, class Partitioning, size_t Size>
 class TspDataTemplate {
 	// Type checking
 	static_assert(std::is_base_of<TypeBase, TSPType>::value, "TSPType must be a derived class of TSPType in TSP_Data<T,C,P>");
 	//static_assert(std::is_base_of<Partitioning_Base, Partitioning>::value, "Partitioning must be a derived class of Partitioning_Base in TSP_Data<T,C,P>");
-public:	
+public:
 	// Constructors
 	TspDataTemplate(const Cube& c) : m_size(c) {};
 	~TspDataTemplate() = default;
@@ -16,30 +16,34 @@ public:
 	// Methods
 	// Adders
 	void addCity(const Point3D& city) {
-		m_cities.emplace_back(m_cities.size(), city);
+		if (m_city_count >= Size)
+			throw std::out_of_range("TSP_Data::addCity: The number of cities exceeds the maximum size of the array.");
+		m_cities[m_city_count++] = TSPType(m_city_count, city);
 	};
 
-	void generateRandomCities(GenerationType type, const Cube &size, std::mt19937 &seed) {
-		m_cities.emplace_back(m_cities.size(), type, size, seed);
+	void generateRandomCities(GenerationType type, const Cube& size, std::mt19937& seed) {
+		if (m_city_count >= Size)
+			throw std::out_of_range("TSP_Data::generateRandomCities: The number of cities exceeds the maximum size of the array.");
+		m_cities[m_city_count++] = TSPType(m_city_count, type, size, seed);
 	};
 
 	// Getters
-	inline unsigned int const getNumberOfCities() const {
-		return m_cities.size();
+	inline size_t const getNumberOfCities() const {
+		return m_city_count;
 	};
 
-	std::vector<TSPType> const& getAllCities() const {
+	std::array<TSPType, Size> const& getAllCities() const {
 		return m_cities;
 	};
 
-	std::vector<TSPType> getCities(const Cube& s) const {
-		std::vector<TSPType> output;
+	std::vector<size_t> getCities(const Cube& s) const {
+		std::vector<size_t> output;
 		output.reserve(m_cities.size());
 
 		return output;
 	};
 
-	double getDistance(const TSPType &city1, const TSPType& city2) const {
+	double getDistance(const TSPType& city1, const TSPType& city2) const {
 		if (Caching == CachingType::Full)						// C is constexpr, so this is optimized out
 			return m_cache[city1.m_id][city2.m_id];
 
@@ -59,9 +63,10 @@ public:
 
 private:
 	// Members
+	size_t m_city_count = 0;
 	Cube m_size;
-	std::vector<TSPType> m_cities;
-	std::vector<std::vector<double>> m_cache;	// Only 8 bytes of stack memory
+	std::array<TSPType, Size> m_cities;
+	std::array<std::array<double, Size>, Size> m_cache;
 	Partitioning m_partition;
 };
 

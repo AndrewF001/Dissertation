@@ -4,9 +4,9 @@
 
 int main(int argc, char* argv[]) {
 	Cube size = { { 10, 10, 10 }, 10, 10, 10 };
-	TspTemplate<Type2d, CachingType::None, int,
-		LookaheadConvexHull<Type2d, CachingType::None, int>,
-		Kopt<Type2d, CachingType::None, int>> tsp(size);
+	TspTemplate<Type2d, CachingType::None, int, 4,
+		LookaheadConvexHull<Type2d, CachingType::None, int, 4>,
+		Kopt<Type2d, CachingType::None, int, 4>> tsp(size);
 	tsp.m_data.addCity({2, 2, 2});
 	tsp.m_data.addCity({0, 0, 0});
 	std::mt19937 e2(1);

@@ -6,7 +6,7 @@
 #include "tour_construction/lookahead_convex_hull.h"
 #include "tour_optimisation/k_opt.h"
 
-template <class TSPType, CachingType Caching, class Partitioning, class Construction, class Optimisation>
+template <class TSPType, CachingType Caching, class Partitioning, size_t Size, class Construction, class Optimisation>
 class TspTemplate {
 
 public:
@@ -19,7 +19,7 @@ public:
 	};
 
 public:	// Change to private later
-	TspDataTemplate<TSPType, Caching, Partitioning> m_data;
+	TspDataTemplate<TSPType, Caching, Partitioning, Size> m_data;
 	Construction m_construction;
 	Optimisation m_optimisation;
 };

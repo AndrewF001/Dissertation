@@ -6,9 +6,11 @@
 #define M_PI 3.14159265358979323846     // HOW IS THERE NO PI IN C++ STANDARD LIBRARY!?
 #endif
 
-Type2d::Type2d(unsigned int id, Point3D point) : TypeBase(id, point), m_point(point) {}
+Type2d::Type2d() : TypeBase(), m_point(P3DEFAULT) {}
 
-Type2d::Type2d(unsigned int id, GenerationType type, const Cube &size, std::mt19937 &seed)
+Type2d::Type2d(const size_t id, Point3D const& point) : TypeBase(id, point), m_point(point) {}
+
+Type2d::Type2d(const size_t id, GenerationType type, const Cube &size, std::mt19937 &seed)
     : TypeBase(id, type, size, seed), m_point(generateRandomCities(type, size, seed)) {}
 
 double Type2d::getDistance(const TypeBase &p) const {

@@ -6,14 +6,14 @@ enum class OptimisationType {
 	LinKernighan
 };
 
-template<class TSPType, CachingType Caching, class Partitioning>
+template<class TSPType, CachingType Caching, class Partitioning, size_t Size>
 class OptimisationBase {
 public:
-	OptimisationBase(TspDataTemplate<TSPType, Caching, Partitioning>& ref) : m_data_ref(ref) {};
+	OptimisationBase(TspDataTemplate<TSPType, Caching, Partitioning, Size>& ref) : m_data_ref(ref) {};
 	~OptimisationBase() = default;
 
 	virtual void optimiseTour() = 0;
 
 protected:
-	TspDataTemplate<TSPType, Caching, Partitioning>& m_data_ref;
+	TspDataTemplate<TSPType, Caching, Partitioning, Size>& m_data_ref;
 };

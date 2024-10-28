@@ -26,7 +26,7 @@ public:
 	Point3D(Point2D const& p);
 	Point3D(Point2D&& p);
 
-	const double x, y, z;
+	double x, y, z;	// This should be const
 
 	friend std::ostream& operator<<(std::ostream& os, const Point3D& point) {
 		os << "Point3D(" << point.x << ", " << point.y << ", " << point.z << ")";
@@ -40,7 +40,7 @@ public:
 	Point2D(Point3D const& p) : x(p.x), y(p.y) {}		// Can downgrade but not upgrade
 	Point2D(Point3D&& p) : x(p.x), y(p.y) {}			// Can downgrade but not upgrade
 
-	const double x, y;
+	double x, y;	// This should be const
 
 	friend std::ostream& operator<<(std::ostream& os, const Point2D& point) {
 		os << "Point2D(" << point.x << ", " << point.y << ")";

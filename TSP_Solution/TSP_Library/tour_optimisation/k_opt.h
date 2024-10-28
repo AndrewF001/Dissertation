@@ -1,10 +1,10 @@
 #pragma once
 #include "optimisation_base.h"
 
-template<class TSPType, CachingType Caching, class Partitioning>
-class Kopt : public OptimisationBase<TSPType, Caching, Partitioning> {
+template<class TSPType, CachingType Caching, class Partitioning, size_t Size>
+class Kopt : public OptimisationBase<TSPType, Caching, Partitioning, Size> {
 public:
-	Kopt(TspDataTemplate<TSPType, Caching, Partitioning>& ref) : OptimisationBase<TSPType, Caching, Partitioning>(ref) {};
+	Kopt(TspDataTemplate<TSPType, Caching, Partitioning, Size>& ref) : OptimisationBase<TSPType, Caching, Partitioning, Size>(ref) {};
 	~Kopt() = default;
 
 	void optimiseTour() {
