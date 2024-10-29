@@ -1,5 +1,5 @@
 #pragma once
-#include "../tsp_data/data/tsp_data_template.h"
+#include "../tsp_data/tsp_data_template.h"
 
 enum class OptimisationType {
 	kopt,

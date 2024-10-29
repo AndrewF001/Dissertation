@@ -24,19 +24,19 @@
     <ClInclude Include="tour_optimisation\optimisation_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp_data\data\types\type_base.h">
+    <ClInclude Include="tsp_data\types\type_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp_data\data\tsp_data_template.h">
+    <ClInclude Include="tsp_data\tsp_data_template.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp_data\data\partitioning\partitioning_base.h">
+    <ClInclude Include="tsp_data\partitioning\partitioning_base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp_data\data\tsp_constructs.h">
+    <ClInclude Include="tsp_data\tsp_constructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp_data\data\types\2d.h">
+    <ClInclude Include="tsp_data\types\2d.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tour_construction\lookahead_convex_hull.h">
@@ -45,12 +45,12 @@
     <ClInclude Include="tour_optimisation\k_opt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp_data\data\partitioning\no_partitioning.h">
+    <ClInclude Include="tsp_data\partitioning\no_partitioning.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tsp_data\data\types\2d.cpp">
+    <ClCompile Include="tsp_data\types\2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
