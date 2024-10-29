@@ -5,11 +5,11 @@ class Type2d : public TypeBase {
 public:
 	// Constructor
 	Type2d();
-	Type2d(const size_t id, Point3D const& point);
-	Type2d(const size_t id, GenerationType type, const Cube &size, std::mt19937 &seed);
+	Type2d(Point3D const& point);
+	Type2d(GenerationType type, const Cube &size, std::mt19937 &seed);
 	~Type2d() = default;
 
-	Point2D m_point;	// This should be const
+	Point2D m_point;	// TODO: This should be const
 
 	// Methods
 	virtual double getDistance(const TypeBase &p) const;

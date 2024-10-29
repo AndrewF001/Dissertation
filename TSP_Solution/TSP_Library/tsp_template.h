@@ -14,11 +14,12 @@ public:
 	~TspTemplate() = default;
 
 	void run() {
+		m_data.initaliseCache();
 		m_construction.constructTour();
 		m_optimisation.optimiseTour();
 	};
 
-public:	// Change to private later
+public:	// TODO: Change to private later
 	TspDataTemplate<TSPType, Caching, Partitioning, Size> m_data;
 	Construction m_construction;
 	Optimisation m_optimisation;

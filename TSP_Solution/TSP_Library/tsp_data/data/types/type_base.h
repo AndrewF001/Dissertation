@@ -4,13 +4,10 @@
 class TypeBase {
 public: 
 	// Constructor
-	//TypeBase() : m_id(SIZE_MAX) {};
 	TypeBase(){};
-	//TypeBase(const size_t id, const Point3D& p) : m_id(id) {};
-	TypeBase(const size_t id, const Point3D& p){};
-	//TypeBase(const size_t id, const GenerationType type, const Cube& size, std::mt19937& seed) : m_id(id) {};
-	TypeBase(const size_t id, const GenerationType type, const Cube& size, std::mt19937& seed){};
-	virtual ~TypeBase() = default;
+	TypeBase(const Point3D& p) {};
+	TypeBase(const GenerationType type, const Cube& size, std::mt19937& seed){};
+	~TypeBase() = default;
 
 	// ID
 	//const size_t m_id;	

@@ -498,3 +498,14 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+
+
+### VTune files
+
+TSP_Solution\DawnCache
+TSP_Solution\GPUCache
+TSP_Solution\Empirical_Testing\Intel
+TSP_Solution/Empirical_Testing/Intel\302\256 VTune\342\204\242 Profiler Results/
+TSP_Solution/Empirical_Testing/Intel® VTune™ Profiler Results/
+TSP_Solution/Empirical_Testing/Intel*Profiler Results/

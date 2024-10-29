@@ -8,11 +8,13 @@
 
 Type2d::Type2d() : TypeBase(), m_point(P3DEFAULT) {}
 
-Type2d::Type2d(const size_t id, Point3D const& point) : TypeBase(id, point), m_point(point) {}
+Type2d::Type2d(const Point3D& point) : TypeBase(point), m_point(point) {}
 
-Type2d::Type2d(const size_t id, GenerationType type, const Cube &size, std::mt19937 &seed)
-    : TypeBase(id, type, size, seed), m_point(generateRandomCities(type, size, seed)) {}
+Type2d::Type2d(GenerationType type, const Cube &size, std::mt19937 &seed)
+    : TypeBase(type, size, seed), m_point(generateRandomCities(type, size, seed)) {}
 
+
+// TODO: add pythagorean theorem for distance calculation
 double Type2d::getDistance(const TypeBase &p) const {
     const Type2d &p2d = static_cast<const Type2d &>(p);
     const Point2D &p2 = p2d.m_point;

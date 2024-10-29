@@ -72,6 +72,7 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <OpenMP>GenerateParallelCode</OpenMP>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <OptimizationDiagnosticLevel>Level3</OptimizationDiagnosticLevel>
     </ClCompile>
     <Link>
       <Link>
@@ -89,6 +90,8 @@
       <TreatWarningAsError>false</TreatWarningAsError>
       <OpenMP>GenerateParallelCode</OpenMP>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <OptimizationDiagnosticLevel>Level3</OptimizationDiagnosticLevel>
+      <SYCLOptimization>MaxSpeedHighLevel</SYCLOptimization>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

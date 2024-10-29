@@ -1,4 +1,3 @@
-//#include "tsp_library_realtime.h"
 #include <iostream>
 #include "tsp_template.h"
 
@@ -21,4 +20,5 @@ int main(int argc, char* argv[]) {
 	tsp.m_optimisation.optimiseTour();
 
 	tsp.run();
+	std::cout << tsp.m_data.getDistance(0, 1) << "\n";
 }
