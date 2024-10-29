@@ -6,15 +6,15 @@ enum class ContructionType {
 	NearestNeighbour
 };
 
-template<class TSPType, CachingType Caching, class Partitioning, size_t Size>
+template<class TSPType, size_t Size, CachingTypes Caching, class Partitioning>
 class ConstructionBase {
 public:
-	ConstructionBase(TspDataTemplate<TSPType, Caching, Partitioning, Size>& ref) : m_data_ref(ref) {};
+	ConstructionBase(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : m_data_ref(ref) {};
 	~ConstructionBase() = default;
 
 	virtual void constructTour() = 0;
 
 protected:
-	TspDataTemplate<TSPType, Caching, Partitioning, Size>& m_data_ref;
+	TspDataTemplate<TSPType, Size, Caching, Partitioning>& m_data_ref;
 };
 

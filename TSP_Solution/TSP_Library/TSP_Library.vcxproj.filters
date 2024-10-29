@@ -45,11 +45,11 @@
     <ClInclude Include="tour_optimisation\k_opt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tsp_data\data\partitioning\no_partitioning.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tsp_data\data\partitioning\partitioning_base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="tsp_data\data\types\2d.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

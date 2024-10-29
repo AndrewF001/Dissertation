@@ -6,7 +6,7 @@ public:
 	// Constructor
 	TypeBase(){};
 	TypeBase(const Point3D& p) {};
-	TypeBase(const GenerationType type, const Cube& size, std::mt19937& seed){};
+	TypeBase(const GenerationTypes type, const Cube& size, std::mt19937& seed){};
 	~TypeBase() = default;
 
 	// ID
@@ -15,16 +15,16 @@ public:
 	// Methods
 	virtual double getDistance(const TypeBase& p) const = 0;
 	virtual bool contains(const Cube &s) const = 0;
-	virtual Point3D rectangleGen(const GenerationType type, const Cube &size, std::mt19937 &seed) const = 0;
-	virtual Point3D circleGen(const GenerationType type, const Cube &size, std::mt19937 &seed) const = 0;
+	virtual Point3D rectangleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const = 0;
+	virtual Point3D circleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const = 0;
 	
-	Point3D generateRandomCities(const GenerationType type, const Cube &size, std::mt19937 &seed) const {
+	Point3D generateRandomCities(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const {
 		switch (type) {
-		case GenerationType::Rectangle:
+		case GenerationTypes::Rectangle:
 			return rectangleGen(type, size, seed);
-		case GenerationType::Circle:
+		case GenerationTypes::Circle:
 			return circleGen(type, size, seed);
-		case GenerationType::AreaCode:
+		case GenerationTypes::AreaCode:
 			std::exit(101); // TODO: Not implemented
 			return Point3D();
 		}

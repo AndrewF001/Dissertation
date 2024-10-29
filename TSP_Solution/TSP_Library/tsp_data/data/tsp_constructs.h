@@ -1,20 +1,20 @@
 #pragma once
 #include <iostream>
 
-enum CachingType {
-	Full,
+enum CachingTypes {
+	FULL,
 	Partial,
 	None
 };
 
-enum GenerationType {
+enum GenerationTypes {
 	Rectangle,
 	Circle,
 	AreaCode
 };
 
-enum PartitioningType {
-	NoPartitioning,
+enum PartitioningTypes {
+	NonePartitioning,
 	QuadTree
 };
 

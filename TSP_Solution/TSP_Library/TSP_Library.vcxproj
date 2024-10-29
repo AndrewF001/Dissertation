@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="tour_construction\lookahead_convex_hull.h" />
     <ClInclude Include="tour_optimisation\k_opt.h" />
+    <ClInclude Include="tsp_data\data\partitioning\no_partitioning.h" />
     <ClInclude Include="tsp_data\data\types\2d.h" />
     <ClInclude Include="tsp_data\data\tsp_constructs.h" />
     <ClInclude Include="tsp_data\data\partitioning\partitioning_base.h" />
@@ -24,7 +25,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tsp_data\data\types\2d.cpp" />
-    <ClCompile Include="tsp_data\data\partitioning\partitioning_base.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{17840673-d844-48b3-8a3c-6d5447bbd81f}</ProjectGuid>

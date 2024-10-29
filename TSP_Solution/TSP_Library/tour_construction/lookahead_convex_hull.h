@@ -1,10 +1,10 @@
 #pragma once
 #include "construction_base.h"
 
-template<class TSPType, CachingType Caching, class Partitioning, size_t Size>
-class LookaheadConvexHull : public ConstructionBase<TSPType, Caching, Partitioning, Size> {
+template<class TSPType, size_t Size, CachingTypes Caching, class Partitioning>
+class LookaheadConvexHull : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
 public:
-	LookaheadConvexHull(TspDataTemplate<TSPType, Caching, Partitioning, Size>& ref) : ConstructionBase<TSPType, Caching, Partitioning, Size>(ref) {};
+	LookaheadConvexHull(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : ConstructionBase<TSPType, Size, Caching, Partitioning>(ref) {};
 	~LookaheadConvexHull() = default;
 
 	void constructTour() {

@@ -10,7 +10,7 @@ Type2d::Type2d() : TypeBase(), m_point(P3DEFAULT) {}
 
 Type2d::Type2d(const Point3D& point) : TypeBase(point), m_point(point) {}
 
-Type2d::Type2d(GenerationType type, const Cube &size, std::mt19937 &seed)
+Type2d::Type2d(GenerationTypes type, const Cube &size, std::mt19937 &seed)
     : TypeBase(type, size, seed), m_point(generateRandomCities(type, size, seed)) {}
 
 
@@ -25,13 +25,13 @@ bool Type2d::contains(const Cube &s) const {
     return s.contains(m_point);
 }
 
-Point3D Type2d::rectangleGen(const GenerationType type, const Cube &size, std::mt19937 &seed) const {
+Point3D Type2d::rectangleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const {
     std::uniform_real_distribution<double> x_rnd(0, size.width);
     std::uniform_real_distribution<double> y_rnd(0, size.height);
     return Point3D(x_rnd(seed), y_rnd(seed), 0);
 }
 
-Point3D Type2d::circleGen(const GenerationType type, const Cube &size, std::mt19937 &seed) const {
+Point3D Type2d::circleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const {
     std::uniform_real_distribution<double> angle_rnd(0, M_PI * 2);
     std::uniform_real_distribution<double> radius_rnd;
     if(size.height > size.width) {
