@@ -10,7 +10,7 @@ template<class TSPType, size_t Size, CachingTypes Caching, class Partitioning>
 class OptimisationBase {
 public:
 	OptimisationBase(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : m_data_ref(ref) {};
-	~OptimisationBase() = default;
+	virtual ~OptimisationBase() = default;
 
 	virtual void optimiseTour() = 0;
 

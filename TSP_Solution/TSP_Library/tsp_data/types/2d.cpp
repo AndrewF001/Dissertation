@@ -15,13 +15,13 @@ Type2d::Type2d(GenerationTypes type, const Cube &size, std::mt19937 &seed)
 
 
 // TODO: add pythagorean theorem for distance calculation
-double Type2d::getDistance(const TypeBase &p) const {
+inline double Type2d::getDistance(const TypeBase &p) const {
     const Type2d &p2d = static_cast<const Type2d &>(p);
     const Point2D &p2 = p2d.m_point;
     return pow(m_point.x - p2.x, 2) + pow(m_point.y - p2.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
 }
 
-bool Type2d::contains(const Cube &s) const {
+inline bool Type2d::contains(const Cube &s) const {
     return s.contains(m_point);
 }
 

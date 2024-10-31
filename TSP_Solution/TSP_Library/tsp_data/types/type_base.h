@@ -7,14 +7,14 @@ public:
 	TypeBase(){};
 	TypeBase(const Point3D& p) {};
 	TypeBase(const GenerationTypes type, const Cube& size, std::mt19937& seed){};
-	~TypeBase() = default;
+	virtual ~TypeBase() = default;
 
 	// ID
 	//const size_t m_id;	
 
 	// Methods
-	virtual double getDistance(const TypeBase& p) const = 0;
-	virtual bool contains(const Cube &s) const = 0;
+	inline virtual double getDistance(const TypeBase& p) const = 0;
+	inline virtual bool contains(const Cube &s) const = 0;
 	virtual Point3D rectangleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const = 0;
 	virtual Point3D circleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const = 0;
 	

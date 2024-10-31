@@ -10,7 +10,7 @@ template<class TSPType, size_t Size, CachingTypes Caching, class Partitioning>
 class ConstructionBase {
 public:
 	ConstructionBase(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : m_data_ref(ref) {};
-	~ConstructionBase() = default;
+	virtual ~ConstructionBase() = default;
 
 	virtual void constructTour() = 0;
 

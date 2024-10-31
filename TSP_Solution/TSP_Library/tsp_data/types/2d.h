@@ -12,9 +12,9 @@ public:
 	Point2D m_point;	// TODO: This should be const
 
 	// Methods
-	virtual double getDistance(const TypeBase &p) const;
-	virtual bool contains(const Cube &s) const;
-	virtual Point3D rectangleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const;
-	virtual Point3D circleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const;
+	inline double getDistance(const TypeBase &p) const override;
+	inline bool contains(const Cube &s) const override;
+	Point3D rectangleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const override;
+	Point3D circleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const override;
 };
 
