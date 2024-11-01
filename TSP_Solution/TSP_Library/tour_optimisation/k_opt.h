@@ -1,7 +1,7 @@
 #pragma once
 #include "optimisation_base.h"
 
-template<class TSPType, size_t Size, CachingTypes Caching, class Partitioning>
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class Kopt : public OptimisationBase<TSPType, Size, Caching, Partitioning> {
 public:
 	Kopt(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : OptimisationBase<TSPType, Size, Caching, Partitioning>(ref) {};

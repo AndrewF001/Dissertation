@@ -23,9 +23,6 @@
     <ClInclude Include="tour_construction\construction_base.h" />
     <ClInclude Include="tsp_template.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="tsp_data\types\2d.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{17840673-d844-48b3-8a3c-6d5447bbd81f}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

@@ -6,7 +6,7 @@ enum class ContructionType {
 	NearestNeighbour
 };
 
-template<class TSPType, size_t Size, CachingTypes Caching, class Partitioning>
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class ConstructionBase {
 public:
 	ConstructionBase(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : m_data_ref(ref) {};

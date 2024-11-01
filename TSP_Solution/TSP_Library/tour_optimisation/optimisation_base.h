@@ -6,7 +6,7 @@ enum class OptimisationType {
 	LinKernighan
 };
 
-template<class TSPType, size_t Size, CachingTypes Caching, class Partitioning>
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class OptimisationBase {
 public:
 	OptimisationBase(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : m_data_ref(ref) {};

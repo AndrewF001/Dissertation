@@ -1,12 +1,13 @@
 #pragma once
 #include <random>
 #include "../tsp_constructs.h"
+
 class TypeBase {
 public: 
 	// Constructor
 	TypeBase(){};
 	TypeBase(const Point3D& p) {};
-	TypeBase(const GenerationTypes type, const Cube& size, std::mt19937& seed){};
+	TypeBase(const GenerationType type, const Cube& size, std::mt19937& seed){};
 	virtual ~TypeBase() = default;
 
 	// ID
@@ -15,16 +16,16 @@ public:
 	// Methods
 	inline virtual double getDistance(const TypeBase& p) const = 0;
 	inline virtual bool contains(const Cube &s) const = 0;
-	virtual Point3D rectangleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const = 0;
-	virtual Point3D circleGen(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const = 0;
+	virtual Point3D rectangleGen(const GenerationType type, const Cube &size, std::mt19937 &seed) const = 0;
+	virtual Point3D circleGen(const GenerationType type, const Cube &size, std::mt19937 &seed) const = 0;
 	
-	Point3D generateRandomCities(const GenerationTypes type, const Cube &size, std::mt19937 &seed) const {
+	Point3D generateRandomCities(const GenerationType type, const Cube &size, std::mt19937 &seed) const {
 		switch (type) {
-		case GenerationTypes::Rectangle:
+		case GenerationType::Rectangle:
 			return rectangleGen(type, size, seed);
-		case GenerationTypes::Circle:
+		case GenerationType::Circle:
 			return circleGen(type, size, seed);
-		case GenerationTypes::AreaCode:
+		case GenerationType::AreaCode:
 			std::exit(101); // TODO: Not implemented
 			return Point3D();
 		}
