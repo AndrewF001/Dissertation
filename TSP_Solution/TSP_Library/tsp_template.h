@@ -3,7 +3,6 @@
 #include "tsp_data/types/type_base.h"
 #include "tsp_data/types/2d.h"
 //#include "tsp_data/types/2d.cpp"
-#include "tsp_data/partitioning/no_partitioning.h"
 #include "tour_construction/lookahead_convex_hull.h"
 #include "tour_optimisation/k_opt.h"
 

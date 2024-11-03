@@ -30,9 +30,6 @@
     <ClInclude Include="tsp_data\tsp_data_template.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tsp_data\partitioning\partitioning_base.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="tsp_data\tsp_constructs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -43,9 +40,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tour_optimisation\k_opt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tsp_data\partitioning\no_partitioning.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
