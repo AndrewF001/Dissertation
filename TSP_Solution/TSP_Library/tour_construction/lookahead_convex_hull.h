@@ -9,6 +9,5 @@ public:
 
 	void constructTour() override {
 		std::cout << "Lookahead Convex Hull\n";
-		std::cout << this->m_data_ref.getAllCities()[0].m_point << "\n";
 	};
 };

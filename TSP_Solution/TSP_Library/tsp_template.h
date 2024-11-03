@@ -11,30 +11,29 @@ template <class TSPType, size_t Size, CachingType Caching, PartitioningType Part
 class TspTemplate {
 
 public:
-	TspTemplate(const Cube& size) : m_data(size) {};
+	TspTemplate(const Cube& size) : m_data(size) {};	// !!! ONLY USE FOR DEBUGGING !!!
+	TspTemplate(const Cube& size, GenerationType type, std::mt19937& seed) : m_data(size, type, seed) {};
+	TspTemplate(const Cube& size, std::array<TSPType, Size> cities) : m_data(size, cities) {};
+
 	~TspTemplate() = default;
 
 	void run() {
 		m_data.initalisePartition();
 		m_data.initaliseCache();
 		ConstructTour();
-		//m_construction.constructTour();
 		OptimiseTour();
-		//m_optimisation.optimiseTour();
 	};
 
 public:	// TODO: Change to private later
 	TspDataTemplate<TSPType, Size, Caching, Partitioning> m_data;
-	//Construction m_construction;
-	//Optimisation m_optimisation;
 
 	void ConstructTour() {
-		if (Optimisation == OptimisationType::kopt)	// constexpr
+		if constexpr (Optimisation == OptimisationType::kopt)
 			Kopt<TSPType, Size, Caching, Partitioning>(m_data).optimiseTour();	// Virtual method can't be static
 	};
 
 	void OptimiseTour() {
-		if (Construction == ContructionType::LookaheadConvexHull) // constexpr
+		if constexpr (Construction == ContructionType::LookaheadConvexHull)
 			LookaheadConvexHull<TSPType, Size, Caching, Partitioning>(m_data).constructTour();	// Virtual method can't be static
 	};
 };
