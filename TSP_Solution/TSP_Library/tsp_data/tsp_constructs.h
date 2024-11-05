@@ -26,6 +26,10 @@ public:
 
 	double x, y;	// TODO: This should be const
 
+	double gradient(const Point2D& p2) const {
+		return (p2.y - y) / (p2.x - x);
+	}
+
 	friend std::ostream& operator<<(std::ostream& os, const Point2D& point) {
 		os << "Point2D(" << point.x << ", " << point.y << ")";
 		return os;

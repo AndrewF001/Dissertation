@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tour_construction\convex_hull.h" />
     <ClInclude Include="tour_construction\lookahead_convex_hull.h" />
     <ClInclude Include="tour_optimisation\k_opt.h" />
     <ClInclude Include="tsp_data\types\2d.h" />

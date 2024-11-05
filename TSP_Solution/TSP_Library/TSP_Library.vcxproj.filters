@@ -42,5 +42,8 @@
     <ClInclude Include="tour_optimisation\k_opt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tour_construction\convex_hull.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -29,13 +29,13 @@ public:
 	const std::array<TSPType, Size>& getAllCities() const {	return m_cities; };		//TODO: delete later
 	std::vector<size_t> getCitiesInArea(const Square& s) const;
 	double getDistance(size_t city1, size_t city2);
-	double getDistanceConst(size_t city1, size_t city2) const { return m_cities[city1].getDistance(m_cities[city2]); };
+	double getDistanceConst(size_t city1, size_t city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
 
 	/// Route Methods
-	void setCityPos(const size_t index, const size_t pos);
+	void setCityPos(const size_t index, const size_t pos);	// Used by constructor algorithms
 	size_t getCityPos(const size_t index) const { return m_city_pos[index]; };
 	size_t getRoutePos(const size_t pos) const { return m_route[pos]; };
-	void swapCitiesPos(const size_t city1, const size_t city2);
+	void swapCitiesPos(const size_t city1, const size_t city2);	// Used by optimisation algorithms
 	const std::array<size_t, Size>& getRoute() const { return m_route; };
 
 	/// Initalisation Methods
@@ -74,21 +74,21 @@ private:	/// Partitioning Monolithic Code
 	std::vector<size_t> _quadtreeGetCities(const Square& s) const;
 };
 
-template <class T, size_t S, CachingType C, PartitioningType P>
-TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size) : m_size(size) {
+template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size) : m_size(size) {
 	defineVariables();
 };
 
-template <class T, size_t S, CachingType C, PartitioningType P>
-TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_size(size) {
+template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_size(size) {
 	for (size_t i = 0; i < Size; i++)
 		generateRandomCities(type, seed);
 
 	defineVariables();
 };
 
-template <class T, size_t S, CachingType C, PartitioningType P>
-TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size, std::array<T, S> cities) : m_size(size), m_cities(cities), m_city_count(Size) {
+template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, std::array<TSPType, Size> cities) : m_size(size), m_cities(cities), m_city_count(Size) {
 	defineVariables();
 };
 
@@ -140,7 +140,7 @@ double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(size_t
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const size_t city, const size_t pos) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const size_t city, const size_t pos) {	// TODO: add check for range?
 	// Increment all cities that are greater than the new position
 	for (auto& city_pos : m_city_pos) {
 		if (city_pos >= pos)
@@ -148,14 +148,14 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const siz
 	}
 
 	// Shift positions (Deletes the final element!)
-	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(size_t) * (Size - pos - 1));
+	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(size_t) * (Size - pos - 1));	// TODO: Don't copy the final unset element
 
 	m_city_pos[city] = pos;
 	m_route[pos] = city;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const size_t city1, const size_t city2) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const size_t city1, const size_t city2) {	// TODO: add check for range?
 	const size_t pos1 = m_city_pos[city1];
 	const size_t pos2 = m_city_pos[city2];
 	m_city_pos[city1] = pos2;

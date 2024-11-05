@@ -1,5 +1,6 @@
 #pragma once
 #include "construction_base.h"
+#include "convex_hull.h"
 #include "../tsp_data/tsp_data_template.h"
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -9,8 +10,7 @@ public:
 	~LookaheadConvexHull() = default;
 
 	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-		data.setCityPos(1, 0);
-		data.setCityPos(2, 0);
+		ConvexHull<TSPType, Size, Caching, Partitioning>::runSingle(data);
 
 		std::cout << "Lookahead Convex Hull\n";
 	};
