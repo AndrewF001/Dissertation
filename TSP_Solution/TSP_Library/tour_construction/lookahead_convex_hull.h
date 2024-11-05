@@ -8,7 +8,10 @@ public:
 	LookaheadConvexHull() : ConstructionBase<TSPType, Size, Caching, Partitioning>() {};
 	~LookaheadConvexHull() = default;
 
-	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& m_data_ref) override {
+	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
+		data.setCityPos(1, 0);
+		data.setCityPos(2, 0);
+
 		std::cout << "Lookahead Convex Hull\n";
 	};
 };

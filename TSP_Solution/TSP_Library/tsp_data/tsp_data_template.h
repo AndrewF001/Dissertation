@@ -29,13 +29,14 @@ public:
 	const std::array<TSPType, Size>& getAllCities() const {	return m_cities; };		//TODO: delete later
 	std::vector<size_t> getCitiesInArea(const Square& s) const;
 	double getDistance(size_t city1, size_t city2);
+	double getDistanceConst(size_t city1, size_t city2) const { return m_cities[city1].getDistance(m_cities[city2]); };
 
 	/// Route Methods
 	void setCityPos(const size_t index, const size_t pos);
 	size_t getCityPos(const size_t index) const { return m_city_pos[index]; };
-	size_t getRoutePos(const size_t pos) const { return m_tour[pos]; };
+	size_t getRoutePos(const size_t pos) const { return m_route[pos]; };
 	void swapCitiesPos(const size_t city1, const size_t city2);
-	const std::array<size_t, Size>& getRoute() const { return m_tour; };
+	const std::array<size_t, Size>& getRoute() const { return m_route; };
 
 	/// Initalisation Methods
 	void initaliseCache();
@@ -47,7 +48,7 @@ private:
 	Square m_size;							// Size of the area	
 	std::array<TSPType, Size> m_cities;		// Array of cities
 	std::array<size_t, Size> m_city_pos{};	// Array of the positions of the cities in the tour
-	std::array<size_t, Size> m_tour{};		// Array of the cities in the tour
+	std::array<size_t, Size> m_route{};		// Array of the cities in the route
 	std::conditional_t<Caching == CachingType::None, 
 		std::array<std::array<double, 0>, 0>,
 		std::array<std::array<double, Size>, Size>> m_cache;	// Cache for the distances between the cities
@@ -57,7 +58,7 @@ private:
 	void generateRandomCities(GenerationType type, std::mt19937& seed);
 
 	/// Constructor Helper Methods
-	void defineCache();
+	void defineVariables();
 
 private:	/// Partitioning Monolithic Code
 	struct EMPTYCLASS {};	// Empty class for the conditional_t to assign zero bytes of memory
@@ -75,7 +76,7 @@ private:	/// Partitioning Monolithic Code
 
 template <class T, size_t S, CachingType C, PartitioningType P>
 TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size) : m_size(size) {
-	defineCache();
+	defineVariables();
 };
 
 template <class T, size_t S, CachingType C, PartitioningType P>
@@ -83,12 +84,12 @@ TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size, GenerationType 
 	for (size_t i = 0; i < Size; i++)
 		generateRandomCities(type, seed);
 
-	defineCache();
+	defineVariables();
 };
 
 template <class T, size_t S, CachingType C, PartitioningType P>
 TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size, std::array<T, S> cities) : m_size(size), m_cities(cities), m_city_count(Size) {
-	defineCache();
+	defineVariables();
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -139,17 +140,18 @@ double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(size_t
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const size_t index, const size_t pos) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const size_t city, const size_t pos) {
 	// Increment all cities that are greater than the new position
-	for (auto city_pos : m_city_pos) {
+	for (auto& city_pos : m_city_pos) {
 		if (city_pos >= pos)
 			city_pos++;
 	}
-	// Shift positions (Deletes the final element!)
-	memcpy(m_city_pos.data() + pos, m_city_pos.data() + pos + 1, sizeof(size_t) * (Size - pos - 1));
 
-	m_city_pos[index] = pos;
-	m_tour[pos] = index;
+	// Shift positions (Deletes the final element!)
+	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(size_t) * (Size - pos - 1));
+
+	m_city_pos[city] = pos;
+	m_route[pos] = city;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -158,7 +160,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const 
 	const size_t pos2 = m_city_pos[city2];
 	m_city_pos[city1] = pos2;
 	m_city_pos[city2] = pos1;
-	std::swap(m_tour[pos1], m_tour[pos2]);
+	std::swap(m_route[pos1], m_route[pos2]);
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -185,9 +187,14 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initalisePartition()
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::defineCache() {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::defineVariables() {
 	for (auto& row : m_cache)
 		std::fill_n(row.begin(), row.size(), DBL_MAX);	// Fills the cache with DBL_MAX, needed for Partial Caching
+
+	for (size_t i = 0; i < Size; i++) {	// Fills the route with SIZE_MAX
+		m_route[i] = SIZE_MAX;
+		m_city_pos[i] = SIZE_MAX - Size; // When setCityPos() is called all values greater are incremented, this stops overflow
+	}
 };
 
 // TODO: Add 3D support

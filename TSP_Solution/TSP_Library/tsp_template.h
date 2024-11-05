@@ -17,23 +17,23 @@ public:
 	void run() {
 		m_data.initalisePartition();
 		m_data.initaliseCache();
-		ConstructTour();
-		OptimiseTour();
+		constructTour();
+		optimiseTour();
 	};
 
 	const TspDataTemplate<TSPType, Size, Caching, Partitioning>& getData() { return m_data; };
-	const std::array<size_t, Size>& getTour() { return m_data.getRoute(); };
+	const std::array<size_t, Size>& getRoute() { return m_data.getRoute(); };
 
 private:	// TODO: Change to private later
 	TspDataTemplate<TSPType, Size, Caching, Partitioning> m_data;
 
-	void ConstructTour() {
-		if constexpr (Optimisation == OptimisationType::kopt)
-			Kopt<TSPType, Size, Caching, Partitioning>(m_data).optimiseTour();	// Virtual method can't be static
-	};
-
-	void OptimiseTour() {
+	void constructTour() {
 		if constexpr (Construction == ContructionType::LookaheadConvexHull)
 			LookaheadConvexHull<TSPType, Size, Caching, Partitioning>().constructTour(m_data);	// Virtual method can't be static
+	};
+
+	void optimiseTour() {
+		if constexpr (Optimisation == OptimisationType::kopt)
+			Kopt<TSPType, Size, Caching, Partitioning>(m_data).optimiseTour();	// Virtual method can't be static
 	};
 };
