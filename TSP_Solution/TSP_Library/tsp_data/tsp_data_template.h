@@ -19,19 +19,19 @@ class TspDataTemplate {
 
 public:
 	/// Constructors
-	TspDataTemplate(const Cube& size);
-	TspDataTemplate(const Cube& size, GenerationType type, std::mt19937& seed);
-	TspDataTemplate(const Cube& size, std::array<TSPType, Size> cities);
+	TspDataTemplate(const Square& size);
+	TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed);
+	TspDataTemplate(const Square& size, std::array<TSPType, Size> cities);
 	~TspDataTemplate() = default;
 
 	/// Adders Methods
-	void addCity(const Point3D& city);
+	void addCity(const Point2D& city);
 	void generateRandomCities(GenerationType type, std::mt19937& seed);
 
 	/// Getters Methods
 	inline const size_t getNumberOfCities() const {	return m_city_count; };
 	const std::array<TSPType, Size>& getAllCities() const {	return m_cities; };		//TODO: delete later
-	std::vector<size_t> getCities(const Cube& s) const;
+	std::vector<size_t> getCities(const Square& s) const;
 	double getDistance(size_t city1, size_t city2);
 
 	/// Initalisation Methods
@@ -41,7 +41,7 @@ public:
 private:
 	/// Members Data
 	size_t m_city_count = 0;				// Live count of the number of cities
-	Cube m_size;						// Size of the area	
+	Square m_size;						// Size of the area	
 	std::array<TSPType, Size> m_cities;	// Array of cities
 	std::conditional_t<Caching == CachingType::None, 
 		std::array<std::array<double, 0>, 0>,
@@ -60,17 +60,17 @@ private:	/// Partitioning Monolithic Code
 	void _quadTreeInitalisePartition();
 
 	// Partitioning Getters
-	std::vector<size_t> _noPartitioningGetCities(const Cube& s) const;
-	std::vector<size_t> _quadtreeGetCities(const Cube& s) const;
+	std::vector<size_t> _noPartitioningGetCities(const Square& s) const;
+	std::vector<size_t> _quadtreeGetCities(const Square& s) const;
 };
 
 template <class T, size_t S, CachingType C, PartitioningType P>
-TspDataTemplate<T, S, C, P>::TspDataTemplate(const Cube& size) : m_size(size) {
+TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size) : m_size(size) {
 	defineCache();
 };
 
 template <class T, size_t S, CachingType C, PartitioningType P>
-TspDataTemplate<T, S, C, P>::TspDataTemplate(const Cube& size, GenerationType type, std::mt19937& seed) : m_size(size) {
+TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_size(size) {
 	for (size_t i = 0; i < Size; i++)
 		generateRandomCities(type, seed);
 
@@ -78,12 +78,12 @@ TspDataTemplate<T, S, C, P>::TspDataTemplate(const Cube& size, GenerationType ty
 };
 
 template <class T, size_t S, CachingType C, PartitioningType P>
-TspDataTemplate<T, S, C, P>::TspDataTemplate(const Cube& size, std::array<T, S> cities) : m_size(size), m_cities(cities), m_city_count(Size) {
+TspDataTemplate<T, S, C, P>::TspDataTemplate(const Square& size, std::array<T, S> cities) : m_size(size), m_cities(cities), m_city_count(Size) {
 	defineCache();
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::addCity(const Point3D& city) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::addCity(const Point2D& city) {
 	if (m_city_count >= Size)
 		throw std::out_of_range("TSP_Data::addCity: The number of cities exceeds the maximum size of the array.");
 
@@ -99,7 +99,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCities(const Cube& s) const {
+std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCities(const Square& s) const {
 	if constexpr (Partitioning == PartitioningType::NonePartitioning)
 		return _noPartitioningGetCities(s);
 	if constexpr (Partitioning == PartitioningType::QuadTree)
@@ -160,7 +160,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::defineCache() {
 
 // TODO: Add 3D support
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPartitioningGetCities(const Cube& s) const {
+std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPartitioningGetCities(const Square& s) const {
 	std::vector<size_t> output;
 	output.reserve(Size);
 
@@ -179,7 +179,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadTreeInitalisePa
 
 // TODO: implement
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadtreeGetCities(const Cube& s) const {
+std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadtreeGetCities(const Square& s) const {
 	std::vector<size_t> output;
 	output.reserve(Size);
 

@@ -11,9 +11,9 @@ template <class TSPType, size_t Size, CachingType Caching, PartitioningType Part
 class TspTemplate {
 
 public:
-	TspTemplate(const Cube& size) : m_data(size) {};	// !!! ONLY USE FOR DEBUGGING !!!
-	TspTemplate(const Cube& size, GenerationType type, std::mt19937& seed) : m_data(size, type, seed) {};
-	TspTemplate(const Cube& size, std::array<TSPType, Size> cities) : m_data(size, cities) {};
+	TspTemplate(const Square& size) : m_data(size) {};	// !!! ONLY USE FOR DEBUGGING !!!
+	TspTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_data(size, type, seed) {};
+	TspTemplate(const Square& size, std::array<TSPType, Size> cities) : m_data(size, cities) {};
 
 	~TspTemplate() = default;
 
@@ -25,6 +25,8 @@ public:
 	};
 
 public:	// TODO: Change to private later
+	// Implement both
+	std::array<size_t, Size> m_tour{};	// TODO: look into index assignment (city[i] = pos) vs value assignment (arr[i] = city)
 	TspDataTemplate<TSPType, Size, Caching, Partitioning> m_data;
 
 	void ConstructTour() {

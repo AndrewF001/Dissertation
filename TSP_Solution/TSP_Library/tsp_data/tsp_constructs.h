@@ -18,8 +18,38 @@ enum PartitioningType {
 	QuadTree
 };
 
-struct Point2D;
+struct Point2D {
+public:
+	Point2D(double x = 0, double y = 0) : x(x), y(y) {}
+	Point2D(Point2D const& p) : x(p.x), y(p.y) {}
+	//explicit Point2D(Point2D&& p) : x(p.x), y(p.y) {}	// TODO: Add Rvalue reference constructor
 
+	double x, y;	// TODO: This should be const
+
+	friend std::ostream& operator<<(std::ostream& os, const Point2D& point) {
+		os << "Point2D(" << point.x << ", " << point.y << ")";
+		return os;
+	}
+};
+
+static Point2D const P2DEFAULT = Point2D(0, 0);
+
+struct Square {
+	Square(Square const& c) : p(c.p), width(c.width), height(c.height) {}
+	Square(Point2D const& p = P2DEFAULT, double width = 0, double height = 0) : p(p), width(width), height(height) {}
+
+
+	Point2D p;
+	double width, height;
+
+	bool contains(const Point2D& p2) const {
+		return p2.x >= this->p.x && p2.x <= this->p.x + width &&
+			p2.y >= this->p.y && p2.y <= this->p.y + height;
+	}
+};
+
+// TODO: 3D Code for later
+/*
 struct Point3D {
 public:
 	Point3D(double x = 0, double y = 0, double z = 0) : x(x), y(y), z(z) {}
@@ -34,25 +64,10 @@ public:
 	}
 };
 
-struct Point2D {
-public:
-	Point2D(double x, double y) : x(x), y(y) {}
-	Point2D(Point3D const& p) : x(p.x), y(p.y) {}
-	Point2D(Point3D&& p) : x(p.x), y(p.y) {}
+//Point3D::Point3D(Point2D const& p) : x(p.x), y(p.y), z(0) {}
+//Point3D::Point3D(Point2D&& p) : x(p.x), y(p.y), z(0) {}
 
-	double x, y;	// TODO: This should be const
-
-	friend std::ostream& operator<<(std::ostream& os, const Point2D& point) {
-		os << "Point2D(" << point.x << ", " << point.y << ")";
-		return os;
-	}
-};
-
-Point3D::Point3D(Point2D const& p) : x(p.x), y(p.y), z(0) {}
-Point3D::Point3D(Point2D&& p) : x(p.x), y(p.y), z(0) {}
-
-static Point2D const P2DEFAULT = Point2D(0, 0);
-static Point3D const P3DEFAULT = Point3D(0, 0, 0);
+//static Point3D const P3DEFAULT = Point3D(0, 0, 0);
 
 struct Cube {
 	Cube(Cube const& c) : p(c.p), width(c.width), height(c.height), depth(c.depth) {}
@@ -74,3 +89,4 @@ struct Cube {
 			p2.y >= this->p.y && p2.y <= this->p.y + height;
 	}
 };
+*/
