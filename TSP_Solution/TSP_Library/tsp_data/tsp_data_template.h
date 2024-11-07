@@ -32,11 +32,13 @@ public:
 	double getDistanceConst(size_t city1, size_t city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
 
 	/// Route Methods
-	void setCityPos(const size_t index, const size_t pos);	// Used by constructor algorithms
+	const std::array<size_t, Size>& getRoute() const { return m_route; };
+	size_t getRouteSize() const { return m_city_count; };
 	size_t getCityPos(const size_t index) const { return m_city_pos[index]; };
 	size_t getRoutePos(const size_t pos) const { return m_route[pos]; };
-	void swapCitiesPos(const size_t city1, const size_t city2);	// Used by optimisation algorithms
-	const std::array<size_t, Size>& getRoute() const { return m_route; };
+	bool isCityInRoute(const size_t city) const { return m_city_pos[city] < m_route_count; };
+	void setCityPos(const size_t index, const size_t pos);	// Used by construction algorithms to create a route
+	void swapCitiesPos(const size_t city1, const size_t city2);	// Used by optimisation algorithms to improve a route
 
 	/// Initalisation Methods
 	void initaliseCache();
@@ -47,8 +49,12 @@ private:
 	size_t m_city_count = 0;				// Live count of the number of cities
 	Square m_size;							// Size of the area	
 	std::array<TSPType, Size> m_cities;		// Array of cities
+
+	size_t m_route_count = 0;				// Live count of the number of cities in the route
 	std::array<size_t, Size> m_city_pos{};	// Array of the positions of the cities in the tour
 	std::array<size_t, Size> m_route{};		// Array of the cities in the route
+	
+	
 	std::conditional_t<Caching == CachingType::None, 
 		std::array<std::array<double, 0>, 0>,
 		std::array<std::array<double, Size>, Size>> m_cache;	// Cache for the distances between the cities
@@ -115,8 +121,7 @@ std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCi
 	if constexpr (Partitioning == PartitioningType::QuadTree)
 		return _quadtreeGetCities(s);
 
-	//static_assert(false, "TspDataTemplate::getCities(), impossible to reach code reached!");
-	//throw std::runtime_error(false, "TspDataTemplate::getCities(), impossible to reach code reached!");
+	throw std::runtime_error(false, "TspDataTemplate::getCities(), impossible to reach code reached!");
 	return {};
 };
 
@@ -140,7 +145,14 @@ double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(size_t
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const size_t city, const size_t pos) {	// TODO: add check for range?
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const size_t city, const size_t pos) {
+#ifdef _DEBUG
+	if (m_route_count >= Size)
+		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array.");
+	if (pos > m_route_count)
+		throw std::out_of_range("TSP_Data::setCityPos: The position is greater than the number of cities in the route.");
+#endif
+
 	// Increment all cities that are greater than the new position
 	for (auto& city_pos : m_city_pos) {
 		if (city_pos >= pos)
@@ -148,14 +160,21 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const siz
 	}
 
 	// Shift positions (Deletes the final element!)
-	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(size_t) * (Size - pos - 1));	// TODO: Don't copy the final unset element
+	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(size_t) * (m_route_count - pos));
 
 	m_city_pos[city] = pos;
 	m_route[pos] = city;
+
+	m_route_count++;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const size_t city1, const size_t city2) {	// TODO: add check for range?
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const size_t city1, const size_t city2) {
+#ifdef _DEBUG
+	if (city1 >= m_route_count || city2 >= m_route_count)
+		throw std::out_of_range("TSP_Data::swapCitiesPos: The city is not in the route.");
+#endif
+
 	const size_t pos1 = m_city_pos[city1];
 	const size_t pos2 = m_city_pos[city2];
 	m_city_pos[city1] = pos2;

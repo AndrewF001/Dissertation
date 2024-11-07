@@ -15,6 +15,7 @@ public:
 
 	// Methods
 	inline virtual double getDistance(const TypeBase& p) const = 0;
+	inline double getDistance(const TypeBase& p1, const TypeBase& p2) const {	return getDistance(p1) + getDistance(p2);	};
 	inline virtual bool contains(const Square &s) const = 0;
 	virtual Point2D rectangleGen(const GenerationType type, const Square &size, std::mt19937 &seed) const = 0;
 	virtual Point2D circleGen(const GenerationType type, const Square &size, std::mt19937 &seed) const = 0;

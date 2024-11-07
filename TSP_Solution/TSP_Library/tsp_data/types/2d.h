@@ -5,7 +5,7 @@
 #include "type_base.h"
 
 #ifndef M_PI
-#define M_PI 3.14159265358979323846     // HOW IS THERE NO PI IN C++ STANDARD LIBRARY!?
+constexpr double M_PI = 3.14159265358979323846;     // HOW IS THERE NO PI IN C++ STANDARD LIBRARY!?
 #endif
 
 
@@ -22,9 +22,8 @@ public:
     // Methods
     // TODO: add pythagorean theorem for distance calculation
     inline double getDistance(const TypeBase& p) const override {
-        const Type2d& p2d = static_cast<const Type2d&>(p);
-        const Point2D& p2 = p2d.m_point;
-        return pow(m_point.x - p2.x, 2) + pow(m_point.y - p2.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+        const Point2D& point = static_cast<const Type2d&>(p).m_point;
+        return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
     }
 
     inline bool contains(const Square& s) const override{

@@ -1,7 +1,7 @@
 #pragma once
 #include "../tsp_data/tsp_data_template.h"
 
-enum class ContructionType {
+enum class ConstructionType {
 	LookaheadConvexHull,
 	NearestNeighbour
 };
