@@ -9,9 +9,9 @@ int main(int argc, char* argv[]) {
 	const Square area = {{0, 0}, 10, 10 };
 	std::mt19937 engine(1);
 	
-	auto tsp = TspTemplate<Type2d, 10, CachingType::None, PartitioningType::NonePartitioning, ConstructionType::LookaheadConvexHull, OptimisationType::kopt>(area, GenerationType::Rectangle, engine);
+	auto tsp = TspTemplate<Type2d, 300, CachingType::None, PartitioningType::NonePartitioning, ConstructionType::LookaheadConvexHull, OptimisationType::kopt>(area, GenerationType::Rectangle, engine);
 
-	tsp.run(5);
+	tsp.run(8);
 	auto& route = tsp.getRoute();
 	auto& data = tsp.getData();
 
@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
 	printf("Time taken: %f seconds\n", duration.count() / 1000000.0);
 
 	for (cityID i = 0; i < data.getNumberOfCities(); i++) {
-		std::cout << i << " : " << data.getCity(i).m_point << "\n";
+		std::cout << i << " : " << data.getCity(i).m_point << " position " << data.getCity(i).getRoutePosition() << "\n";
 	}
 	
 	for (auto i : route) {

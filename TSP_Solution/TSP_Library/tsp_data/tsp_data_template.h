@@ -35,7 +35,7 @@ public:
 	double getDistanceConst(cityID city1, cityID city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
 
 	/// Route Methods
-	const std::array<cityPTR, Size>& getRoute() const { return m_route; };
+	const std::array<cityPTR, Size + 1>& getRoute() const { return m_route; };
 	size_t getRouteSize() const { return m_route_count; };
 	cityID getRouteCityID(const cityPTR position) const { return position - &m_cities[0]; };
 	bool isCityInRoute(const cityID city) const { return m_cities[city].isInRoute(); };
@@ -53,7 +53,7 @@ private:
 	std::array<TSPType, Size> m_cities;		// Array of cities
 
 	size_t m_route_count = 0;				// Live count of the number of cities in the route
-	std::array<cityPTR, Size> m_route{};		// Array of the cities in the route
+	std::array<cityPTR, Size + 1> m_route{};	// Array of the cities in the route
 	//std::array<size_t, Size> m_city_pos{};	// Array of the positions of the cities in the tour
 	
 	
@@ -153,19 +153,36 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cit
 		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array.");
 	if (pos > m_route_count)
 		throw std::out_of_range("TSP_Data::setCityPos: The position is greater than the number of cities in the route.");
+	if (city >= m_city_count)
+		throw std::out_of_range("TSP_Data::setCityPos: The city is not in the array.");
 	if (isCityInRoute(city))
 		std::cout << "City: " << city << " added multiple times\n";	// TODO: Change to throw
 #endif
+
 	for (cityID i = pos; i < m_route_count; i++) {
 		m_route[i]->incrementRoutePosition();
 	}
 
-	// Shift positions (Deletes the final element!)
-	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(cityPTR) * (m_route_count - pos));
+	// Shift positions correctly without deleting the final element
+	auto src = m_route.data() + pos;
+	auto dest = src + 1;
+	auto count = sizeof(cityPTR) * (m_route_count - pos + 1);
+	memmove(dest, src, count);
 
-	m_route[pos] = &m_cities[city];
-	m_cities[city].setRoutePosition(pos);
+	//for (size_t i = m_route_count + 1; i > pos; i--)	// TODO: Replace for more efficient method
+	//	m_route[i] = m_route[i - 1];
+
 	m_route_count++;
+	m_route[pos] = &m_cities[city];
+	if (pos == 0)
+		m_route[m_route_count] = &m_cities[city];
+
+	m_cities[city].setRoutePosition(pos);
+
+#ifdef _DEBUG
+	if (m_route[0] != m_route[m_route_count])
+		throw std::runtime_error("TSP_Data::setCityPos: The first and last city in the route are not the same.");
+#endif
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>

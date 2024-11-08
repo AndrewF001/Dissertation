@@ -23,6 +23,13 @@ public:
     // TODO: add pythagorean theorem for distance calculation
     inline double getDistance(const TypeBase& p) const override {
         const Point2D& point = static_cast<const Type2d&>(p).m_point;
+        //return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+        return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+    }
+
+    inline double getDistance(const TypeBase* p) const override {
+		const auto& point = static_cast<const Type2d*>(p)->m_point;
+        //return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
         return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
     }
 

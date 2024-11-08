@@ -28,7 +28,7 @@ public:
 	};
 
 	const TspDataTemplate<TSPType, Size, Caching, Partitioning>& getData() const { return m_data; };
-	const std::array<TSPType*, Size>& getRoute() const { return m_data.getRoute(); };
+	const std::array<TSPType*, Size + 1>& getRoute() const { return m_data.getRoute(); };
 
 private:
 	TspDataTemplate<TSPType, Size, Caching, Partitioning> m_data;

@@ -20,7 +20,7 @@ public:
 		const size_t additions = Size - data.getRouteSize();
 		for (size_t i = 0; i < additions; i++) {
 			auto [closest_point, route_position] = FindClosestPoints(data);
-			//data.setCityPos(closest_point, route_position);
+			data.setCityPos(closest_point, route_position);
 		}
 
 		std::cout << "Lookahead Convex Hull\n";
@@ -29,83 +29,78 @@ public:
 private:
 	const size_t m_depth;
 
-	std::pair<size_t, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
-		std::pair<size_t, size_t> output;
+	std::pair<cityID, cityID> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
+		std::pair<cityID, cityID> output;
 		double min_dist = DBL_MAX;
-		size_t depth = 0;
+		size_t depth = m_depth;
 
-		if (Size + 1 - data.getRouteSize() < m_depth)
-			depth = Size + 1 - data.getRouteSize();
+		if (Size - data.getRouteSize() < m_depth)
+			depth = Size - data.getRouteSize();
 
-		for (cityID i = 0; i < Size; i++) {
-			if (data.isCityInRoute(i)) continue;
+		for (cityID idx = 0; idx < Size; idx++) {
+			if (data.isCityInRoute(idx)) continue;
 
-			auto [distance, index] = ShortestRoute(data, i, depth, min_dist);
+			auto [distance, position] = ShortestRoute(data, idx, depth, min_dist);
 			if (distance < min_dist) {
 				min_dist = distance;
-				output = { i, index };
+				output = { idx, position };
 			}
 		}
-
 		return output;
 	}
 
 	std::pair<double, cityID> ShortestRoute(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, cityID point, size_t depth, const double best_distance) {
-		std::pair<double, cityID> output = { DBL_MAX, 0 };
-		/*
-		std::vector<TSPType&> partail_route;
-		partail_route.reserve(m_depth + 1);
-		partail_route.push_back(point);
-		auto& cities = data.getAllCities();
-		auto& route = data.getRoute();
+		std::pair<double, cityID> output = { DBL_MAX, SIZE_MAX };
+		std::vector<std::pair<const TSPType*, cityID>> partail_route;
+		partail_route.reserve(depth + 2);
+		partail_route.resize(3);
+		partail_route[1] = { &data.getCity(point), point };
+		
+
+		const auto& route = data.getRoute();
 		// find closest point to point
-		for (size_t i = 0; i < data.getRouteSize()-1; i++) {
-			double distance = point.getDistance(route[i], route[i + 1]) - route[i].getDistane(route[i+1]);
+		for (size_t i = 0; i < data.getRouteSize(); i++) {
+			double distance = partail_route[1].first->calcDeivation(route[i], route[i+1]);
 			if (distance < output.first) {
 				output.first = distance;
 				output.second = i;
 			}
 		}
-		/*
-		// Add it to partail route
-		partail_route.insert(partail_route.begin(), data.route[output.second]);
-		partail_route.push_back(data.route[output.second + 1]);
 
-		// Set visited to true so that it isn't added again
-		partail_route[1]->visited = true;
+		// Add it to partail route
+		partail_route[0] = { route[output.second], data.getRouteCityID(route[output.second]) };
+		partail_route[2] = { route[output.second + 1], data.getRouteCityID(route[output.second + 1]) };
 
 		// Repeat for lookaheads
 		// Find closest point that is apart of partail route
 		for (size_t i = 0; i < depth - 1; i++) {
 			double min_dist = DBL_MAX;
-			std::pair<Point*, size_t> add_point = { nullptr, 0 };
+			std::pair<cityID, size_t> add_point = { SIZE_MAX, SIZE_MAX };
 
-			for (size_t j = 0; j < partail_route.size() - 1; j++) {
-				for (size_t k = 0; k < data.size; k++) {
-					if (data.cities[k].visited) continue;
+			for (cityID k = 0; k < Size; k++) {
+				if (data.isCityInRoute(k)) 
+					continue;
 
-					double distance = partail_route[j]->square_distance(data.cities[k]) + partail_route[j + 1]->square_distance(data.cities[k]) - partail_route[j]->square_distance(*partail_route[j + 1]);
+				// Check if point is already in partail route
+                if (std::any_of(partail_route.begin() + 1, partail_route.end() - 1, [k](const auto& route_point) { return route_point.second == k; })) continue;
+
+				for (size_t j = 0; j < partail_route.size() - 1; j++) {
+					double distance = partail_route[j].first->calcDeivation(&data.getCity(k), partail_route[j + 1].first);
 					if (distance < min_dist) {
 						min_dist = distance;
-						add_point = { &data.cities[k], j };
+						add_point = { k, j };
 					}
 				}
 			}
 
 			// add closest point to partail route
-			partail_route.insert(partail_route.begin() + add_point.second + 1, add_point.first);
-			add_point.first->visited = true;
+			partail_route.insert(partail_route.begin() + add_point.second + 1, { &data.getCity(add_point.first) ,add_point.first });
 			output.first += min_dist;
 
-			if (output.first > best_distance)
-				break;
+			//if (output.first > best_distance)	// TODO: Optimisation doesn't work as intended
+				//break;
 		}
-
-		// Set partail route to unvisited as they haven't been added to the route yet
-		for (size_t i = 1; i < partail_route.size() - 1; i++) {
-			partail_route[i]->visited = false;
-		}
-		//*/
+		
 		return output;
 	}
 };
