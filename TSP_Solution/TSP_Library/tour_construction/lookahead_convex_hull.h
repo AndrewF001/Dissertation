@@ -17,10 +17,10 @@ public:
 	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 		ConvexHull<TSPType, Size, Caching, Partitioning>::runSingle(data);
 
-		const size_t additions = Size - data.getRouteSize() + 1;
+		const size_t additions = Size - data.getRouteSize();
 		for (size_t i = 0; i < additions; i++) {
 			auto [closest_point, route_position] = FindClosestPoints(data);
-			data.setCityPos(closest_point, route_position);
+			//data.setCityPos(closest_point, route_position);
 		}
 
 		std::cout << "Lookahead Convex Hull\n";
@@ -29,20 +29,44 @@ public:
 private:
 	const size_t m_depth;
 
-	std::pair<double, size_t> ShortestRoute(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, TSPType& point, const double best_distance) {
-		std::pair<double, size_t> output = { DBL_MAX, 0 };
-		/*
-		std::vector<size_t> partail_route = { point };
+	std::pair<size_t, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
+		std::pair<size_t, size_t> output;
+		double min_dist = DBL_MAX;
+		size_t depth = 0;
 
+		if (Size + 1 - data.getRouteSize() < m_depth)
+			depth = Size + 1 - data.getRouteSize();
+
+		for (cityID i = 0; i < Size; i++) {
+			if (data.isCityInRoute(i)) continue;
+
+			auto [distance, index] = ShortestRoute(data, i, depth, min_dist);
+			if (distance < min_dist) {
+				min_dist = distance;
+				output = { i, index };
+			}
+		}
+
+		return output;
+	}
+
+	std::pair<double, cityID> ShortestRoute(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, cityID point, size_t depth, const double best_distance) {
+		std::pair<double, cityID> output = { DBL_MAX, 0 };
+		/*
+		std::vector<TSPType&> partail_route;
+		partail_route.reserve(m_depth + 1);
+		partail_route.push_back(point);
+		auto& cities = data.getAllCities();
+		auto& route = data.getRoute();
 		// find closest point to point
-		for (size_t i = 0; i < Size - 1; i++) {
-			double distance = point->square_distance(*data.route[i], *data.route[i + 1]) - data.route[i]->square_distance(*data.route[i + 1]);
+		for (size_t i = 0; i < data.getRouteSize()-1; i++) {
+			double distance = point.getDistance(route[i], route[i + 1]) - route[i].getDistane(route[i+1]);
 			if (distance < output.first) {
 				output.first = distance;
 				output.second = i;
 			}
 		}
-
+		/*
 		// Add it to partail route
 		partail_route.insert(partail_route.begin(), data.route[output.second]);
 		partail_route.push_back(data.route[output.second + 1]);
@@ -82,27 +106,6 @@ private:
 			partail_route[i]->visited = false;
 		}
 		//*/
-		return output;
-	}
-
-	std::pair<size_t, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
-		std::pair<size_t, size_t> output;
-		/*double min_dist = DBL_MAX;
-
-		if (data.size + 1 - data.route.size() < depth)
-			depth = data.size + 1 - data.route.size();
-
-		for (size_t i = 0; i < data.size; i++) {
-			if (data.cities[i].visited) continue;
-
-			auto [distance, index] = ShortestRoute(data, &data.cities[i], depth, min_dist);
-			if (distance < min_dist) {
-				min_dist = distance;
-				output = { &data.cities[i], index };
-			}
-		}
-
-		*/ 
 		return output;
 	}
 };

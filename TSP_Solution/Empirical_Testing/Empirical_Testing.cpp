@@ -19,13 +19,13 @@ int main(int argc, char* argv[]) {
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 	
 	printf("Time taken: %f seconds\n", duration.count() / 1000000.0);
-	int i = 0;
-	for (auto& point : data.getAllCities()) {
-		std::cout << i++ << " : " << point.m_point << "\n";
+
+	for (cityID i = 0; i < data.getNumberOfCities(); i++) {
+		std::cout << i << " : " << data.getCity(i).m_point << "\n";
 	}
 	
 	for (auto i : route) {
-		std::cout << i << " ";
+		std::cout << data.getRouteCityID(i) << " ";
 	}
 	return 0;
 }

@@ -17,6 +17,8 @@ class TspDataTemplate {
 	/// Type checking
 	static_assert(std::is_base_of<TypeBase, TSPType>::value, "TSPType must be a derived class of TSPType in TSP_Data<T,C,P>");
 
+	using cityPTR = TSPType*;
+
 public:
 	/// Constructors
 	TspDataTemplate(const Square& size);
@@ -25,20 +27,20 @@ public:
 	~TspDataTemplate() = default;
 
 	/// Getters Methods
+	//const std::array<TSPType, Size>& getAllCities() const { return m_cities; };	// This is too much privalage
+	inline const TSPType& getCity(const cityID city) const { return m_cities[city]; };
 	inline const size_t getNumberOfCities() const {	return m_city_count; };
-	const std::array<TSPType, Size>& getAllCities() const {	return m_cities; };		//TODO: delete later
-	std::vector<size_t> getCitiesInArea(const Square& s) const;
-	double getDistance(size_t city1, size_t city2);
-	double getDistanceConst(size_t city1, size_t city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
+	std::vector<cityID> getCitiesInArea(const Square& s) const;
+	double getDistance(cityID city1, cityID city2);
+	double getDistanceConst(cityID city1, cityID city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
 
 	/// Route Methods
-	const std::array<size_t, Size>& getRoute() const { return m_route; };
-	size_t getRouteSize() const { return m_city_count; };
-	size_t getCityPos(const size_t index) const { return m_city_pos[index]; };
-	size_t getRoutePos(const size_t pos) const { return m_route[pos]; };
-	bool isCityInRoute(const size_t city) const { return m_city_pos[city] < m_route_count; };
-	void setCityPos(const size_t index, const size_t pos);	// Used by construction algorithms to create a route
-	void swapCitiesPos(const size_t city1, const size_t city2);	// Used by optimisation algorithms to improve a route
+	const std::array<cityPTR, Size>& getRoute() const { return m_route; };
+	size_t getRouteSize() const { return m_route_count; };
+	cityID getRouteCityID(const cityPTR position) const { return position - &m_cities[0]; };
+	bool isCityInRoute(const cityID city) const { return m_cities[city].isInRoute(); };
+	void setCityPos(const cityID city_id, const cityID pos);	// Used by construction algorithms to create a route
+	void swapCitiesPos(const cityID city1, const cityID city2);	// Used by optimisation algorithms to improve a route
 
 	/// Initalisation Methods
 	void initaliseCache();
@@ -51,8 +53,8 @@ private:
 	std::array<TSPType, Size> m_cities;		// Array of cities
 
 	size_t m_route_count = 0;				// Live count of the number of cities in the route
-	std::array<size_t, Size> m_city_pos{};	// Array of the positions of the cities in the tour
-	std::array<size_t, Size> m_route{};		// Array of the cities in the route
+	std::array<cityPTR, Size> m_route{};		// Array of the cities in the route
+	//std::array<size_t, Size> m_city_pos{};	// Array of the positions of the cities in the tour
 	
 	
 	std::conditional_t<Caching == CachingType::None, 
@@ -76,8 +78,8 @@ private:	/// Partitioning Monolithic Code
 	void _quadTreeInitalisePartition();
 
 	// Partitioning Getters
-	std::vector<size_t> _noPartitioningGetCities(const Square& s) const;
-	std::vector<size_t> _quadtreeGetCities(const Square& s) const;
+	std::vector<cityID> _noPartitioningGetCities(const Square& s) const;
+	std::vector<cityID> _quadtreeGetCities(const Square& s) const;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -115,7 +117,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const Square& s) const {
+std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const Square& s) const {
 	if constexpr (Partitioning == PartitioningType::NonePartitioning)
 		return _noPartitioningGetCities(s);
 	if constexpr (Partitioning == PartitioningType::QuadTree)
@@ -126,7 +128,7 @@ std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCi
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(size_t city1, size_t city2) {			// Not const as it modifies the cache for partial caching
+double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(cityID city1, cityID city2) {			// Not const as it modifies the cache for partial caching
 	if constexpr (Caching == CachingType::FULL)				// Caching is constexpr, so this is optimized out
 		return m_cache[city1][city2];
 
@@ -145,48 +147,46 @@ double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(size_t
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const size_t city, const size_t pos) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city, const cityID pos) {
 #ifdef _DEBUG
 	if (m_route_count >= Size)
 		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array.");
 	if (pos > m_route_count)
 		throw std::out_of_range("TSP_Data::setCityPos: The position is greater than the number of cities in the route.");
+	if (isCityInRoute(city))
+		std::cout << "City: " << city << " added multiple times\n";	// TODO: Change to throw
 #endif
-
-	// Increment all cities that are greater than the new position
-	for (auto& city_pos : m_city_pos) {
-		if (city_pos >= pos)
-			city_pos++;
+	for (cityID i = pos; i < m_route_count; i++) {
+		m_route[i]->incrementRoutePosition();
 	}
 
 	// Shift positions (Deletes the final element!)
-	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(size_t) * (m_route_count - pos));
+	memcpy(m_route.data() + pos + 1, m_route.data() + pos, sizeof(cityPTR) * (m_route_count - pos));
 
-	m_city_pos[city] = pos;
-	m_route[pos] = city;
-
+	m_route[pos] = &m_cities[city];
+	m_cities[city].setRoutePosition(pos);
 	m_route_count++;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const size_t city1, const size_t city2) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const cityID city1, const cityID city2) {
 #ifdef _DEBUG
 	if (city1 >= m_route_count || city2 >= m_route_count)
 		throw std::out_of_range("TSP_Data::swapCitiesPos: The city is not in the route.");
 #endif
 
-	const size_t pos1 = m_city_pos[city1];
-	const size_t pos2 = m_city_pos[city2];
-	m_city_pos[city1] = pos2;
-	m_city_pos[city2] = pos1;
+	const cityID pos1 = m_cities[city1].m_route_position;
+	const cityID pos2 = m_cities[city2].m_route_position;
+	m_cities[city1].m_route_position = pos2;
+	m_cities[city2].m_route_position = pos1;
 	std::swap(m_route[pos1], m_route[pos2]);
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initaliseCache() {
 	if constexpr (Caching == CachingType::FULL) {
-		for (size_t i = 0; i < m_city_count; i++) {
-			for (size_t j = i; j < m_city_count; j++) {		// Could do vectorization here
+		for (cityID i = 0; i < m_city_count; i++) {
+			for (cityID j = i; j < m_city_count; j++) {		// Could do vectorization here
 				m_cache[i][j] = m_cities[i].getDistance(m_cities[j]);
 				m_cache[j][i] = m_cache[i][j];
 			}
@@ -210,19 +210,18 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::defineVariables() {
 	for (auto& row : m_cache)
 		std::fill_n(row.begin(), row.size(), DBL_MAX);	// Fills the cache with DBL_MAX, needed for Partial Caching
 
-	for (size_t i = 0; i < Size; i++) {	// Fills the route with SIZE_MAX
-		m_route[i] = SIZE_MAX;
-		m_city_pos[i] = SIZE_MAX - Size; // When setCityPos() is called all values greater are incremented, this stops overflow
+	for (cityID i = 0; i < Size; i++) {	// Fills the route with SIZE_MAX
+		m_route[i] = nullptr;
 	}
 };
 
 // TODO: Add 3D support
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPartitioningGetCities(const Square& s) const {
-	std::vector<size_t> output;
+std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPartitioningGetCities(const Square& s) const {
+	std::vector<cityID> output;
 	output.reserve(Size);
 
-	for (size_t i = 0; i < getNumberOfCities(); i++) {
+	for (cityID i = 0; i < getNumberOfCities(); i++) {
 		if (m_cities[i].m_point.x >= s.p.x && m_cities[i].m_point.y >= s.p.y &&
 			m_cities[i].m_point.x <= s.p.x + s.width && m_cities[i].m_point.y <= s.p.y + s.height)
 			output.push_back(i);
@@ -237,8 +236,8 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadTreeInitalisePa
 
 // TODO: implement
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-std::vector<size_t> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadtreeGetCities(const Square& s) const {
-	std::vector<size_t> output;
+std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadtreeGetCities(const Square& s) const {
+	std::vector<cityID> output;
 	output.reserve(Size);
 
 	return output;

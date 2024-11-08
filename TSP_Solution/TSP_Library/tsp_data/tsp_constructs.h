@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+using cityID = size_t;
+
 enum CachingType {
 	FULL,
 	Partial,
