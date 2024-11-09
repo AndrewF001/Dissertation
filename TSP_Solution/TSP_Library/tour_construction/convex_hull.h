@@ -27,25 +27,25 @@ private:
 		MaxPoints output{};
 		double max_x = DBL_MIN, max_y = DBL_MIN, min_x = DBL_MAX, min_y = DBL_MAX;
 		for (cityID i = 0; i < Size; i++) {
-			auto& city = data.getCity(i);
+			auto& city = data.getCityPoint(i);
 			// Most North Point
-			if (city.m_point.y > max_y) {
-				max_y = city.m_point.y;
+			if (city.y > max_y) {
+				max_y = city.y;
 				output.north = i;
 			}
 			// Most South Point
-			if (city.m_point.y < min_y) {
-				min_y = city.m_point.y;
+			if (city.y < min_y) {
+				min_y = city.y;
 				output.south = i;
 			}
 			// Most East Point
-			if (city.m_point.x > max_x) {
-				max_x = city.m_point.x;
+			if (city.x > max_x) {
+				max_x = city.x;
 				output.east = i;
 			}
 			// Most West Point
-			if (city.m_point.x < min_x) {
-				min_x = city.m_point.x;
+			if (city.x < min_x) {
+				min_x = city.x;
 				output.west = i;
 			}
 		}
@@ -82,16 +82,16 @@ private:
 			// setup for new iteration
 			output.push_back(new_point);
 			last_point = new_point;
-			auto& last_city = data.getCity(last_point);
+			auto& last_city = data.getCityPoint(last_point);
 			double grad = ConvexHull::gradent_set<gradent>();
 
 			// find best fit
 			for (cityID i = 0; i < Size; i++) {	// TODO: Only find cities in correct quater
-				auto& new_city = data.getCity(i);
-				if (ConvexHull::left_statement<left>(last_city.m_point.x, new_city.m_point.x))
+				auto& new_city = data.getCityPoint(i);
+				if (ConvexHull::left_statement<left>(last_city.x, new_city.x))
 					continue;
 
-				double g = last_city.m_point.gradient(new_city.m_point);
+				double g = last_city.gradient(new_city);
 				if (gradent && g > grad) {
 					grad = g;
 					new_point = i;

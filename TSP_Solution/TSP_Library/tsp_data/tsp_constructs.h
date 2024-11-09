@@ -4,7 +4,7 @@
 using cityID = size_t;
 
 enum CachingType {
-	FULL,
+	Full,
 	Partial,
 	None
 };
@@ -16,7 +16,7 @@ enum GenerationType {
 };
 
 enum PartitioningType {
-	NonePartitioning,
+	NoPartitioning,
 	QuadTree
 };
 

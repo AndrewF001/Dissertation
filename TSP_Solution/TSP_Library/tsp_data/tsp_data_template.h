@@ -28,10 +28,13 @@ public:
 
 	/// Getters Methods
 	//const std::array<TSPType, Size>& getAllCities() const { return m_cities; };	// This is too much privalage
-	inline const TSPType& getCity(const cityID city) const { return m_cities[city]; };
+	//inline const TSPType& getCity(const cityID city) const { return m_cities[city]; };
+	inline const Point2D& getCityPoint(const cityID city) const { return m_cities[city].getPoint(); };
+	inline size_t getCityRoutePosition(const cityID city) const { return m_cities[city].getRoutePosition(); };
 	inline const size_t getNumberOfCities() const {	return m_city_count; };
 	std::vector<cityID> getCitiesInArea(const Square& s) const;
 	double getDistance(cityID city1, cityID city2);
+	double calcDeivation(const cityID new_city, const cityID old_city1, const cityID old_city2);	// Used by outside classes
 	double getDistanceConst(cityID city1, cityID city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
 
 	/// Route Methods
@@ -118,7 +121,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const Square& s) const {
-	if constexpr (Partitioning == PartitioningType::NonePartitioning)
+	if constexpr (Partitioning == PartitioningType::NoPartitioning)
 		return _noPartitioningGetCities(s);
 	if constexpr (Partitioning == PartitioningType::QuadTree)
 		return _quadtreeGetCities(s);
@@ -129,7 +132,7 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCi
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(cityID city1, cityID city2) {			// Not const as it modifies the cache for partial caching
-	if constexpr (Caching == CachingType::FULL)				// Caching is constexpr, so this is optimized out
+	if constexpr (Caching == CachingType::Full)				// Caching is constexpr, so this is optimized out
 		return m_cache[city1][city2];
 
 	double result;									// Use the same memory later
@@ -144,7 +147,12 @@ double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(cityID
 		m_cache[city1][city2] = result;
 
 	return result;
-};
+}
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+inline double TspDataTemplate<TSPType, Size, Caching, Partitioning>::calcDeivation(const cityID new_city, const cityID old_city1, const cityID old_city2) {
+	return getDistance(new_city, old_city1) + getDistance(new_city, old_city2) - getDistance(old_city1, old_city2);
+}
+;
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city, const cityID pos) {
@@ -201,7 +209,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapCitiesPos(const 
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initaliseCache() {
-	if constexpr (Caching == CachingType::FULL) {
+	if constexpr (Caching == CachingType::Full) {
 		for (cityID i = 0; i < m_city_count; i++) {
 			for (cityID j = i; j < m_city_count; j++) {		// Could do vectorization here
 				m_cache[i][j] = m_cities[i].getDistance(m_cities[j]);
@@ -213,7 +221,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initaliseCache() {
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initalisePartition() {
-	if constexpr (Partitioning == PartitioningType::NonePartitioning)
+	if constexpr (Partitioning == PartitioningType::NoPartitioning)
 		return;
 	if constexpr (Partitioning == PartitioningType::QuadTree)
 		return _quadTreeInitalisePartition();

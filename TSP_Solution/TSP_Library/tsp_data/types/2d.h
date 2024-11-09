@@ -11,27 +11,24 @@ constexpr double M_PI = 3.14159265358979323846;     // HOW IS THERE NO PI IN C++
 
 class Type2d : public TypeBase {
 public:
-	Point2D m_point;	// TODO: This should be const
-
     // Constructor
-    Type2d() : TypeBase(), m_point(P2DEFAULT) {}
-    Type2d(const Point2D& point) : TypeBase(point), m_point(point) {}
-    Type2d(GenerationType type, const Square& size, std::mt19937& seed)
-        : TypeBase(type, size, seed), m_point(generateRandomCities(type, size, seed)) {}
+    Type2d() : TypeBase(P2DEFAULT) {}
+    Type2d(const Point2D& point) : TypeBase(point) {}
+    Type2d(GenerationType type, const Square& size, std::mt19937& seed) : TypeBase(generateRandomCities(type, size, seed)) {}
 
     // Methods
     // TODO: add pythagorean theorem for distance calculation
     inline double getDistance(const TypeBase& p) const override {
         const Point2D& point = static_cast<const Type2d&>(p).m_point;
-        //return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
-        return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+        return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+        //return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
     }
 
-    inline double getDistance(const TypeBase* p) const override {
-		const auto& point = static_cast<const Type2d*>(p)->m_point;
-        //return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
-        return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
-    }
+  //  inline double getDistance(const TypeBase* p) const override {
+		//const auto& point = static_cast<const Type2d*>(p)->m_point;
+        ////return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+        //return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+  //  }
 
     inline bool contains(const Square& s) const override{
         return s.contains(m_point);
