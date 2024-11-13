@@ -106,10 +106,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <QtRcc Include="TSP_GUI.qrc" />
+    <QtUic Include="tspprinter.ui" />
     <QtUic Include="TSP_GUI.ui" />
     <QtMoc Include="TSP_GUI.h" />
+    <ClCompile Include="tspprinter.cpp" />
     <ClCompile Include="TSP_GUI.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="tspprinter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

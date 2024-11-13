@@ -1,7 +1,9 @@
 #pragma once
 
+#include <memory>
 #include <QtWidgets/QMainWindow>
 #include "ui_TSP_GUI.h"
+#include "tspprinter.h"
 
 class TSP_GUI : public QMainWindow
 {
@@ -10,7 +12,9 @@ class TSP_GUI : public QMainWindow
 public:
     TSP_GUI(QWidget *parent = nullptr);
     ~TSP_GUI();
+    void setData(std::pair<std::vector<Point2D>, std::vector<cityID>> data);
 
 private:
     Ui::TSP_GUIClass ui;
+	std::unique_ptr<TspPrinter> printer;
 };
