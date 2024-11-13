@@ -49,6 +49,9 @@ public:
 	void initaliseCache();
 	void initalisePartition();
 
+	/// Debugging Methods
+	bool validRoute() const;
+
 private:
 	/// Members Data
 	size_t m_city_count = 0;				// Live count of the number of cities
@@ -228,6 +231,44 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initalisePartition()
 
 	//static_assert(false, "TspDataTemplate::initalisePartition(), impossible to reach code reached!");	// TODO: Odd behaviour, check later
 	throw std::runtime_error("TspDataTemplate::initalisePartition(), impossible to reach code reached!");
+};
+
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+inline bool TspDataTemplate<TSPType, Size, Caching, Partitioning>::validRoute() const {
+	bool valid = true;
+
+	// Check is cycle
+	if (m_route[0] != m_route[Size]) {
+		std::cout << "Route is not a cycle (End point doesn't equal Start point)\n";
+		valid = false;
+	}
+
+	// Check route lenght
+	if (m_route_count != Size) {
+		std::cout << "Route is wrong length\n";
+		valid = false;
+	}
+
+	// Check which points aren't visited
+	for (size_t i = 0; i < Size; i++) {
+		if (!isCityInRoute(i)) {
+			std::cout << "Node " << i << " never visited!\n";
+			valid = false;
+		}
+	}
+
+	// Check if a point is visited twice
+    std::array<bool, Size> map = {false};
+	for (size_t i = 0; i < Size; i++) {
+		if (map[getRouteCityID(m_route[i])]) {
+			std::cout << "Node " << i << " visited twice!\n";
+			valid = false;
+			continue;
+		}
+		map[getRouteCityID(m_route[i])] = true;
+	}
+
+	return valid;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>

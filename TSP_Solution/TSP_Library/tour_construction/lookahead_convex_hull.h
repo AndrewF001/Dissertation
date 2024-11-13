@@ -77,11 +77,11 @@ private:
 			double min_dist = DBL_MAX;
 			std::pair<cityID, size_t> add_point = { SIZE_MAX, SIZE_MAX };
 
-			for (cityID k = 0; k < Size; k++) {
+			for (cityID k = 0; k < Size; k++) {	// TODO: use partitioning to reduce search space
 				if (data.isCityInRoute(k)) 
 					continue;
 
-				// Check if point is already in partail route
+				// Check if point is already in partail route TODO: Optimize with isCityInRoute()
                 if (std::any_of(partail_route.begin() + 1, partail_route.end() - 1, [k](const auto& route_point) { return route_point == k; })) continue;
 
 				for (size_t j = 0; j < partail_route.size() - 1; j++) {

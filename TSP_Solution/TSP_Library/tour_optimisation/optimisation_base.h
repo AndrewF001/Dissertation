@@ -2,6 +2,7 @@
 #include "../tsp_data/tsp_data_template.h"
 
 enum class OptimisationType {
+	None,
 	kopt,
 	LinKernighan
 };

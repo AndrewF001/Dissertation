@@ -1,7 +1,6 @@
 #pragma once
 #include <numbers>    // C++20 just doesn't work with DPC++??
 #include <cmath>
-#include "2d.h"
 #include "type_base.h"
 
 #ifndef M_PI
@@ -17,17 +16,14 @@ public:
     Type2d(GenerationType type, const Square& size, std::mt19937& seed) : TypeBase(generateRandomCities(type, size, seed)) {}
 
     // Methods
-    // TODO: add pythagorean theorem for distance calculation
     inline double getDistance(const TypeBase& p) const override {
         const Point2D& point = static_cast<const Type2d&>(p).m_point;
-        return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
-        //return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+        return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance
     }
 
   //  inline double getDistance(const TypeBase* p) const override {
 		//const auto& point = static_cast<const Type2d*>(p)->m_point;
-        ////return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance as Pythagorean theorem is expensive with no benefit
-        //return pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2); // Euclidean distance as Pythagorean theorem is expensive with no benefit
+        ////return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance
   //  }
 
     inline bool contains(const Square& s) const override{
