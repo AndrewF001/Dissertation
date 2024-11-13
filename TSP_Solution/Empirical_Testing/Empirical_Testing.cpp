@@ -8,11 +8,11 @@ int main(int argc, char* argv[]) {
 	const Square area = {{0, 0}, 10, 10 };
 	std::mt19937 engine(1);
 	
-	auto tsp = std::make_unique<TspTemplate<Type2d, 400, CachingType::Full, PartitioningType::NoPartitioning, ConstructionType::LookaheadConvexHull, OptimisationType::kopt>>(area, GenerationType::Rectangle, engine);
+	auto tsp = std::make_unique<TspTemplate<Type2d, 500, CachingType::Full, PartitioningType::NoPartitioning, ConstructionType::LookaheadConvexHull, OptimisationType::kopt>>(area, GenerationType::Rectangle, engine);
 
 	auto start = std::chrono::high_resolution_clock::now();
 	
-	tsp->run(5);
+	tsp->run(7);
 
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
 	auto& data = tsp->getData();
 
 	if (valid) {
-		std::cout << "Is a valid route\n";
+		std::cout << "Route is valid\n";
 	}
 	else {
 		std::cout << "Invalid route!!!\n";

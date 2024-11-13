@@ -129,7 +129,7 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCi
 	if constexpr (Partitioning == PartitioningType::QuadTree)
 		return _quadtreeGetCities(s);
 
-	throw std::runtime_error(false, "TspDataTemplate::getCities(), impossible to reach code reached!");
+	throw std::runtime_error("TspDataTemplate::getCities(), impossible to reach code reached!");
 	return {};
 };
 
@@ -288,8 +288,9 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPa
 	output.reserve(Size);
 
 	for (cityID i = 0; i < getNumberOfCities(); i++) {
-		if (m_cities[i].m_point.x >= s.p.x && m_cities[i].m_point.y >= s.p.y &&
-			m_cities[i].m_point.x <= s.p.x + s.width && m_cities[i].m_point.y <= s.p.y + s.height)
+		auto& point = getCityPoint(i);
+		if (point.x >= s.p.x && point.y >= s.p.y &&
+			point.x <= s.p.x + s.width && point.y <= s.p.y + s.height)
 			output.push_back(i);
 	}
 
