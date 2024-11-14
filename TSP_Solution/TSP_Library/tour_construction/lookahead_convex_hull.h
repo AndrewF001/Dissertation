@@ -75,18 +75,18 @@ private:
 		// Find closest point that is apart of partail route
 		Point2D p = data.getCityPoint(partail_route[1]);
 		std::vector<cityID> city_search = data.getCitiesInArea(Square({p.x - best_distance, p.y - best_distance }, best_distance*2, best_distance * 2));
-		
+
 		for (size_t i = 0; i < depth - 1; i++) {
 			double min_dist = DBL_MAX;
 			std::pair<cityID, size_t> add_point = { SIZE_MAX, SIZE_MAX };
-
 
 			for (cityID k = 0; k < city_search.size(); k++) {	// TODO: use partitioning to reduce search space
 				if (data.isCityInRoute(city_search[k]))
 					continue;
 
 				// Check if point is already in partail route TODO: Optimize with isCityInRoute()
-                if (std::any_of(partail_route.begin() + 1, partail_route.end() - 1, [k](const auto& route_point) { return route_point == k; })) continue;
+                if (std::any_of(partail_route.begin() + 1, partail_route.end() - 1, [k](const auto& route_point) { return route_point == k; }))
+					continue;
 
 				for (size_t j = 0; j < partail_route.size() - 1; j++) {
 					double distance = data.calcDeivation(city_search[k], partail_route[j], partail_route[j + 1]);
@@ -96,6 +96,9 @@ private:
 					}
 				}
 			}
+
+			if (add_point.first == SIZE_MAX)	// No point found
+				break;	// Is this the correct behaviour?
 
 			// add closest point to partail route
 			partail_route.insert(partail_route.begin() + add_point.second + 1, add_point.first);
