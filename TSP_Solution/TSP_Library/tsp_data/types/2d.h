@@ -13,7 +13,9 @@ public:
     // Constructor
     Type2d() : TypeBase(P2DEFAULT) {}
     Type2d(const Point2D& point) : TypeBase(point) {}
-    Type2d(GenerationType type, const Square& size, std::mt19937& seed) : TypeBase(generateRandomCities(type, size, seed)) {}
+    Type2d(GenerationType type, const Square& size, std::mt19937& seed) : TypeBase() {
+		m_point = generateRandomCities(type, size, seed);
+    }
 
     // Methods
     inline double getDistance(const TypeBase& p) const override {
