@@ -1,8 +1,8 @@
 #include "tspprinter.h"
 #include <QPainter>
 
-TspPrinter::TspPrinter(std::vector<Point2D> d, std::vector<cityID> r, QWidget* parent)
-	: data(d), route(r), QWidget(parent)
+TspPrinter::TspPrinter(TSPOutput data, QWidget* parent)
+	: data(data), QWidget(parent)
 {
 	ui.setupUi(this);
 }
@@ -22,19 +22,19 @@ void TspPrinter::paintEvent(QPaintEvent * event) {
     painter.drawLine(width() - 1, 1, width() - 1, height());
 
     // Scale factor
-    double scalex = static_cast<double>(100000) / width();
-    double scaley = static_cast<double>(100000) / height();
+    double scalex = static_cast<double>(data.area.width) / width();
+    double scaley = static_cast<double>(data.area.height) / height();
 
     // Draw the lines
     painter.setPen(QPen(Qt::black, 2));
-    for (size_t i = 0; i < route.size() - 1; i++) {
-        painter.drawLine(data[route[i]].x / scalex, data[route[i]].y / scaley, data[route[i + 1]].x / scalex, data[route[i + 1]].y / scaley);
+    for (size_t i = 0; i < data.route.size() - 1; i++) {
+        painter.drawLine(data.node_coord_section[data.route[i]].x / scalex, data.node_coord_section[data.route[i]].y / scaley, data.node_coord_section[data.route[i+1]].x / scalex, data.node_coord_section[data.route[i+1]].y / scaley);
     }
 
     // Draw the points
     painter.setPen(QPen(Qt::red, 3));
-    for (int i = 0; i < data.size(); i++) {
-        painter.drawPoint(data[i].x / scalex, data[i].y / scaley);
+    for (int i = 0; i < data.node_coord_section.size(); i++) {
+        painter.drawPoint(data.node_coord_section[i].x / scalex, data.node_coord_section[i].y / scaley);
     }
 
     painter.setPen(QPen(Qt::black, 1));

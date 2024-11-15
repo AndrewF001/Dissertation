@@ -5,7 +5,7 @@
 
 int main(int argc, char* argv[]) {
 	
-	const Square area = {{0, 0}, 10, 10 };
+	const Square area = {{0, 0}, 1000, 1000 };
 	std::mt19937 engine(1);
 	
 	auto tsp = std::make_unique<TspTemplate<Type2d, 500, CachingType::Full, PartitioningType::NoPartitioning, ConstructionType::LookaheadConvexHull, OptimisationType::kopt>>(area, GenerationType::Rectangle, engine);

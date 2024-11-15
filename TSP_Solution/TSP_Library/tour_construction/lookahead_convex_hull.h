@@ -20,7 +20,7 @@ public:
 		const size_t additions = Size - data.getRouteSize();
 		for (size_t i = 0; i < additions; i++) {
 			auto [closest_point, route_position] = FindClosestPoints(data);
-			data.setCityPos(closest_point, route_position);
+			data.setCityPos(closest_point, route_position + 1);
 		}
 
 		std::cout << "Lookahead Convex Hull\n";
@@ -29,9 +29,9 @@ public:
 private:
 	const size_t m_depth;
 
-	std::pair<cityID, cityID> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
-		std::pair<cityID, cityID> output;
+	std::pair<cityID, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
 		double min_dist = DBL_MAX;
+		std::pair<cityID, size_t> output;
 		size_t depth = m_depth;
 
 		if (Size - data.getRouteSize() < m_depth)
@@ -74,7 +74,9 @@ private:
 		// Repeat for lookaheads
 		// Find closest point that is apart of partail route
 		Point2D p = data.getCityPoint(partail_route[1]);
-		std::vector<cityID> city_search = data.getCitiesInArea(Square({p.x - best_distance, p.y - best_distance }, best_distance*2, best_distance * 2));
+
+		double offset = best_distance * best_distance;
+		std::vector<cityID> city_search = data.getCitiesInArea(Square({p.x - offset, p.y - offset }, offset * 2, offset * 2));
 
 		for (size_t i = 0; i < depth - 1; i++) {
 			double min_dist = DBL_MAX;
@@ -104,7 +106,7 @@ private:
 			partail_route.insert(partail_route.begin() + add_point.second + 1, add_point.first);
 			output.first += min_dist;
 
-			if (output.first > best_distance)	// TODO: Optimisation doesn't work as intended
+			if (output.first > best_distance)
 				break;
 		}
 		

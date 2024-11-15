@@ -12,7 +12,7 @@ class TSP_GUI : public QMainWindow
 public:
     TSP_GUI(QWidget *parent = nullptr);
     ~TSP_GUI();
-    void setData(std::pair<std::vector<Point2D>, std::vector<cityID>> data);
+    void setData(TSPOutput data);
 
 private:
     Ui::TSP_GUIClass ui;

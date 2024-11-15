@@ -20,6 +20,8 @@ class TspDataTemplate {
 	using cityPTR = TSPType*;
 
 public:
+	const Square m_area;	// Size of the area	
+
 	/// Constructors
 	TspDataTemplate(const Square& size);
 	TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed);
@@ -55,7 +57,6 @@ public:
 private:
 	/// Members Data
 	size_t m_city_count = 0;				// Live count of the number of cities
-	Square m_size;							// Size of the area	
 	std::array<TSPType, Size> m_cities;		// Array of cities
 
 	size_t m_route_count = 0;				// Live count of the number of cities in the route
@@ -89,12 +90,12 @@ private:	/// Partitioning Monolithic Code
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size) : m_size(size) {
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size) : m_area(size) {
 	defineVariables();
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_size(size) {
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_area(size) {
 	for (size_t i = 0; i < Size; i++)
 		generateRandomCities(type, seed);
 
@@ -102,7 +103,7 @@ TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Squ
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, std::array<TSPType, Size> cities) : m_size(size), m_cities(cities), m_city_count(Size) {
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, std::array<TSPType, Size> cities) : m_area(size), m_cities(cities), m_city_count(Size) {
 	defineVariables();
 };
 
@@ -119,7 +120,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities
 	if (m_city_count >= Size)
 		throw std::out_of_range("TSP_Data::generateRandomCities: The number of cities exceeds the maximum size of the array.");
 
-	m_cities[m_city_count++] = TSPType(type, m_size, seed);
+	m_cities[m_city_count++] = TSPType(type, m_area, seed);
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -158,7 +159,7 @@ inline double TspDataTemplate<TSPType, Size, Caching, Partitioning>::calcDeivati
 ;
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city, const cityID pos) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city, const size_t pos) {
 #ifdef _DEBUG
 	if (m_route_count >= Size)
 		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array.");
@@ -170,7 +171,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cit
 		std::cout << "City: " << city << " added multiple times\n";	// TODO: Change to throw
 #endif
 
-	for (cityID i = pos; i < m_route_count; i++) {
+	for (size_t i = pos; i < m_route_count; i++) {
 		m_route[i]->incrementRoutePosition();
 	}
 

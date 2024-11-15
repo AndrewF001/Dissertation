@@ -5,6 +5,7 @@
 #include "tsp_data/types/2d.h"
 #include "tour_construction/lookahead_convex_hull.h"
 #include "tour_optimisation/k_opt.h"
+#include "tsp_output.h"
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning, ConstructionType Construction, OptimisationType Optimisation>
 class TspTemplate {
@@ -15,7 +16,7 @@ public:
 	TspTemplate(const Square& size, std::array<TSPType, Size> cities) : m_data(size, cities) {};
 	~TspTemplate() = default;
 
-	void run(size_t depth = 1, size_t max_threads = omp_get_max_threads()) {
+	TSPOutput run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
 		if (m_data.getNumberOfCities() != Size)
 			throw std::invalid_argument("Number of cities does not match the size of the template! Fill all data entries");
 
@@ -25,6 +26,18 @@ public:
 		m_data.initaliseCache();
 		constructTour(depth, max_threads);
 		optimiseTour(max_threads);
+
+		TSPOutput output;
+		auto r = m_data.getRoute();
+		for (size_t i = 0; i < Size + 1; i++) {
+			output.route.push_back(m_data.getRouteCityID(r[i]));
+		}
+
+		for (size_t i = 0; i < Size; i++) {
+			output.node_coord_section.push_back(m_data.getCityPoint(i));
+		}
+		output.area = m_data.m_area;
+		return output;
 	};
 
 	const TspDataTemplate<TSPType, Size, Caching, Partitioning>& getData() const { return m_data; };

@@ -10,8 +10,9 @@ TSP_GUI::TSP_GUI(QWidget *parent)
 TSP_GUI::~TSP_GUI()
 {}
 
-void TSP_GUI::setData(std::pair<std::vector<Point2D>,std::vector<cityID>> data) {
-    printer = std::make_unique<TspPrinter>(data.first, data.second);
-    ui.centralWidget->setLayout(new QVBoxLayout);
-    ui.centralWidget->layout()->addWidget(printer.get());
+void TSP_GUI::setData(TSPOutput data) {
+    printer = std::make_unique<TspPrinter>(data);
+	ui.gridLayout->addWidget(printer.get());
+    //ui.centralWidget->setLayout(new QVBoxLayout);
+    //ui.centralWidget->layout()->addWidget(printer.get());
 }
