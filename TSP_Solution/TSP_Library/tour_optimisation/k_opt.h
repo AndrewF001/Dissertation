@@ -2,12 +2,12 @@
 #include "optimisation_base.h"
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-class Kopt : public OptimisationBase<TSPType, Size, Caching, Partitioning> {
+class KOpt : public OptimisationBase<TSPType, Size, Caching, Partitioning> {
 public:
-	Kopt(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : OptimisationBase<TSPType, Size, Caching, Partitioning>(ref) {};
-	~Kopt() = default;
+	KOpt() : OptimisationBase<TSPType, Size, Caching, Partitioning>() {};
+	~KOpt() = default;
 
-	void optimiseTour() override {
+	void optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 		std::cout << "Kopt\n";
 	};
 };

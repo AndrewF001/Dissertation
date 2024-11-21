@@ -5,6 +5,7 @@
 #include "tsp_data/types/2d.h"
 #include "tour_construction/lookahead_convex_hull.h"
 #include "tour_optimisation/k_opt.h"
+#include "tour_optimisation/two_opt.h"
 #include "tsp_output.h"
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning, ConstructionType Construction, OptimisationType Optimisation>
@@ -16,7 +17,7 @@ public:
 	TspTemplate(const Square& size, std::array<TSPType, Size> cities) : m_data(size, cities) {};
 	~TspTemplate() = default;
 
-	TSPOutput run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
+	void run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
 		if (m_data.getNumberOfCities() != Size)
 			throw std::invalid_argument("Number of cities does not match the size of the template! Fill all data entries");
 
@@ -24,9 +25,18 @@ public:
 
 		m_data.initalisePartition();
 		m_data.initaliseCache();
-		constructTour(depth, max_threads);
-		optimiseTour(max_threads);
 
+		constructTour(depth, max_threads);
+		std::cout << "Original Route Length: " << m_data.getRouteLength() << std::endl;
+		
+		optimiseTour(max_threads);
+		std::cout << "Improved Route Length: " << m_data.getRouteLength() << std::endl;
+	};
+
+	const TspDataTemplate<TSPType, Size, Caching, Partitioning>& getData() const { return m_data; };
+	const std::array<TSPType*, Size + 1>& getRoute() const { return m_data.getRoute(); };
+	bool validRoute() const { return m_data.validRoute(); };
+	TSPOutput getOutput() const { 
 		TSPOutput output;
 		auto r = m_data.getRoute();
 		for (size_t i = 0; i < Size + 1; i++) {
@@ -40,10 +50,6 @@ public:
 		return output;
 	};
 
-	const TspDataTemplate<TSPType, Size, Caching, Partitioning>& getData() const { return m_data; };
-	const std::array<TSPType*, Size + 1>& getRoute() const { return m_data.getRoute(); };
-	bool validRoute() const { return m_data.validRoute(); };
-
 private:
 	TspDataTemplate<TSPType, Size, Caching, Partitioning> m_data;
 
@@ -53,7 +59,10 @@ private:
 	};
 
 	void optimiseTour(size_t max_threads) {
-		if constexpr (Optimisation == OptimisationType::kopt)
-			Kopt<TSPType, Size, Caching, Partitioning>(m_data).optimiseTour();	// Virtual method can't be static
+		if (Optimisation == OptimisationType::TwoOpt)
+			TwoOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);
+		
+		//if constexpr (Optimisation == OptimisationType::Kopt)
+			//KOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);	// Virtual method can't be static
 	};
 };

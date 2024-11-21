@@ -18,6 +18,7 @@ public:
 	// Point Methods
 	inline const Point2D& getPoint() const { return m_point; };
 	inline virtual double getDistance(const TypeBase& p) const = 0;
+	inline virtual double getDistance(const TypeBase* p) const = 0;
 	//inline virtual double getDistance(const TypeBase* p) const = 0;
 	//inline double getDistance(const TypeBase& p1, const TypeBase& p2) const {	return getDistance(p1) + getDistance(p2);	};
 	//inline double getDistance(const TypeBase* p1, const TypeBase* p2) const {	return getDistance(p1) + getDistance(p2);	};
@@ -28,10 +29,11 @@ public:
 	virtual Point2D circleGen(const GenerationType type, const Square &size, std::mt19937 &seed) const = 0;
 
 	// Route Methods
-	inline size_t getRoutePosition() const { return m_route_position; };
+	inline const cityID getRoutePosition() const { return m_route_position; };
 	inline void setRoutePosition(const size_t pos) { m_route_position = pos; };
 	inline void resetRoutePosition() { m_route_position = SIZE_MAX; };
 	inline void incrementRoutePosition() { m_route_position++; };
+	inline void decrementRoutePosition() { m_route_position--; };
 	inline bool isInRoute() const { return m_route_position != SIZE_MAX; };
 
 	// Generation

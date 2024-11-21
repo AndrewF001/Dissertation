@@ -3,18 +3,18 @@
 
 enum class OptimisationType {
 	None,
-	kopt,
-	LinKernighan
+	Kopt,
+	TwoOpt,
 };
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class OptimisationBase {
 public:
-	OptimisationBase(TspDataTemplate<TSPType, Size, Caching, Partitioning>& ref) : m_data_ref(ref) {};
+	OptimisationBase() = default;
 	virtual ~OptimisationBase() = default;
 
-	virtual void optimiseTour() = 0;
+	virtual void optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) = 0;
 
-protected:
-	TspDataTemplate<TSPType, Size, Caching, Partitioning>& m_data_ref;
+//protected:
+//	TspDataTemplate<TSPType, Size, Caching, Partitioning>& m_data_ref;
 };

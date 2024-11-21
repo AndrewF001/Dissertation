@@ -19,14 +19,18 @@ public:
 
     // Methods
     inline double getDistance(const TypeBase& p) const override {
-        const Point2D& point = static_cast<const Type2d&>(p).m_point;
-        return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance
+        const Point2D& point = p.getPoint();
+		double diff_x = m_point.x - point.x;
+		double diff_y = m_point.y - point.y;
+        return std::sqrt((diff_x * diff_x) + (diff_y * diff_y)); // Euclidean distance
     }
 
-  //  inline double getDistance(const TypeBase* p) const override {
-		//const auto& point = static_cast<const Type2d*>(p)->m_point;
-        ////return std::sqrt(pow(m_point.x - point.x, 2) + pow(m_point.y - point.y, 2)); // Euclidean distance
-  //  }
+    inline double getDistance(const TypeBase* p) const override {
+        const Point2D& point = p->getPoint();;
+        double diff_x = m_point.x - point.x;
+        double diff_y = m_point.y - point.y;
+        return std::sqrt((diff_x * diff_x) + (diff_y * diff_y)); // Euclidean distance
+    }
 
     inline bool contains(const Square& s) const override{
         return s.contains(m_point);

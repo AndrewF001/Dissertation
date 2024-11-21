@@ -15,6 +15,8 @@ public:
 	~LookaheadConvexHull() = default;
 
 	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
+		std::cout << "Lookahead Convex Hull\n";
+
 		ConvexHull<TSPType, Size, Caching, Partitioning>::runSingle(data);
 
 		const size_t additions = Size - data.getRouteSize();
@@ -22,8 +24,6 @@ public:
 			auto [closest_point, route_position] = FindClosestPoints(data);
 			data.setCityPos(closest_point, route_position + 1);
 		}
-
-		std::cout << "Lookahead Convex Hull\n";
 	};
 
 private:
