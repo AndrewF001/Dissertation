@@ -19,9 +19,7 @@ public:
 		}
 	};
 
-private:
-
-	std::pair<cityID, size_t> FindClosestPoint(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
+	static std::pair<cityID, size_t> FindClosestPoint(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
 		double min_dist = DBL_MAX;
 		std::pair<cityID, size_t> output;
 		const auto& route = data.getRoute();

@@ -4,7 +4,8 @@
 enum class ConstructionType {
 	LookaheadConvexHull,
 	NearestNeighbour,
-	ShortestInsertion
+	ShortestInsertion,
+	ConvexHullInsertion
 };
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>

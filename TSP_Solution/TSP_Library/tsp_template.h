@@ -60,6 +60,9 @@ private:
 
 		if constexpr (Construction == ConstructionType::ShortestInsertion)
 			ShortestInsertion<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
+
+		if constexpr (Construction == ConstructionType::ConvexHullInsertion)
+			ConvexHullInsertion<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
 			
 	};
 

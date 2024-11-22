@@ -30,7 +30,7 @@ private:
 	const size_t m_depth;
 
 	std::pair<cityID, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
-		double min_dist = DBL_MAX/4;
+		double min_dist = DBL_MAX;
 		std::pair<cityID, size_t> output;
 		size_t depth = m_depth;
 
@@ -100,7 +100,7 @@ private:
 			}
 
 			if (add_point.first == SIZE_MAX)	// No point found
-				break;	// Is this the correct behaviour?
+				break;
 
 			// add closest point to partail route
 			partail_route.insert(partail_route.begin() + add_point.second + 1, add_point.first);
