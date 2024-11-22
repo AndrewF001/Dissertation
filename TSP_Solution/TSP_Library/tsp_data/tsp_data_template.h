@@ -2,8 +2,10 @@
 #include <array>
 #include <random>
 #include <algorithm>
+
 #include "tsp_constructs.h"
 #include "types/type_base.h"
+#include "partitioning/quadtree.h"
 
 /// <summary>
 ///  Monolithic class to store, manage and access the TSP data for many different types 
@@ -65,7 +67,7 @@ private:
 	//std::array<size_t, Size> m_city_pos{};	// Array of the positions of the cities in the tour
 	
 	
-	std::conditional_t<Caching == CachingType::None, 
+	std::conditional_t<Caching == CachingType::none, 
 		std::array<std::array<double, 0>, 0>,
 		std::array<std::array<double, Size>, Size>> m_cache;	// Cache for the distances between the cities
 
@@ -80,7 +82,7 @@ private:	/// Partitioning Monolithic Code
 	struct EMPTYCLASS {};	// Empty class for the conditional_t to assign zero bytes of memory
 
 	// Partitioning Data
-	std::conditional_t<Partitioning == PartitioningType::QuadTree, int, EMPTYCLASS> m_quadtree;	// Data  TODO: change int to QuadTree
+	std::conditional_t<Partitioning == PartitioningType::quadTree, std::unique_ptr<QuadTree>, EMPTYCLASS> m_quadtree;
 	
 	// Partitioning Initalisation
 	void _quadTreeInitalisePartition();
@@ -126,9 +128,9 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const Square& s) const {
-	if constexpr (Partitioning == PartitioningType::NoPartitioning)
+	if constexpr (Partitioning == PartitioningType::noPartitioning)
 		return _noPartitioningGetCities(s);
-	if constexpr (Partitioning == PartitioningType::QuadTree)
+	if constexpr (Partitioning == PartitioningType::quadTree)
 		return _quadtreeGetCities(s);
 
 	throw std::runtime_error("TspDataTemplate::getCities(), impossible to reach code reached!");
@@ -137,18 +139,18 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCi
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(cityID city1, cityID city2) {			// Not const as it modifies the cache for partial caching
-	if constexpr (Caching == CachingType::Full)				// Caching is constexpr, so this is optimized out
+	if constexpr (Caching == CachingType::full)				// Caching is constexpr, so this is optimized out
 		return m_cache[city1][city2];
 
 	double result;									// Use the same memory later
-	if constexpr (Caching == CachingType::Partial) {
+	if constexpr (Caching == CachingType::partial) {
 		result = m_cache[city1][city2];
 		if (result != DBL_MAX)						// Check if the value is already in the cache
 			return result;
 	}
 
 	result = m_cities[city1].getDistance(m_cities[city2]);	// Calculate the distance
-	if constexpr (Caching == CachingType::Partial)			// Store the result in the cache
+	if constexpr (Caching == CachingType::partial)			// Store the result in the cache
 		m_cache[city1][city2] = result;
 
 	return result;
@@ -192,9 +194,6 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cit
 	auto count = sizeof(cityPTR) * (m_route_count - pos + 1);
 	memmove(dest, src, count);
 
-	//for (size_t i = m_route_count + 1; i > pos; i--)	// TODO: Replace for more efficient method
-	//	m_route[i] = m_route[i - 1];
-
 	m_route_count++;
 	m_route[pos] = &m_cities[city];
 	if (pos == 0)
@@ -231,7 +230,7 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapRoutePos(cityID 
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initaliseCache() {
-	if constexpr (Caching == CachingType::Full) {
+	if constexpr (Caching == CachingType::full) {
 		for (cityID i = 0; i < m_city_count; i++) {
 			for (cityID j = i; j < m_city_count; j++) {		// Could do vectorization here
 				m_cache[i][j] = m_cities[i].getDistance(m_cities[j]);
@@ -243,9 +242,9 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initaliseCache() {
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initalisePartition() {
-	if constexpr (Partitioning == PartitioningType::NoPartitioning)
+	if constexpr (Partitioning == PartitioningType::noPartitioning)
 		return;
-	if constexpr (Partitioning == PartitioningType::QuadTree)
+	if constexpr (Partitioning == PartitioningType::quadTree)
 		return _quadTreeInitalisePartition();
 
 	//static_assert(false, "TspDataTemplate::initalisePartition(), impossible to reach code reached!");	// TODO: Odd behaviour, check later
@@ -314,15 +313,20 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPa
 	return output;
 };
 
-// TODO: implement
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadTreeInitalisePartition() {};
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadTreeInitalisePartition() {
+	m_quadtree = std::make_unique<QuadTree>(m_area);
+	for (cityID i = 0; i < getNumberOfCities(); i++) {
+		m_quadtree->insert(i, getCityPoint(i));
+	}
+};
 
 // TODO: implement
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadtreeGetCities(const Square& s) const {
 	std::vector<cityID> output;
-	output.reserve(Size);
+	
+	m_quadtree->contains(s, output);
 
 	return output;
 };

@@ -4,20 +4,20 @@
 using cityID = size_t;
 
 enum CachingType {
-	Full,
-	Partial,
-	None
+	full,
+	partial,
+	none
 };
 
 enum GenerationType {
-	Rectangle,
-	Circle,
-	AreaCode
+	rectangle,
+	circle,
+	areaCode
 };
 
 enum PartitioningType {
-	NoPartitioning,
-	QuadTree
+	noPartitioning,
+	quadTree
 };
 
 struct Point2D {
@@ -59,9 +59,18 @@ struct Square {
 
 
 		return x && y;
+	}
 
-		return p2.x >= this->p.x && p2.x <= this->p.x + width &&
-			p2.y >= this->p.y && p2.y <= this->p.y + height;
+	bool overlaps(const Square& s) const {
+		bool x = p.x < s.p.x + s.width;
+		if (width != INFINITY)
+			x = x && p.x + width > s.p.x;
+
+		bool y = p.y < s.p.y + s.height;
+		if (height != INFINITY)
+			y = y && p.y + height > s.p.y;
+
+		return x && y;
 	}
 };
 

@@ -39,11 +39,11 @@ public:
 	// Generation
 	Point2D generateRandomCities(const GenerationType type, const Square &size, std::mt19937 &seed) const {
 		switch (type) {
-			case GenerationType::Rectangle:
+			case GenerationType::rectangle:
 				return rectangleGen(type, size, seed);
-			case GenerationType::Circle:
+			case GenerationType::circle:
 				return circleGen(type, size, seed);
-			case GenerationType::AreaCode:
+			case GenerationType::areaCode:
 				std::exit(101); // TODO: Not implemented
 				return Point2D();
 		}
