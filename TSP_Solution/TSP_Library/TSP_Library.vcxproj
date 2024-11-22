@@ -19,6 +19,7 @@
     <ClInclude Include="tour_construction\shortest_insertion.h" />
     <ClInclude Include="tour_optimisation\k_opt.h" />
     <ClInclude Include="tour_optimisation\optimisation_headers.h" />
+    <ClInclude Include="tour_optimisation\three_opt.h" />
     <ClInclude Include="tour_optimisation\two_opt.h" />
     <ClInclude Include="tsp_data\types\2d.h" />
     <ClInclude Include="tsp_data\tsp_constructs.h" />

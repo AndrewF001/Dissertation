@@ -3,3 +3,10 @@
 #include "nearest_neighbour.h"
 #include "shortest_insertion.h"
 #include "convex_hull_insertion.h"
+
+enum class ConstructionType {
+	LookaheadConvexHull,
+	NearestNeighbour,
+	ShortestInsertion,
+	ConvexHullInsertion
+};

@@ -67,9 +67,12 @@ private:
 	};
 
 	void optimiseTour(size_t max_threads) {
-		if (Optimisation == OptimisationType::TwoOpt)
+		if constexpr (Optimisation == OptimisationType::TwoOpt)
 			TwoOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);
 		
+		//if constexpr (Optimisation == OptimisationType::ThreeOpt)
+			//ThreeOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);
+
 		//if constexpr (Optimisation == OptimisationType::Kopt)
 			//KOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);
 	};
