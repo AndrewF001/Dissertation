@@ -1,12 +1,10 @@
 #pragma once
 #include <omp.h>
-#include "tsp_data/tsp_data_template.h"
-#include "tsp_data/types/type_base.h"
-#include "tsp_data/types/2d.h"
-#include "tour_construction/lookahead_convex_hull.h"
-#include "tour_optimisation/k_opt.h"
-#include "tour_optimisation/two_opt.h"
+
 #include "tsp_output.h"
+#include "tsp_data/types_headers.h"
+#include "tour_construction/consturction_headers.h"
+#include "tour_optimisation/optimisation_headers.h"
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning, ConstructionType Construction, OptimisationType Optimisation>
 class TspTemplate {
@@ -55,7 +53,10 @@ private:
 
 	void constructTour(size_t depth, size_t max_threads) {
 		if constexpr (Construction == ConstructionType::LookaheadConvexHull)
-			LookaheadConvexHull<TSPType, Size, Caching, Partitioning>(depth).constructTour(m_data);	// Virtual method can't be static
+			LookaheadConvexHull<TSPType, Size, Caching, Partitioning>(depth).constructTour(m_data);
+
+		if constexpr (Construction == ConstructionType::NearestNeighbour)
+			NearestNeighbour<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
 	};
 
 	void optimiseTour(size_t max_threads) {
@@ -63,6 +64,6 @@ private:
 			TwoOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);
 		
 		//if constexpr (Optimisation == OptimisationType::Kopt)
-			//KOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);	// Virtual method can't be static
+			//KOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);
 	};
 };

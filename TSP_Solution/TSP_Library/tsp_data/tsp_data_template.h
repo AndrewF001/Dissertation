@@ -307,9 +307,7 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPa
 	output.reserve(Size);
 
 	for (cityID i = 0; i < getNumberOfCities(); i++) {
-		auto& point = getCityPoint(i);
-		if (point.x >= s.p.x && point.y >= s.p.y &&
-			point.x <= s.p.x + s.width && point.y <= s.p.y + s.height)
+		if (s.contains(getCityPoint(i)))
 			output.push_back(i);
 	}
 

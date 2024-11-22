@@ -48,6 +48,18 @@
     <ClInclude Include="tour_optimisation\two_opt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tour_construction\nearest_neighbour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tour_construction\consturction_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tour_optimisation\optimisation_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tsp_data\types_headers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tsp_output.h">

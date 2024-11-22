@@ -30,7 +30,7 @@ private:
 	const size_t m_depth;
 
 	std::pair<cityID, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
-		double min_dist = DBL_MAX;
+		double min_dist = DBL_MAX/4;
 		std::pair<cityID, size_t> output;
 		size_t depth = m_depth;
 

@@ -49,6 +49,17 @@ struct Square {
 	double width, height;
 
 	bool contains(const Point2D& p2) const {
+		bool x = p2.x >= p.x;
+		if (width != INFINITY)
+			x = x && p.x + width;
+
+		bool y = p2.y >= p.y;
+		if (height != INFINITY)
+			y = y && p.y + height;
+
+
+		return x && y;
+
 		return p2.x >= this->p.x && p2.x <= this->p.x + width &&
 			p2.y >= this->p.y && p2.y <= this->p.y + height;
 	}

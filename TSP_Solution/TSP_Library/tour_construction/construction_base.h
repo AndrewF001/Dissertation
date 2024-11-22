@@ -17,4 +17,3 @@ public:
 //protected:
 	//TspDataTemplate<TSPType, Size, Caching, Partitioning>& m_data_ref;
 };
-

@@ -11,9 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="tour_construction\consturction_headers.h" />
     <ClInclude Include="tour_construction\convex_hull.h" />
     <ClInclude Include="tour_construction\lookahead_convex_hull.h" />
+    <ClInclude Include="tour_construction\nearest_neighbour.h" />
     <ClInclude Include="tour_optimisation\k_opt.h" />
+    <ClInclude Include="tour_optimisation\optimisation_headers.h" />
     <ClInclude Include="tour_optimisation\two_opt.h" />
     <ClInclude Include="tsp_data\types\2d.h" />
     <ClInclude Include="tsp_data\tsp_constructs.h" />
@@ -21,6 +24,7 @@
     <ClInclude Include="tsp_data\types\type_base.h" />
     <ClInclude Include="tour_optimisation\optimisation_base.h" />
     <ClInclude Include="tour_construction\construction_base.h" />
+    <ClInclude Include="tsp_data\types_headers.h" />
     <ClInclude Include="tsp_template.h" />
   </ItemGroup>
   <ItemGroup>
