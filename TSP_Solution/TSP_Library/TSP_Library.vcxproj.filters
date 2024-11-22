@@ -60,6 +60,9 @@
     <ClInclude Include="tsp_data\types_headers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tour_construction\shortest_insertion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tsp_output.h">

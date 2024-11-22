@@ -15,6 +15,7 @@
     <ClInclude Include="tour_construction\convex_hull.h" />
     <ClInclude Include="tour_construction\lookahead_convex_hull.h" />
     <ClInclude Include="tour_construction\nearest_neighbour.h" />
+    <ClInclude Include="tour_construction\shortest_insertion.h" />
     <ClInclude Include="tour_optimisation\k_opt.h" />
     <ClInclude Include="tour_optimisation\optimisation_headers.h" />
     <ClInclude Include="tour_optimisation\two_opt.h" />

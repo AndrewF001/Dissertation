@@ -57,6 +57,10 @@ private:
 
 		if constexpr (Construction == ConstructionType::NearestNeighbour)
 			NearestNeighbour<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
+
+		if constexpr (Construction == ConstructionType::ShortestInsertion)
+			ShortestInsertion<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
+			
 	};
 
 	void optimiseTour(size_t max_threads) {
