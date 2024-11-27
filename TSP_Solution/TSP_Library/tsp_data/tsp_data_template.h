@@ -27,8 +27,12 @@ public:
 	/// Constructors
 	TspDataTemplate(const Square& size);
 	TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed);
-	TspDataTemplate(const Square& size, std::array<TSPType, Size> cities);
+	TspDataTemplate(const Square& size, std::array<TSPType, Size>& cities);
 	~TspDataTemplate() = default;
+
+	/// Static Creation Methods
+	static std::array<TSPType, Size> generateCities(const Square& size, GenerationType type, std::mt19937& seed);
+	static TSPType generateRandomCities(const Square& size, GenerationType type, std::mt19937& seed);
 
 	/// Getters Methods
 	//const std::array<TSPType, Size>& getAllCities() const { return m_cities; };	// This is too much privalage
@@ -73,10 +77,6 @@ private:
 
 	/// Adders Methods
 	void addCity(const Point2D& city);
-	void generateRandomCities(GenerationType type, std::mt19937& seed);
-
-	/// Constructor Helper Methods
-	void defineVariables();
 
 private:	/// Partitioning Monolithic Code
 	struct EMPTYCLASS {};	// Empty class for the conditional_t to assign zero bytes of memory
@@ -94,20 +94,33 @@ private:	/// Partitioning Monolithic Code
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size) : m_area(size) {
-	defineVariables();
+	for (auto& row : m_cache)
+		std::fill_n(row.begin(), row.size(), DBL_MAX);	// Fills the cache with DBL_MAX, needed for Partial Caching
+
+	std::fill(m_route.begin(), m_route.end(), nullptr);	// Fills the route with nullptr
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_area(size) {
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : TspDataTemplate(size) {
+	m_cities = generateCities(size, type, seed);
+	m_city_count = Size;
+};
+
+template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, std::array<TSPType, Size>& cities) : TspDataTemplate(size), m_cities(cities), m_city_count(Size) {};
+
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+inline std::array<TSPType, Size> TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateCities(const Square& size, GenerationType type, std::mt19937& seed) {
+	std::array<TSPType, Size> cities;
+
 	for (size_t i = 0; i < Size; i++)
-		generateRandomCities(type, seed);
+		cities[i] = generateRandomCities(size, type, seed);
 
-	defineVariables();
-};
-
-template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, std::array<TSPType, Size> cities) : m_area(size), m_cities(cities), m_city_count(Size) {
-	defineVariables();
+	return cities;
+}
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+inline TSPType TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities(const Square& size, GenerationType type, std::mt19937& seed) {
+	return TSPType(type, size, seed);
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -116,14 +129,6 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::addCity(const Point2
 		throw std::out_of_range("TSP_Data::addCity: The number of cities exceeds the maximum size of the array.");
 
 	m_cities[m_city_count++] = TSPType(city);
-};
-
-template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities(GenerationType type, std::mt19937& seed) {
-	if (m_city_count >= Size)
-		throw std::out_of_range("TSP_Data::generateRandomCities: The number of cities exceeds the maximum size of the array.");
-
-	m_cities[m_city_count++] = TSPType(type, m_area, seed);
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
@@ -171,17 +176,17 @@ inline double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getRouteLen
 	return distance;
 };
 
-template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city, const size_t pos) {
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+inline void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city_id, const cityID pos) {
 #ifdef _DEBUG
 	if (m_route_count >= Size)
 		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array.");
 	if (pos > m_route_count)
 		throw std::out_of_range("TSP_Data::setCityPos: The position is greater than the number of cities in the route.");
-	if (city >= m_city_count)
+	if (city_id >= m_city_count)
 		throw std::out_of_range("TSP_Data::setCityPos: The city is not in the array.");
-	if (isCityInRoute(city))
-		std::cout << "City: " << city << " added multiple times\n";	// TODO: Change to throw
+	if (isCityInRoute(city_id))
+		std::cout << "City: " << city_id << " added multiple times\n";	// TODO: Change to throw
 #endif
 
 	for (size_t i = pos; i < m_route_count; i++) {
@@ -195,17 +200,17 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cit
 	memmove(dest, src, count);
 
 	m_route_count++;
-	m_route[pos] = &m_cities[city];
+	m_route[pos] = &m_cities[city_id];
 	if (pos == 0)
-		m_route[m_route_count] = &m_cities[city];
+		m_route[m_route_count] = &m_cities[city_id];
 
-	m_cities[city].setRoutePosition(pos);
+	m_cities[city_id].setRoutePosition(pos);
 
 #ifdef _DEBUG
 	if (m_route[0] != m_route[m_route_count])
 		throw std::runtime_error("TSP_Data::setCityPos: The first and last city in the route are not the same.");
 #endif
-};
+}
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::swapRoutePos(cityID route1, cityID route2) {
@@ -287,16 +292,6 @@ inline bool TspDataTemplate<TSPType, Size, Caching, Partitioning>::validRoute() 
 	}
 
 	return valid;
-};
-
-template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::defineVariables() {
-	for (auto& row : m_cache)
-		std::fill_n(row.begin(), row.size(), DBL_MAX);	// Fills the cache with DBL_MAX, needed for Partial Caching
-
-	for (cityID i = 0; i < Size; i++) {	// Fills the route with SIZE_MAX
-		m_route[i] = nullptr;
-	}
 };
 
 // TODO: Add 3D support

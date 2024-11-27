@@ -3,7 +3,7 @@
 #include "tsp_template.h"
 
 
-TEST(TestCaseName, TestName) {
-  EXPECT_EQ(1, 1);
+TEST(_LookAheadConvexHull, Similarity) {
+  
   EXPECT_TRUE(true);
 }

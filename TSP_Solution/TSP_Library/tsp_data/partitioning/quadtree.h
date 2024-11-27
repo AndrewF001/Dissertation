@@ -11,6 +11,7 @@ public:
 	QuadTree(Square area, cityID id = SIZE_MAX) : m_bounds(area), m_data(id) {};
 	~QuadTree() = default;
 
+	// TODO: optimise this function
 	void insert(cityID id, Point2D point) {
 		double x_mid = m_bounds.p.x + m_bounds.width / 2;
 		double y_mid = m_bounds.p.y + m_bounds.height / 2;
@@ -45,9 +46,11 @@ public:
 		}
 	};
 
+	// TODO: Optimise this function
 	void contains(const Square& search_area, std::vector<cityID>& found) {
 		if (m_data == SIZE_MAX)
 			return;
+
 
 		if (search_area.overlaps(m_bounds)) {
 			found.push_back(m_data);
