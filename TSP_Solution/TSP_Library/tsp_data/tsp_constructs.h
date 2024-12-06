@@ -17,7 +17,8 @@ enum GenerationType {
 
 enum PartitioningType {
 	noPartitioning,
-	quadTree
+	linearSearch,
+	quadTree,
 };
 
 struct Point2D {
@@ -62,13 +63,17 @@ struct Square {
 	}
 
 	bool overlaps(const Square& s) const {
-		bool x = p.x < s.p.x + s.width;
+		bool x = true;
+		if (s.width != INFINITY)
+			x = p.x < s.p.x + s.width;
 		if (width != INFINITY)
-			x = x && p.x + width > s.p.x;
+			x &= p.x + width > s.p.x;
 
-		bool y = p.y < s.p.y + s.height;
+		bool y = true;
+		if (s.height != INFINITY)
+			y = p.y < s.p.y + s.height;
 		if (height != INFINITY)
-			y = y && p.y + height > s.p.y;
+			y &= p.y + height > s.p.y;
 
 		return x && y;
 	}

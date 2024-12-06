@@ -8,7 +8,7 @@
 
 class QuadTree {
 public:
-	QuadTree(Square area, cityID id = SIZE_MAX) : m_bounds(area), m_data(id) {};
+	QuadTree(Square area) : m_bounds(area), m_id(SIZE_MAX), m_point(P2DEFAULT) {};
 	~QuadTree() = default;
 
 	// TODO: optimise this function
@@ -18,8 +18,9 @@ public:
 		double width = m_bounds.width / 2;
 		double height = m_bounds.height / 2;
 
-		if (m_data == SIZE_MAX) {
-			m_data = id;
+		if (m_id == SIZE_MAX) {
+			m_id = id;
+			m_point = point;
 
 			m_children[0] = std::make_unique<QuadTree>(Square{ m_bounds.p, width, height });	// Top left
 			m_children[1] = std::make_unique<QuadTree>(Square{ Point2D{ x_mid, m_bounds.p.y }, width, height });	// Top right
@@ -46,23 +47,32 @@ public:
 		}
 	};
 
-	// TODO: Optimise this function
-	void contains(const Square& search_area, std::vector<cityID>& found) {
-		if (m_data == SIZE_MAX)
-			return;
-
-
-		if (search_area.overlaps(m_bounds)) {
-			found.push_back(m_data);
-			m_children[0]->contains(search_area, found);
-			m_children[1]->contains(search_area, found);
-			m_children[2]->contains(search_area, found);
-			m_children[3]->contains(search_area, found);
-		}
+	
+	std::vector<cityID> contains(const Square& search_area) {
+		std::vector<cityID> found;
+		_contains(search_area, found);
+		return found;
 	};
 
 private:
-	cityID m_data;
+	size_t m_id;
+	Point2D m_point;
 	const Square m_bounds;
 	std::array<std::unique_ptr<QuadTree>, 4> m_children = { nullptr };
+	
+	// TODO: Optimise this function
+	void _contains(const Square& search_area, std::vector<cityID>& found) {
+		if (m_id == SIZE_MAX)
+			return;
+
+		if (search_area.overlaps(m_bounds)) {
+			if (search_area.contains(m_point))
+				found.push_back(m_id);
+
+			m_children[0]->_contains(search_area, found);
+			m_children[1]->_contains(search_area, found);
+			m_children[2]->_contains(search_area, found);
+			m_children[3]->_contains(search_area, found);
+		}
+	};
 };

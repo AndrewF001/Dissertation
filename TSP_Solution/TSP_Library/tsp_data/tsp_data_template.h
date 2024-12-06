@@ -89,6 +89,7 @@ private:	/// Partitioning Monolithic Code
 
 	// Partitioning Getters
 	std::vector<cityID> _noPartitioningGetCities(const Square& s) const;
+	std::vector<cityID> _linearSearch(const Square& s) const;
 	std::vector<cityID> _quadtreeGetCities(const Square& s) const;
 };
 
@@ -300,6 +301,18 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPa
 	std::vector<cityID> output;
 	output.reserve(Size);
 
+	for (size_t i = 0; i < getNumberOfCities(); i++) {
+		output.push_back(i);
+	}
+
+	return output;
+};
+
+template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_linearSearch(const Square& s) const {
+	std::vector<cityID> output;
+	output.reserve(Size);
+
 	for (cityID i = 0; i < getNumberOfCities(); i++) {
 		if (s.contains(getCityPoint(i)))
 			output.push_back(i);
@@ -319,9 +332,5 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadTreeInitalisePa
 // TODO: implement
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_quadtreeGetCities(const Square& s) const {
-	std::vector<cityID> output;
-	
-	m_quadtree->contains(s, output);
-
-	return output;
+	return m_quadtree->contains(s);
 };
