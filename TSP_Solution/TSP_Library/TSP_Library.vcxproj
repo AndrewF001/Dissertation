@@ -34,6 +34,11 @@
   <ItemGroup>
     <ClCompile Include="tsp_output.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Utilities\Utilities.vcxproj">
+      <Project>{5473ee49-0dfa-4367-8ef9-573022d9d6cd}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{17840673-d844-48b3-8a3c-6d5447bbd81f}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

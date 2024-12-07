@@ -1,10 +1,10 @@
 #pragma once
 #include <chrono>
 
-class timer {
+class Timer {
 public:
-	timer() : m_duration() { start_timer();	};
-	~timer() = default;
+	Timer() : m_duration() { start_timer();	};
+	~Timer() = default;
 
 	void start_timer() {
 		m_start = std::chrono::high_resolution_clock::now();

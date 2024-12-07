@@ -24,16 +24,31 @@ public:
 			throw std::invalid_argument("Number of cities does not match the size of the template! Fill all data entries");
 
 		omp_set_num_threads(max_threads);
+		m_timer.reset_timer();
 
 		m_data.initalisePartition();
+		m_output.initalisePartition_time = m_timer.interluve();
 
 		m_data.initaliseCache();
+		m_output.initaliseCache_time = m_timer.interluve();
 
 		constructTour(depth, max_threads);
-		std::cout << "Original Route Length: " << m_data.getRouteLength() << std::endl;
-		
+		m_output.constructTour_time = m_timer.interluve();
+		double distance = m_data.getRouteLength();
+		std::cout << "Original Route Length: " << distance << std::endl;
+		m_output.constructTour_distance = distance;
+		m_timer.start_timer();
+
+
 		optimiseTour(max_threads);
-		std::cout << "Improved Route Length: " << m_data.getRouteLength() << std::endl;
+		m_output.optimiseTour_time = m_timer.interluve();
+		m_output.run_time = m_timer.stop_timer();
+		distance = m_data.getRouteLength();
+		std::cout << "Improved Route Length: " << distance << std::endl;
+		m_output.distance = distance;
+		
+		// Do m_output finalization
+
 	};
 
 	const TspDataTemplate<TSPType, Size, Caching, Partitioning>& getData() const { return m_data; };
@@ -55,6 +70,8 @@ public:
 
 private:
 	TspDataTemplate<TSPType, Size, Caching, Partitioning> m_data;
+	TSPOutput m_output;
+	Timer m_timer;
 
 	void constructTour(size_t depth, size_t max_threads) {
 		if constexpr (Construction == ConstructionType::LookaheadConvexHull)
