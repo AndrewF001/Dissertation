@@ -1,10 +1,14 @@
 #pragma once
 #include <omp.h>
 
+#include "timer.h"
+
 #include "tsp_output.h"
 #include "tsp_data/types_headers.h"
 #include "tour_construction/consturction_headers.h"
 #include "tour_optimisation/optimisation_headers.h"
+
+
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning, ConstructionType Construction, OptimisationType Optimisation>
 class TspTemplate {
