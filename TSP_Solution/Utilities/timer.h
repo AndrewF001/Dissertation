@@ -14,7 +14,7 @@ public:
 		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - m_start);
 	}
 
-	std::chrono::milliseconds interluve() {
+	std::chrono::milliseconds interval() {
 		auto pause = std::chrono::high_resolution_clock::now();
 		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(pause - m_start);
 		m_duration += duration;
@@ -30,9 +30,9 @@ public:
 	}
 
 	std::chrono::milliseconds stop_timer() {
-		auto duration = interluve();
-		reset_timer();
-		return duration;
+		m_start = std::chrono::steady_clock::time_point{};
+		//reset_timer();
+		return m_duration;
 	}
 
 private:

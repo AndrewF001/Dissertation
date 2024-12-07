@@ -1,7 +1,7 @@
 #include "tspprinter.h"
 #include <QPainter>
 
-TspPrinter::TspPrinter(TSPOutput data, QWidget* parent)
+TspPrinter::TspPrinter(TSPVerboseResult data, QWidget* parent)
 	: data(data), QWidget(parent)
 {
 	ui.setupUi(this);

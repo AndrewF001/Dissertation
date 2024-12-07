@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
 
 	auto start = std::chrono::high_resolution_clock::now();
 	
-	tsp->run(4);
+	auto output = tsp->run(4);
 
 	auto stop = std::chrono::high_resolution_clock::now();
 	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
