@@ -1,6 +1,10 @@
 #pragma once
-#include "tsp_data/tsp_constructs.h"
 #include <vector>
+#include <chrono>
+#include <random>
+
+#include "tsp_data/tsp_constructs.h"
+
 struct TSPOutput {
 	// .tsp file data fields
 	std::string name;	// File name
@@ -11,16 +15,19 @@ struct TSPOutput {
 	std::string display_data_type;
 	std::vector<Point2D> node_coord_section;
 
+	// Contruction par
 	Square area;
+	std::mt19937 seed;
 
 	// Completed route
 	double distance;
 	std::vector<cityID> route;
 
 	// Run statistics
-	double run_time;
-	double initalisePartition;
-	double initaliseCache;
-	double constructTour;
-	double optimiseTour;
+	std::chrono::milliseconds run_time;
+	std::chrono::milliseconds initalisePartition_time;
+	std::chrono::milliseconds initaliseCache_time;
+	std::chrono::milliseconds constructTour_time;
+	std::chrono::milliseconds optimiseTour_time;
+	double constructTour_distance;
 };

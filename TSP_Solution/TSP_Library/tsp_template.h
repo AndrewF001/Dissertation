@@ -22,6 +22,7 @@ public:
 		omp_set_num_threads(max_threads);
 
 		m_data.initalisePartition();
+
 		m_data.initaliseCache();
 
 		constructTour(depth, max_threads);
