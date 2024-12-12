@@ -1,6 +1,8 @@
 #pragma once
 #include <chrono>
 
+using TimeScale = std::chrono::microseconds;
+
 class Timer {
 public:
 	Timer() : m_duration() { start_timer();	};
@@ -10,32 +12,33 @@ public:
 		m_start = std::chrono::high_resolution_clock::now();
 	}
 
-	std::chrono::milliseconds time() {
-		return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - m_start);
+	TimeScale time() {
+		return std::chrono::duration_cast<TimeScale>(std::chrono::high_resolution_clock::now() - m_start);
 	}
 
-	std::chrono::milliseconds interval() {
+	TimeScale interval() {
 		auto pause = std::chrono::high_resolution_clock::now();
-		auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(pause - m_start);
+		auto duration = std::chrono::duration_cast<TimeScale>(pause - m_start);
 		m_duration += duration;
 		m_start = pause;
 		return duration;
 	}
 
-	std::chrono::milliseconds reset_timer() {
+	TimeScale resetTimer() {
 		auto dur = m_duration;
-		m_duration = std::chrono::milliseconds(0);
+		m_duration = TimeScale(0);
 		m_start = std::chrono::steady_clock::time_point{};
 		return dur;
 	}
 
-	std::chrono::milliseconds stop_timer() {
+	TimeScale stopTimer() {
+		m_duration += std::chrono::duration_cast<TimeScale>(std::chrono::high_resolution_clock::now() - m_start);
 		m_start = std::chrono::steady_clock::time_point{};
-		//reset_timer();
+
 		return m_duration;
 	}
 
 private:
 	std::chrono::steady_clock::time_point m_start;
-	std::chrono::milliseconds m_duration;
+	TimeScale m_duration;
 };

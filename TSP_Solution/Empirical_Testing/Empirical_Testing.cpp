@@ -10,32 +10,23 @@ int main(int argc, char* argv[]) {
 	
 	auto tsp = std::make_unique<TspTemplate<Type2d, 200, CachingType::full, PartitioningType::quadTree, ConstructionType::LookaheadConvexHull, OptimisationType::TwoOpt>>(area, GenerationType::rectangle, engine);
 
-	auto start = std::chrono::high_resolution_clock::now();
-	
 	auto output = tsp->run(4);
-
-	auto stop = std::chrono::high_resolution_clock::now();
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
 	
-	printf("Time taken: %f seconds\n", duration.count() / 1000000.0);
+	printf("Time taken: %f seconds\n", output.total_run_time.count() / 1000000.0);
 
-	bool valid = tsp->validRoute();
-	auto& route = tsp->getRoute();
-	auto& data = tsp->getData();
-
-	if (valid) {
+	if (output.validRoute) {
 		std::cout << "Route is valid\n";
 	}
 	else {
 		std::cout << "Invalid route!!!\n";
 	}
 
-	for (cityID i = 0; i < data.getNumberOfCities(); i++) {
-		std::cout << i << " : " << data.getCityPoint(i) << " position " << data.getCityRoutePosition(i) << "\n";
+	for (cityID i = 0; i < output.num_cities; i++) {
+		std::cout << i << " : " << output.node_coord_section[i] << "\n";
 	}
 	
-	for (auto i : route) {
-		std::cout << data.getRouteCityID(i) << " ";
+	for (auto i : output.route) {
+		std::cout << i << " ";
 	}
 	return 0;
 }

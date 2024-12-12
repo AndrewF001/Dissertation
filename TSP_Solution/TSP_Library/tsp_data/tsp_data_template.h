@@ -68,8 +68,6 @@ private:
 
 	size_t m_route_count = 0;				// Live count of the number of cities in the route
 	std::array<cityPTR, Size + 1> m_route{};	// Array of the cities in the route
-	//std::array<size_t, Size> m_city_pos{};	// Array of the positions of the cities in the tour
-	
 	
 	std::conditional_t<Caching == CachingType::none, 
 		std::array<std::array<double, 0>, 0>,
@@ -136,6 +134,8 @@ template <class TSPType, size_t Size, CachingType Caching, PartitioningType Part
 std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const Square& s) const {
 	if constexpr (Partitioning == PartitioningType::noPartitioning)
 		return _noPartitioningGetCities(s);
+	if constexpr (Partitioning == PartitioningType::linearSearch)
+		return _linearSearch(s);
 	if constexpr (Partitioning == PartitioningType::quadTree)
 		return _quadtreeGetCities(s);
 
@@ -249,6 +249,8 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initaliseCache() {
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initalisePartition() {
 	if constexpr (Partitioning == PartitioningType::noPartitioning)
+		return;
+	if constexpr (Partitioning == PartitioningType::linearSearch)
 		return;
 	if constexpr (Partitioning == PartitioningType::quadTree)
 		return _quadTreeInitalisePartition();

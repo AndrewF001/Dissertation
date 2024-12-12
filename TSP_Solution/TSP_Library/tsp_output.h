@@ -6,6 +6,7 @@
 #include "tsp_data/tsp_constructs.h"
 #include "tour_optimisation/optimisation_headers.h"
 #include "tour_construction/consturction_headers.h"
+#include "timer.h"
 
 // Not enough info to reproduce results but sames timing results
 class TSPResult {
@@ -28,11 +29,11 @@ public:
 
 	// Run statistics
 	bool validRoute;
-	std::chrono::milliseconds total_run_time;
-	std::chrono::milliseconds initalisePartition_time;
-	std::chrono::milliseconds initaliseCache_time;
-	std::chrono::milliseconds constructTour_time;
-	std::chrono::milliseconds optimiseTour_time;
+	TimeScale total_run_time;
+	TimeScale initalisePartition_time;
+	TimeScale initaliseCache_time;
+	TimeScale constructTour_time;
+	TimeScale optimiseTour_time;
 };
 
 // Fully reconstructable results

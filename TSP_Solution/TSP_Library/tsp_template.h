@@ -45,7 +45,7 @@ public:
 
 		optimiseTour(max_threads);
 		m_output.optimiseTour_time = m_timer.interval();
-		m_output.total_run_time = m_timer.stop_timer();
+		m_output.total_run_time = m_timer.stopTimer();
 		distance = m_data.getRouteLength();
 		std::cout << "Improved Route Length: " << distance << std::endl;
 		m_output.final_distance = distance;
