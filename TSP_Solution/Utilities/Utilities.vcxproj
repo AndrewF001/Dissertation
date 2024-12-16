@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="file_handler.h" />
     <ClInclude Include="logger.h" />
     <ClInclude Include="timer.h" />
   </ItemGroup>

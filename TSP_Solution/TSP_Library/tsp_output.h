@@ -34,6 +34,13 @@ public:
 	TimeScale initaliseCache_time;
 	TimeScale constructTour_time;
 	TimeScale optimiseTour_time;
+
+	std::string csvLine() {
+		std::string output = "";
+
+
+	}
+
 };
 
 // Fully reconstructable results
@@ -48,4 +55,10 @@ public:
 	std::vector<Point2D> node_coord_section;
 
 	std::vector<cityID> route;
+
+	std::string csvLine() {
+		std::string output = TSPResult::csvLine();
+
+		return output;
+	}
 };
