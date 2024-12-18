@@ -29,23 +29,23 @@ private:
 		for (cityID i = 0; i < Size; i++) {
 			auto& city = data.getCityPoint(i);
 			// Most North Point
-			if (city.y > max_y) {
-				max_y = city.y;
+			if (city.m_y > max_y) {
+				max_y = city.m_y;
 				output.north = i;
 			}
 			// Most South Point
-			if (city.y < min_y) {
-				min_y = city.y;
+			if (city.m_y < min_y) {
+				min_y = city.m_y;
 				output.south = i;
 			}
 			// Most East Point
-			if (city.x > max_x) {
-				max_x = city.x;
+			if (city.m_x > max_x) {
+				max_x = city.m_x;
 				output.east = i;
 			}
 			// Most West Point
-			if (city.x < min_x) {
-				min_x = city.x;
+			if (city.m_x < min_x) {
+				min_x = city.m_x;
 				output.west = i;
 			}
 		}
@@ -75,6 +75,39 @@ private:
 	};
 
 	template<bool left, bool gradent>
+	static std::vector<cityID> convexHullQuatar(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data, cityID new_point, const cityID dest) {
+		std::vector<cityID> output;
+		cityID last_point = new_point;
+		do {
+			// setup for new iteration
+			output.push_back(new_point);
+			last_point = new_point;
+			auto& last_city = data.getCityPoint(last_point);
+			double grad = ConvexHull::gradent_set<gradent>();
+			const auto& search = data.getCitiesInArea(last_point, dest);
+			// find best fit
+			for (const auto& city : search) {	// TODO: Only find cities in correct quater
+				auto& new_city = data.getCityPoint(city);
+				if (ConvexHull::left_statement<left>(last_city.m_x, new_city.m_x))
+					continue;
+
+				double g = last_city.gradient(new_city);
+				if (gradent && g > grad) {
+					grad = g;
+					new_point = city;
+				}
+				else if (!gradent && g < grad) {
+					grad = g;
+					new_point = city;
+				}
+			} 
+			// Check if a new best fit was found
+		} while (new_point != dest);
+
+		return output;
+	};
+
+	template<bool left, bool gradent>
 	static std::vector<cityID> convexHullHalf(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data, cityID new_point) {
 		std::vector<cityID> output;
 		cityID last_point = new_point;
@@ -88,7 +121,7 @@ private:
 			// find best fit
 			for (cityID i = 0; i < Size; i++) {	// TODO: Only find cities in correct quater
 				auto& new_city = data.getCityPoint(i);
-				if (ConvexHull::left_statement<left>(last_city.x, new_city.x))
+				if (ConvexHull::left_statement<left>(last_city.m_x, new_city.m_x))
 					continue;
 
 				double g = last_city.gradient(new_city);
@@ -112,15 +145,31 @@ private:
 		MaxPoints points = ConvexHull::maxPoints(data);
 		std::cout << "North: " << points.north << " East: " << points.east << " South: " << points.south << " West: " << points.west << "\n";
 
-		std::vector<cityID> upper = ConvexHull::convexHullHalf<false, true>(data, points.west);
-		for (size_t i = 0; i < upper.size(); i++){
-			data.setCityPos(upper[i], i);
-		}
-		
-		std::vector<cityID> lower = ConvexHull::convexHullHalf<true, true>(data, upper.back());
-		for (size_t i = 1; i < lower.size() - 1; i++) {
-			data.setCityPos(lower[i], i + upper.size() - 1);
-		}
+		std::vector<cityID> upper_left = ConvexHull::convexHullQuatar<false, true>(data, points.west, points.north);
+		std::vector<cityID> upper_right = ConvexHull::convexHullQuatar<false, false>(data, points.north, points.east);
+		std::vector<cityID> lower_right = ConvexHull::convexHullQuatar<true, false>(data, points.east, points.south);
+		std::vector<cityID> lower_left = ConvexHull::convexHullQuatar<true, true>(data, points.south, points.west);
+
+		size_t idx = 0;
+		for (const auto city : upper_left)
+			data.setCityPos(city, idx++);
+		for (const auto city : upper_right)
+			data.setCityPos(city, idx++);
+		for (const auto city : lower_right)
+			data.setCityPos(city, idx++);
+		for (const auto city : lower_left)
+			data.setCityPos(city, idx++);
+
+
+		//std::vector<cityID> upper = ConvexHull::convexHullHalf<false, true>(data, points.west);
+		//for (size_t i = 0; i < upper.size(); i++){
+		//	data.setCityPos(upper[i], i);
+		//}
+		//
+		//std::vector<cityID> lower = ConvexHull::convexHullHalf<true, true>(data, upper.back());
+		//for (size_t i = 1; i < lower.size() - 1; i++) {
+		//	data.setCityPos(lower[i], i + upper.size() - 1);
+		//}
 	};
 };
 

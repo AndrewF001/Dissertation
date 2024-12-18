@@ -20,15 +20,15 @@ public:
     // Methods
     inline double getDistance(const TypeBase& p) const override {
         const Point2D& point = p.getPoint();
-		double diff_x = m_point.x - point.x;
-		double diff_y = m_point.y - point.y;
+		double diff_x = m_point.m_x - point.m_x;
+		double diff_y = m_point.m_y - point.m_y;
         return std::sqrt((diff_x * diff_x) + (diff_y * diff_y)); // Euclidean distance
     }
 
     inline double getDistance(const TypeBase* p) const override {
         const Point2D& point = p->getPoint();;
-        double diff_x = m_point.x - point.x;
-        double diff_y = m_point.y - point.y;
+        double diff_x = m_point.m_x - point.m_x;
+        double diff_y = m_point.m_y - point.m_y;
         return std::sqrt((diff_x * diff_x) + (diff_y * diff_y)); // Euclidean distance
     }
 
@@ -38,19 +38,19 @@ public:
 
 	// TODO: Generation code should be apart of Point2D code
     Point2D rectangleGen(const GenerationType type, const Square& size, std::mt19937& seed) const override {
-        std::uniform_real_distribution<double> x_rnd(0, size.width);
-        std::uniform_real_distribution<double> y_rnd(0, size.height);
+        std::uniform_real_distribution<double> x_rnd(0, size.width());
+        std::uniform_real_distribution<double> y_rnd(0, size.height());
         return Point2D(x_rnd(seed), y_rnd(seed));
     }
 
     Point2D circleGen(const GenerationType type, const Square& size, std::mt19937& seed) const override {
         std::uniform_real_distribution<double> angle_rnd(0, M_PI * 2);
         std::uniform_real_distribution<double> radius_rnd;
-        if (size.height > size.width) {
-            radius_rnd = std::uniform_real_distribution<double>(0, size.width / 2);
+        if (size.height() > size.width()) {
+            radius_rnd = std::uniform_real_distribution<double>(0, size.width() / 2);
         }
         else {
-            radius_rnd = std::uniform_real_distribution<double>(0, size.height / 2);
+            radius_rnd = std::uniform_real_distribution<double>(0, size.height() / 2);
         }
         double angle = angle_rnd(seed);
         double radius = radius_rnd(seed);

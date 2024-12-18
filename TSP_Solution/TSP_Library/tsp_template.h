@@ -83,8 +83,8 @@ private:
 	Timer m_timer;
 
 	void constructTour(size_t depth, size_t max_threads) {
-		if constexpr (Construction == ConstructionType::LookaheadConvexHull)
-			LookaheadConvexHull<TSPType, Size, Caching, Partitioning>(depth).constructTour(m_data);
+		if constexpr (Construction == ConstructionType::StaticLookaheadConvexHullInserstion)
+			StaticLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(depth).constructTour(m_data);
 
 		if constexpr (Construction == ConstructionType::NearestNeighbour)
 			NearestNeighbour<TSPType, Size, Caching, Partitioning>().constructTour(m_data);

@@ -2,6 +2,12 @@
 #include "gtest/gtest.h"
 #include "tsp_data/partitioning/quadtree.h"
 
+
+static void check_result(const std::vector<cityID>& found, const std::vector<cityID> expect) {
+	EXPECT_EQ(found.size(), expect.size());
+	EXPECT_EQ(found, expect);
+}
+
 TEST(QuadTreeTest, Creation) {
 	QuadTree tree(Square{ {0, 0}, 100, 100 });
 
@@ -27,9 +33,7 @@ TEST(QuadTreeTest, MultipleInsertion) {
 	tree.insert(4, Point2D{ 70, 30 }); // Top right
 
 	auto found = tree.contains(Square{ {0, 0}, 100, 100 });
-	std::vector<cityID> expect = { 0, 1, 4, 3, 2 };
-	EXPECT_EQ(found.size(), 5);
-	EXPECT_EQ(found, expect);
+	check_result(found, { 0, 1, 4, 3, 2 });
 }
 
 TEST(QuadTreeTest, DepthInsertion) {
@@ -41,9 +45,7 @@ TEST(QuadTreeTest, DepthInsertion) {
 	tree.insert(4, Point2D{ 5, 5 });	// Top left
 
 	auto found = tree.contains(Square{ {0, 0}, 100, 100 });
-	std::vector<cityID> expect = { 0, 1, 2, 3, 4 };
-	EXPECT_EQ(found.size(), 5);
-	EXPECT_EQ(found, expect);
+	check_result(found, { 0, 1, 2, 3, 4 });
 }
 
 TEST(QuadTreeTest, BasicSearch) {
@@ -55,9 +57,7 @@ TEST(QuadTreeTest, BasicSearch) {
 	tree.insert(4, Point2D{ 70, 30 }); // Top right
 
 	auto found = tree.contains(Square{ {0, 0}, 40, 40 });
-	std::vector<cityID> expect = { 0, 1};
-	EXPECT_EQ(found.size(), 2);
-	EXPECT_EQ(found, expect);
+	check_result(found, { 1 });
 }
 
 TEST(QuadTreeTest, DepthSearch) {
@@ -73,7 +73,5 @@ TEST(QuadTreeTest, DepthSearch) {
 	tree.insert(9, Point2D{ 5, 5 });	// Top left
 
 	auto found = tree.contains(Square{ {20, 20}, 20, 20 });
-	std::vector<cityID> expect = { 0, 1, 7, 6  };
-	EXPECT_EQ(found.size(), 4);
-	EXPECT_EQ(found, expect);
+	check_result(found, { 1, 7, 6 });
 }

@@ -23,18 +23,18 @@ enum PartitioningType {
 
 struct Point2D {
 public:
-	Point2D(double x = 0, double y = 0) : x(x), y(y) {}
-	Point2D(Point2D const& p) : x(p.x), y(p.y) {}
+	Point2D(double x = 0, double y = 0) : m_x(x), m_y(y) {}
+	Point2D(Point2D const& p) : m_x(p.m_x), m_y(p.m_y) {}
 	//explicit Point2D(Point2D&& p) : x(p.x), y(p.y) {}	// TODO: Add Rvalue reference constructor
 
-	double x, y;	// TODO: This should be const
+	double m_x, m_y;	// TODO: This should be const
 
 	double gradient(const Point2D& p2) const {
-		return (p2.y - y) / (p2.x - x);
+		return (p2.m_y - m_y) / (p2.m_x - m_x);
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const Point2D& point) {
-		os << "Point2D(" << point.x << ", " << point.y << ")";
+		os << "Point2D(" << point.m_x << ", " << point.m_y << ")";
 		return os;
 	}
 };
@@ -42,41 +42,77 @@ public:
 static Point2D const P2DEFAULT = Point2D(0, 0);
 
 struct Square {
-	Square(Square const& c) : p(c.p), width(c.width), height(c.height) {}
-	Square(Point2D const& p = P2DEFAULT, double width = 0, double height = 0) : p(p), width(width), height(height) {}
+	Square(Square const& c) : m_p1(c.m_p1), m_p2(c.m_p2) {}
 
+	Square(Point2D const& p1, Point2D const& p2) {
+		if (p1.m_x < p2.m_x) {
+			m_p1.m_x = p1.m_x;
+			m_p2.m_x = p2.m_x;
+		}
+		else {
+			m_p1.m_x = p2.m_x;
+			m_p2.m_x = p1.m_x;
+		}
 
-	Point2D p;
-	double width, height;
+		if (p1.m_y < p2.m_y) {
+			m_p1.m_y = p1.m_y;
+			m_p2.m_y = p2.m_y;
+		}
+		else {
+			m_p1.m_y = p2.m_y;
+			m_p2.m_y = p1.m_y;
+		}
+	}
 
-	bool contains(const Point2D& p2) const {
-		bool x = p2.x >= p.x;
-		if (width != INFINITY)
-			x = x && p2.x <= p.x + width;
+	Square(Point2D const& p = P2DEFAULT, double width = 0, double height = 0) {
+		if (width < 0) {
+			m_p1.m_x = p.m_x + width;
+			m_p2.m_x = p.m_x;
+		} else {
+			m_p1.m_x = p.m_x;
+			m_p2.m_x = p.m_x + width;
+		}
 
-		bool y = p2.y >= p.y;
-		if (height != INFINITY)
-			y = y && p2.y <= p.y + height;
+		if (height < 0) {
+			m_p1.m_y = p.m_y + height;
+			m_p2.m_y = p.m_y;
+		} else {
+			m_p1.m_y = p.m_y;
+			m_p2.m_y = p.m_y + height;
+		}
+	}
 
+	Point2D m_p1;
+	Point2D m_p2;	// Using this instead of width and height to deal with double precision errors and negative values
+
+	bool contains(const Point2D& point) const {
+		bool x = point.m_x >= m_p1.m_x &&
+				 point.m_x <= m_p2.m_x;
+
+		bool y = point.m_y >= m_p1.m_y &&
+				 point.m_y <= m_p2.m_y;
 
 		return x && y;
 	}
 
 	bool overlaps(const Square& s) const {
-		bool x = true;
-		if (s.width != INFINITY)
-			x = p.x < s.p.x + s.width;
-		if (width != INFINITY)
-			x &= p.x + width >= s.p.x;
+		bool x = m_p1.m_x <= s.m_p2.m_x &&
+				 m_p2.m_x >= s.m_p1.m_x;
 
-		bool y = true;
-		if (s.height != INFINITY)
-			y = p.y < s.p.y + s.height;
-		if (height != INFINITY)
-			y &= p.y + height >= s.p.y;
+		bool y = m_p1.m_y <= s.m_p2.m_y &&
+				 m_p2.m_y >= s.m_p1.m_y;
 
 		return x && y;
 	}
+
+	double width() const {
+		return m_p2.m_x - m_p1.m_x;
+	}
+
+	double height() const {
+		return m_p2.m_y - m_p1.m_y;
+	}
+
 };
 
 // TODO: 3D Code for later

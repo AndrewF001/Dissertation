@@ -4,15 +4,15 @@
 #include "../tsp_data/tsp_data_template.h"
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-class LookaheadConvexHull : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
+class StaticLookaheadConvexHull : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
 public:
-	LookaheadConvexHull(const size_t depth) : ConstructionBase<TSPType, Size, Caching, Partitioning>(), m_depth(depth) {
+	StaticLookaheadConvexHull(const size_t depth) : ConstructionBase<TSPType, Size, Caching, Partitioning>(), m_depth(depth) {
 #ifdef _DEBUG
 		if (depth == 0)
 			throw std::invalid_argument("Depth must be greater than 0");
 #endif
 	};
-	~LookaheadConvexHull() = default;
+	~StaticLookaheadConvexHull() = default;
 
 	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 		std::cout << "Lookahead Convex Hull\n";
@@ -76,7 +76,7 @@ private:
 		Point2D p = data.getCityPoint(partail_route[1]);
 
 		double offset = best_distance * best_distance;
-		std::vector<cityID> city_search = data.getCitiesInArea(Square({p.x - offset, p.y - offset }, offset * 2, offset * 2));
+		std::vector<cityID> city_search = data.getCitiesInArea(Square({p.m_x - offset, p.m_y - offset }, offset * 2, offset * 2));
 
 		for (size_t i = 0; i < depth - 1; i++) {
 			double min_dist = DBL_MAX;

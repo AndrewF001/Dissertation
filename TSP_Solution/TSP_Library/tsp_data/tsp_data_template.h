@@ -41,6 +41,7 @@ public:
 	inline const cityID getCityRoutePosition(const cityID city) const { return m_cities[city].getRoutePosition(); };
 	inline const size_t getNumberOfCities() const {	return m_city_count; };
 	std::vector<cityID> getCitiesInArea(const Square& s) const;
+	std::vector<cityID> getCitiesInArea(const cityID& c1, const cityID& c2) const;
 	double getDistance(cityID city1, cityID city2);
 	double calcDeivation(const cityID new_city, const cityID old_city1, const cityID old_city2);	// Used by outside classes
 	double getDistanceConst(cityID city1, cityID city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
@@ -141,7 +142,15 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCi
 
 	throw std::runtime_error("TspDataTemplate::getCities(), impossible to reach code reached!");
 	return {};
-};
+}
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+inline std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const cityID& c1, const cityID& c2) const {
+	Point2D p1 = getCityPoint(c1);
+	Point2D p2 = getCityPoint(c2);
+
+	return getCitiesInArea(Square(p1, p2));
+}
+;
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(cityID city1, cityID city2) {			// Not const as it modifies the cache for partial caching
