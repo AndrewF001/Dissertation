@@ -3,6 +3,8 @@
 #include <chrono>
 #include "tsp_template.h"
 
+#include "logger.h"
+
 int main(int argc, char* argv[]) {
 	
 	const Square area = {{0, 0}, 1000, 1000 };
@@ -12,21 +14,23 @@ int main(int argc, char* argv[]) {
 
 	auto output = tsp->run(5);
 	
-	printf("Time taken: %f seconds\n", output.total_run_time.count() / 1000000.0);
+	Logger::log("Time taken: " + std::to_string(output.total_run_time.count() / 1000000.0) + " seconds\n");
 
 	if (output.validRoute) {
-		std::cout << "Route is valid\n";
+		Logger::log("Route is valid\n");
 	}
 	else {
-		std::cout << "Invalid route!!!\n";
+		Logger::log("Invalid route!!!\n");
 	}
 
 	for (cityID i = 0; i < output.num_cities; i++) {
-		std::cout << i << " : " << output.node_coord_section[i] << "\n";
+		std::stringstream s;
+		s << i << " : " << output.node_coord_section[i] << "\n";
+		Logger::log(s);
 	}
 	
 	for (auto i : output.route) {
-		std::cout << i << " ";
+		Logger::log( std::to_string(i) + " ");
 	}
 	return 0;
 }

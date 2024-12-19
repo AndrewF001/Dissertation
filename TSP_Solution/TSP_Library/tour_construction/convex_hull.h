@@ -1,5 +1,6 @@
 #pragma once
 #include "../tsp_data/tsp_data_template.h"
+#include "logger.h"
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class ConvexHull
@@ -140,7 +141,10 @@ private:
 
 	static void convexHullFull(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
 		MaxPoints points = ConvexHull::maxPoints(data);
-		std::cout << "North: " << points.north << " East: " << points.east << " South: " << points.south << " West: " << points.west << "\n";
+
+		std::stringstream s;
+		s << "North: " << points.north << " East: " << points.east << " South: " << points.south << " West: " << points.west << "\n";
+		Logger::log(s, 2);
 
 		std::vector<cityID> upper_left = ConvexHull::convexHullQuatar<false, true>(data, points.west, points.north);
 		std::vector<cityID> upper_right = ConvexHull::convexHullQuatar<false, false>(data, points.north, points.east);

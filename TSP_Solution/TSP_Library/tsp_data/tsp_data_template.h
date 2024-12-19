@@ -42,6 +42,7 @@ public:
 	inline const size_t getNumberOfCities() const {	return m_city_count; };
 	std::vector<cityID> getCitiesInArea(const Square& s) const;
 	std::vector<cityID> getCitiesInArea(const cityID& c1, const cityID& c2) const;
+	std::vector<cityID> getCitiesInArea(const cityID& c1, const double offset) const;
 	double getDistance(cityID city1, cityID city2);
 	double calcDeivation(const cityID new_city, const cityID old_city1, const cityID old_city2);	// Used by outside classes
 	double getDistanceConst(cityID city1, cityID city2) const { return m_cities[city1].getDistance(m_cities[city2]); }; // Used by outside classes
@@ -152,6 +153,15 @@ template<class TSPType, size_t Size, CachingType Caching, PartitioningType Parti
 inline std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const cityID& c1, const cityID& c2) const {
 	Point2D p1 = getCityPoint(c1);
 	Point2D p2 = getCityPoint(c2);
+
+	return getCitiesInArea(Square(p1, p2));
+}
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+inline std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const cityID& c1, const double offset) const {
+	Point2D point = getCityPoint(c1);
+
+	Point2D p1 = Point2D(point.m_x - offset, point.m_y - offset);
+	Point2D p2 = Point2D(point.m_x + offset, point.m_y + offset);
 
 	return getCitiesInArea(Square(p1, p2));
 }

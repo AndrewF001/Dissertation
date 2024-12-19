@@ -28,8 +28,8 @@ public:
 
 			double offset = min_dist * min_dist;
 
-			auto point = route[idx]->getPoint();
-			std::vector<cityID> city_search = data.getCitiesInArea(Square({ point.x - offset, point.y - offset }, offset * 2, offset * 2));
+			//auto point = route[idx]->getPoint();
+			std::vector<cityID> city_search = data.getCitiesInArea(idx, offset);
 
 			for (size_t i = 0; i < city_search.size(); i++) {
 				if (data.isCityInRoute(city_search[i]))
