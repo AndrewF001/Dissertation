@@ -151,6 +151,15 @@ private:
 		std::vector<cityID> lower_right = ConvexHull::convexHullQuatar<true, false>(data, points.east, points.south);
 		std::vector<cityID> lower_left = ConvexHull::convexHullQuatar<true, true>(data, points.south, points.west);
 
+		if (points.west == points.north)
+			upper_left.pop_back();
+		if (points.north == points.east)
+			upper_right.pop_back();
+		if (points.east == points.south)
+			lower_right.pop_back();
+		if (points.south == points.west)
+			lower_left.pop_back();
+
 		size_t idx = 0;
 		for (const auto city : upper_left)
 			data.setCityPos(city, idx++);

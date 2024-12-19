@@ -81,11 +81,12 @@ TEST(QuadTreeTest, DepthSearch) {
 TEST(QuadTreeTest, StaticLookahead) {
 	Square area = { {0, 0}, 1000, 1000 };
 	std::mt19937 engine(1);
+	constexpr size_t size = 50;
 
-	auto cities = TspDataTemplate<Type2d, 10, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
+	auto cities = TspDataTemplate<Type2d, size, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
 
-	auto quad = std::make_unique<TspTemplate<Type2d, 10, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run(2);
-	auto linear = std::make_unique<TspTemplate<Type2d, 10, CachingType::full, PartitioningType::linearSearch, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run(2);
+	auto quad = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run(2);
+	auto linear = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::linearSearch, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run(2);
 
 	EXPECT_EQ(quad.route, linear.route);
 }
