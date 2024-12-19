@@ -88,9 +88,6 @@ private:
 			// find best fit
 			for (const auto& city : search) {	// TODO: Only find cities in correct quater
 				auto& new_city = data.getCityPoint(city);
-				if (ConvexHull::left_statement<left>(last_city.m_x, new_city.m_x))
-					continue;
-
 				double g = last_city.gradient(new_city);
 				if (gradent && g > grad) {
 					grad = g;

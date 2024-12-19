@@ -22,8 +22,8 @@ void TspPrinter::paintEvent(QPaintEvent * event) {
     painter.drawLine(width() - 1, 1, width() - 1, height());
 
     // Scale factor
-    double scalex = (data.area.m_width) / (width() - 2);
-    double scaley = data.area.m_height / (height() - 2);
+    double scalex = (data.area.width()) / (width() - 2);
+    double scaley = data.area.height() / (height() - 2);
 
     // Draw the lines
     painter.setPen(QPen(Qt::black, 2));

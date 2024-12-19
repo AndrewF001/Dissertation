@@ -16,7 +16,7 @@ enum GenerationType {
 };
 
 enum PartitioningType {
-	noPartitioning,
+	//noPartitioning,
 	linearSearch,
 	quadTree,
 };
@@ -73,6 +73,9 @@ struct Square {
 			m_p2.m_x = p.m_x + width;
 		}
 
+		if (width == INFINITY)
+			m_p2.m_x = INFINITY;
+
 		if (height < 0) {
 			m_p1.m_y = p.m_y + height;
 			m_p2.m_y = p.m_y;
@@ -80,6 +83,9 @@ struct Square {
 			m_p1.m_y = p.m_y;
 			m_p2.m_y = p.m_y + height;
 		}
+
+		if (height == INFINITY)
+			m_p2.m_y = INFINITY;
 	}
 
 	Point2D m_p1;

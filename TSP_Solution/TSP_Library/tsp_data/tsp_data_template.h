@@ -64,10 +64,10 @@ public:
 
 private:
 	/// Members Data
-	size_t m_city_count = 0;				// Live count of the number of cities
+	size_t m_city_count;				// Live count of the number of cities
 	std::array<TSPType, Size> m_cities;		// Array of cities
 
-	size_t m_route_count = 0;				// Live count of the number of cities in the route
+	size_t m_route_count;				// Live count of the number of cities in the route
 	std::array<cityPTR, Size + 1> m_route{};	// Array of the cities in the route
 	
 	std::conditional_t<Caching == CachingType::none, 
@@ -80,34 +80,39 @@ private:
 private:	/// Partitioning Monolithic Code
 	struct EMPTYCLASS {};	// Empty class for the conditional_t to assign zero bytes of memory
 
+	void _constructorHelper(const Square& size);
+
 	// Partitioning Data
+	//std::conditional_t<Partitioning == PartitioningType::noPartitioning, std::vector<cityID>, EMPTYCLASS> m_nopartition;
 	std::conditional_t<Partitioning == PartitioningType::quadTree, std::unique_ptr<QuadTree>, EMPTYCLASS> m_quadtree;
-	
+
 	// Partitioning Initalisation
+	//void _noPartitioningInitalisePartition();
 	void _quadTreeInitalisePartition();
 
 	// Partitioning Getters
-	std::vector<cityID> _noPartitioningGetCities(const Square& s) const;
+	//std::vector<cityID> _noPartitioningGetCities(const Square& s) const;
 	std::vector<cityID> _linearSearch(const Square& s) const;
 	std::vector<cityID> _quadtreeGetCities(const Square& s) const;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size) : m_area(size) {
-	for (auto& row : m_cache)
-		std::fill_n(row.begin(), row.size(), DBL_MAX);	// Fills the cache with DBL_MAX, needed for Partial Caching
-
-	std::fill(m_route.begin(), m_route.end(), nullptr);	// Fills the route with nullptr
+	_constructorHelper(size);
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : TspDataTemplate(size) {
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_area(size) {
+	_constructorHelper(size);
 	m_cities = generateCities(size, type, seed);
 	m_city_count = Size;
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, std::array<TSPType, Size>& cities) : TspDataTemplate(size), m_cities(cities), m_city_count(Size) {};
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, std::array<TSPType, Size>& cities) : m_area(size), m_cities(cities) {
+	_constructorHelper(size);
+	m_city_count = Size;
+};
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 inline std::array<TSPType, Size> TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateCities(const Square& size, GenerationType type, std::mt19937& seed) {
@@ -133,8 +138,8 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::addCity(const Point2
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::getCitiesInArea(const Square& s) const {
-	if constexpr (Partitioning == PartitioningType::noPartitioning)
-		return _noPartitioningGetCities(s);
+	//if constexpr (Partitioning == PartitioningType::noPartitioning)
+	//	return _noPartitioningGetCities(s);
 	if constexpr (Partitioning == PartitioningType::linearSearch)
 		return _linearSearch(s);
 	if constexpr (Partitioning == PartitioningType::quadTree)
@@ -257,14 +262,13 @@ void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initaliseCache() {
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 void TspDataTemplate<TSPType, Size, Caching, Partitioning>::initalisePartition() {
-	if constexpr (Partitioning == PartitioningType::noPartitioning)
-		return;
+	//if constexpr (Partitioning == PartitioningType::noPartitioning)
+	//	return  _noPartitioningInitalisePartition();
 	if constexpr (Partitioning == PartitioningType::linearSearch)
 		return;
 	if constexpr (Partitioning == PartitioningType::quadTree)
 		return _quadTreeInitalisePartition();
 
-	//static_assert(false, "TspDataTemplate::initalisePartition(), impossible to reach code reached!");	// TODO: Odd behaviour, check later
 	throw std::runtime_error("TspDataTemplate::initalisePartition(), impossible to reach code reached!");
 };
 
@@ -306,18 +310,29 @@ inline bool TspDataTemplate<TSPType, Size, Caching, Partitioning>::validRoute() 
 	return valid;
 };
 
-// TODO: Add 3D support
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPartitioningGetCities(const Square& s) const {
-	std::vector<cityID> output;
-	output.reserve(Size);
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::_constructorHelper(const Square& size) {
+	m_city_count = 0;
+	m_route_count = 0;
 
-	for (size_t i = 0; i < getNumberOfCities(); i++) {
-		output.push_back(i);
-	}
+	for (auto& row : m_cache)
+		std::fill_n(row.begin(), row.size(), DBL_MAX);	// Fills the cache with DBL_MAX, needed for Partial Caching
 
-	return output;
-};
+	std::fill(m_route.begin(), m_route.end(), nullptr);	// Fills the route with nullptr
+}
+
+//template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+//void TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPartitioningInitalisePartition() {
+//	m_nopartition.reserve(Size);
+//	for (size_t i = 0; i < getNumberOfCities(); i++) {
+//		m_nopartition.push_back(i);
+//	}
+//}
+//
+//template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+//std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_noPartitioningGetCities(const Square& s) const {
+//	return m_nopartition;
+//};
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_linearSearch(const Square& s) const {
