@@ -107,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="quadtree_test.cpp" />
+    <ClCompile Include="search_test.cpp" />
     <ClCompile Include="square_test.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp">

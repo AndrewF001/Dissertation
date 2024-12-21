@@ -76,7 +76,7 @@ private:
 		std::array<std::array<double, Size>, Size>> m_cache;	// Cache for the distances between the cities
 
 	/// Adders Methods
-	void addCity(const Point2D& city);
+	void addCity(const Point2D&& city);
 
 private:	/// Partitioning Monolithic Code
 	struct EMPTYCLASS {};	// Empty class for the conditional_t to assign zero bytes of memory
@@ -130,7 +130,7 @@ inline TSPType TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRa
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-void TspDataTemplate<TSPType, Size, Caching, Partitioning>::addCity(const Point2D& city) {
+void TspDataTemplate<TSPType, Size, Caching, Partitioning>::addCity(const Point2D&& city) {
 	if (m_city_count >= Size)
 		throw std::out_of_range("TSP_Data::addCity: The number of cities exceeds the maximum size of the array.");
 
@@ -164,8 +164,7 @@ inline std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>
 	Point2D p2 = Point2D(point.m_x + offset, point.m_y + offset);
 
 	return getCitiesInArea(Square(p1, p2));
-}
-;
+};
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getDistance(cityID city1, cityID city2) {			// Not const as it modifies the cache for partial caching
@@ -349,7 +348,7 @@ std::vector<cityID> TspDataTemplate<TSPType, Size, Caching, Partitioning>::_line
 	std::vector<cityID> output;
 	output.reserve(Size);
 
-	for (cityID i = 0; i < getNumberOfCities(); i++) {
+	for (cityID i = 0; i < Size; i++) {
 		if (s.contains(getCityPoint(i)))
 			output.push_back(i);
 	}

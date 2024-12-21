@@ -119,6 +119,11 @@ struct Square {
 		return m_p2.m_y - m_p1.m_y;
 	}
 
+	friend std::ostream& operator<<(std::ostream& os, const Square& point) {
+		os << "Square(" << point.m_p1.m_x << ", " << point.m_p1.m_y << " : " << point.m_p2.m_x << ", " << point.m_p2.m_y << ")";
+		return os;
+	}
+
 };
 
 // TODO: 3D Code for later

@@ -170,7 +170,6 @@ private:
 		for (const auto city : lower_left)
 			data.setCityPos(city, idx++);
 
-
 		//std::vector<cityID> upper = ConvexHull::convexHullHalf<false, true>(data, points.west);
 		//for (size_t i = 0; i < upper.size(); i++){
 		//	data.setCityPos(upper[i], i);
