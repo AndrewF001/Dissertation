@@ -4,10 +4,9 @@
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class KOpt : public OptimisationBase<TSPType, Size, Caching, Partitioning> {
 public:
-	KOpt() : OptimisationBase<TSPType, Size, Caching, Partitioning>() {};
+	KOpt() : OptimisationBase<TSPType, Size, Caching, Partitioning>("KOpt") {};
 	~KOpt() = default;
 
-	void optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-		std::cout << "Kopt\n";
+	void _optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 	};
 };

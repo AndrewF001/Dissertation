@@ -5,12 +5,10 @@
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class ShortestInsertion : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
 public:
-	ShortestInsertion() : ConstructionBase<TSPType, Size, Caching, Partitioning>() {};
+	ShortestInsertion() : ConstructionBase<TSPType, Size, Caching, Partitioning>("ShortestInsertion") {};
 	~ShortestInsertion() = default;
 
-	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-		std::cout << "Shortest Insertion\n";
-
+	void _constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 		data.setCityPos(0, 0);	// Randomly select the first city
 
 		for (size_t i = 1; i < Size; i++) {

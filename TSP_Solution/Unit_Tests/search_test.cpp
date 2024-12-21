@@ -24,10 +24,6 @@ TEST(SearchArea, LinearSearch) {
 	std::mt19937 e(1);
 	TspDataTemplate<Type2d, 10, CachingType::full, PartitioningType::linearSearch> data(s, GenerationType::rectangle, e);
 
-	for (size_t i = 0; i < 10; i++) {
-		std::cout << i  << data.getCityPoint(i) << "\n";
-	}
-
 	/*
 	6Point2D(22.9577, 44.3453)
 	2Point2D(39.6581, 23.6089)

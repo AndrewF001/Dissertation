@@ -2,6 +2,7 @@
 #include <omp.h>
 
 #include "timer.h"
+#include "logger.h"
 
 #include "tsp_output.h"
 #include "tsp_data/types_headers.h"
@@ -38,7 +39,7 @@ public:
 		constructTour(depth, max_threads);
 		m_output.constructTour_time = m_timer.interval();
 		double distance = m_data.getRouteLength();
-		std::cout << "Original Route Length: " << distance << std::endl;
+		Logger::log("Original Route Length: " + std::to_string(distance) + "\n", 2);
 		m_output.constructTour_distance = distance;
 		m_timer.start_timer();
 
@@ -47,7 +48,7 @@ public:
 		m_output.optimiseTour_time = m_timer.interval();
 		m_output.total_run_time = m_timer.stopTimer();
 		distance = m_data.getRouteLength();
-		std::cout << "Improved Route Length: " << distance << std::endl;
+		Logger::log("Improved Route Length: " + std::to_string(distance) + "\n", 2);
 		m_output.final_distance = distance;
 		
 		finaliseOutput();

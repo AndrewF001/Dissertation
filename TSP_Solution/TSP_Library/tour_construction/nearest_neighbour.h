@@ -5,12 +5,10 @@
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class NearestNeighbour : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
 public:
-	NearestNeighbour() : ConstructionBase<TSPType, Size, Caching, Partitioning>() {};
+	NearestNeighbour() : ConstructionBase<TSPType, Size, Caching, Partitioning>("NearestNeighbour") {};
 	~NearestNeighbour() = default;
 
-	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-		std::cout << "Nearest Neighbour\n";
-
+	void _constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 		data.setCityPos(0, 0);	// Randomly select the first city
 		for (size_t i = 1; i < Size; i++) {
 			auto [closest_point, route_position] = FindClosestPoint(data);

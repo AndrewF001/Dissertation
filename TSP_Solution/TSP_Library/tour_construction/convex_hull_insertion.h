@@ -7,12 +7,10 @@
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class ConvexHullInsertion : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
 public:
-	ConvexHullInsertion() : ConstructionBase<TSPType, Size, Caching, Partitioning>() {};
+	ConvexHullInsertion() : ConstructionBase<TSPType, Size, Caching, Partitioning>("ConvexHullInsertion") {};
 	~ConvexHullInsertion() = default;
 
-	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-		std::cout << "Convex Hull Insertion\n";
-
+	void _constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 		ConvexHull<TSPType, Size, Caching, Partitioning>::runSingle(data);
 
 		const size_t additions = Size - data.getRouteSize();

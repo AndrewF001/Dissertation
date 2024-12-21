@@ -4,12 +4,10 @@
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class ThreeOpt : public OptimisationBase<TSPType, Size, Caching, Partitioning> {
 public:
-    ThreeOpt() : OptimisationBase<TSPType, Size, Caching, Partitioning>() {};
+    ThreeOpt() : OptimisationBase<TSPType, Size, Caching, Partitioning>("3Opt") {};
     ~ThreeOpt() = default;
 
-    void optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-        std::cout << "ThreeOpt\n";
-
+    void _optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
         size_t n = data.getRouteSize();
         auto& route = data.getRoute();
 

@@ -4,12 +4,10 @@
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class TwoOpt : public OptimisationBase<TSPType, Size, Caching, Partitioning> {
 public:
-	TwoOpt() : OptimisationBase<TSPType, Size, Caching, Partitioning>() {};
+	TwoOpt() : OptimisationBase<TSPType, Size, Caching, Partitioning>("2Opt") {};
 	~TwoOpt() = default;
 
-	void optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-		std::cout << "TwoOpt\n";
-
+	void _optimiseTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
         size_t n = data.getRouteSize();
 		auto& route = data.getRoute();
 

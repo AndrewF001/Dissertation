@@ -3,6 +3,8 @@
 #include <random>
 #include <algorithm>
 
+#include "logger.h"
+
 #include "tsp_constructs.h"
 #include "types/type_base.h"
 #include "partitioning/quadtree.h"
@@ -204,13 +206,13 @@ template<class TSPType, size_t Size, CachingType Caching, PartitioningType Parti
 inline void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city_id, const cityID pos) {
 #ifdef _DEBUG
 	if (m_route_count >= Size)
-		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array.");
+		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array");
 	if (pos > m_route_count)
-		throw std::out_of_range("TSP_Data::setCityPos: The position is greater than the number of cities in the route.");
+		throw std::out_of_range("TSP_Data::setCityPos: The position is greater than the number of cities in the route");
 	if (city_id >= m_city_count)
-		throw std::out_of_range("TSP_Data::setCityPos: The city is not in the array.");
+		throw std::out_of_range("TSP_Data::setCityPos: The city is not in the array");
 	if (isCityInRoute(city_id))
-		std::cout << "City: " << city_id << " added multiple times\n";	// TODO: Change to throw
+		throw std::invalid_argument( "City: " + std::to_string(city_id) + " added multiple times");
 #endif
 
 	for (size_t i = pos; i < m_route_count; i++) {
@@ -287,20 +289,20 @@ inline bool TspDataTemplate<TSPType, Size, Caching, Partitioning>::validRoute() 
 
 	// Check is cycle
 	if (m_route[0] != m_route[Size]) {
-		std::cout << "Route is not a cycle (End point doesn't equal Start point)\n";
+		Logger::error("Route is not a cycle (End point doesn't equal Start point)\n");
 		valid = false;
 	}
 
 	// Check route lenght
 	if (m_route_count != Size) {
-		std::cout << "Route is wrong length\n";
+		Logger::error("Route is wrong length\n");
 		valid = false;
 	}
 
 	// Check which points aren't visited
 	for (size_t i = 0; i < Size; i++) {
 		if (!isCityInRoute(i)) {
-			std::cout << "Node " << i << " never visited!\n";
+			Logger::error("Node " + std::to_string(i) + " never visited!\n");
 			valid = false;
 		}
 	}
@@ -309,7 +311,7 @@ inline bool TspDataTemplate<TSPType, Size, Caching, Partitioning>::validRoute() 
     std::array<bool, Size> map = {false};
 	for (size_t i = 0; i < Size; i++) {
 		if (map[getRouteCityID(m_route[i])]) {
-			std::cout << "Node " << i << " visited twice!\n";
+			Logger::error("Node " + std::to_string(i) + " visited twice!\n");
 			valid = false;
 			continue;
 		}

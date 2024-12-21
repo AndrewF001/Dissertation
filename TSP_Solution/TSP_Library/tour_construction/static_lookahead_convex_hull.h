@@ -6,7 +6,7 @@
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 class StaticLookaheadConvexHull : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
 public:
-	StaticLookaheadConvexHull(const size_t depth) : ConstructionBase<TSPType, Size, Caching, Partitioning>(), m_depth(depth) {
+	StaticLookaheadConvexHull(const size_t depth) : ConstructionBase<TSPType, Size, Caching, Partitioning>("StaticLookaheadConvexHullInsertion"), m_depth(depth) {
 #ifdef _DEBUG
 		if (depth == 0)
 			throw std::invalid_argument("Depth must be greater than 0");
@@ -14,9 +14,7 @@ public:
 	};
 	~StaticLookaheadConvexHull() = default;
 
-	void constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
-		std::cout << "Lookahead Convex Hull\n";
-
+	void _constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
 		ConvexHull<TSPType, Size, Caching, Partitioning>::runSingle(data);
 
 		const size_t additions = Size - data.getRouteSize();
