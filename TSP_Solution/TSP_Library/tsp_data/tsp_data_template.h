@@ -28,7 +28,7 @@ public:
 
 	/// Constructors
 	TspDataTemplate(const Square& size);
-	TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed);
+	TspDataTemplate(const Square& size, GenerationType type, std::mt19937&& seed);
 	TspDataTemplate(const Square& size, std::array<TSPType, Size>& cities);
 	~TspDataTemplate() = default;
 
@@ -105,7 +105,7 @@ TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Squ
 };
 
 template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_area(size) {
+TspDataTemplate<TSPType, Size, Caching, Partitioning>::TspDataTemplate(const Square& size, GenerationType type, std::mt19937&& seed) : m_area(size) {
 	_constructorHelper(size);
 	m_cities = generateCities(size, type, seed);
 	m_city_count = Size;

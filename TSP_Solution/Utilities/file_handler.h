@@ -17,21 +17,21 @@ static void appendToFile(const std::string& path, const std::string& data) {
 	file.close();
 }
 
-//static std::optional<std::string> readFromFile(const std::string& path) {
-//	std::ifstream file(path);
-//
-//	if (!file.is_open())
-//		return std::nullopt;
-//
-//	std::string data;
-//	std::string line;
-//	while (std::getline(file, line)) {
-//		data += line + "\n";
-//	}
-//
-//	file.close();
-//	return data;
-//}
+static std::optional<std::string> readFromFile(const std::string& path) {
+	std::ifstream file(path);
+
+	if (!file.is_open())
+		return std::nullopt;
+
+	std::string data;
+	std::string line;
+	while (std::getline(file, line)) {
+		data += line + "\n";
+	}
+
+	file.close();
+	return data;
+}
 
 //std::optional<std::vector<uint8_t>> readFromFile(const std::string& path)
 //{
@@ -78,22 +78,22 @@ static void appendToFile(const std::string& path, const std::string& data) {
 //}
 
 
-//template<typename T>
-//std::string objectToString(const T* data) {
-//	return std::string(reinterpret_cast<const char*>(data), sizeof(T));
-//}
-//
-//template<typename T>
-//T stringToObject(const char* data) {
-//	T output;
-//
-//	std::memcpy(&output, data, sizeof(T));
-//
-//	//for (size_t i = 0; i < sizeof(T); i++)
-//	//	((char*)&output)[i] = data[i];
-//
-//	return output;
-//}
+template<typename T>
+std::string objectToString(const T* data) {
+	return std::string(reinterpret_cast<const char*>(data), sizeof(T));
+}
+
+template<typename T>
+T stringToObject(const char* data) {
+	T output;
+
+	std::memcpy(&output, data, sizeof(T));
+
+	//for (size_t i = 0; i < sizeof(T); i++)
+	//	((char*)&output)[i] = data[i];
+
+	return output;
+}
 //
 //static void writeObjectToFile(const std::string& path, const void* data, size_t size) {
 //	std::ofstream file;

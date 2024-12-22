@@ -13,7 +13,7 @@ class TSPResult {
 public:
 	// Contruction parameters
 	Square area;
-	std::mt19937 seed;
+	unsigned int seed;
 	GenerationType genType;
 	size_t num_cities;	// Number of cities
 

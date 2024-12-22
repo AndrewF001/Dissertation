@@ -21,8 +21,8 @@ void vectorContains(const std::vector<T>& a, const std::vector<T> b) {
 
 TEST(SearchArea, LinearSearch) {
 	const Square s{ {0, 0}, 100, 100 };
-	std::mt19937 e(1);
-	TspDataTemplate<Type2d, 10, CachingType::full, PartitioningType::linearSearch> data(s, GenerationType::rectangle, e);
+	
+	TspDataTemplate<Type2d, 10, CachingType::full, PartitioningType::linearSearch> data(s, GenerationType::rectangle, std::mt19937(1));
 
 	/*
 	6Point2D(22.9577, 44.3453)
@@ -70,8 +70,8 @@ TEST(SearchArea, LinearSearch) {
 
 TEST(SearchArea, QuadSearch) {
 	const Square s{ {0, 0}, 100, 100 };
-	std::mt19937 e(1);
-	TspDataTemplate<Type2d, 10, CachingType::full, PartitioningType::quadTree> data(s, GenerationType::rectangle, e);
+	
+	TspDataTemplate<Type2d, 10, CachingType::full, PartitioningType::quadTree> data(s, GenerationType::rectangle, std::mt19937(1));
 	data.initalisePartition();
 
 	/*

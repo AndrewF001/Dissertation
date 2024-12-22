@@ -19,7 +19,7 @@ class TspTemplate {
 
 public:
 	TspTemplate(const Square& size) : m_data(size) {};	// !!! ONLY USE FOR DEBUGGING !!!
-	TspTemplate(const Square& size, GenerationType type, std::mt19937& seed) : m_data(size, type, seed) {
+	TspTemplate(const Square& size, GenerationType type, unsigned int seed) : m_data(size, type, std::mt19937(seed)) {
 		m_output.seed = seed;
 		m_output.genType = type;
 	};
