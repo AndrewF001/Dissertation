@@ -12,7 +12,7 @@ class TSP_GUI : public QMainWindow
 public:
     TSP_GUI(QWidget *parent = nullptr);
     ~TSP_GUI();
-    void setData(TSPVerboseResult data);
+    void setData(TSPVerboseResultDynamic data);
 
 private:
     Ui::TSP_GUIClass ui;

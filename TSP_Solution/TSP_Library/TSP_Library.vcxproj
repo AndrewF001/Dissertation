@@ -29,6 +29,7 @@
     <ClInclude Include="tour_optimisation\optimisation_base.h" />
     <ClInclude Include="tour_construction\construction_base.h" />
     <ClInclude Include="tsp_data\types_headers.h" />
+    <ClInclude Include="tsp_file.h" />
     <ClInclude Include="tsp_template.h" />
   </ItemGroup>
   <ItemGroup>

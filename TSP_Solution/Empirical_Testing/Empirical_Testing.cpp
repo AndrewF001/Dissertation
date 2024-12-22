@@ -4,9 +4,9 @@
 #include "tsp_template.h"
 
 #include "logger.h"
+#include <tsp_file.h>
 
 int main(int argc, char* argv[]) {
-	
 	const Square area = {{0, 0}, 1000, 1000 };
 	std::mt19937 engine(1);
 	
@@ -15,6 +15,11 @@ int main(int argc, char* argv[]) {
 	auto output = tsp->run(2);
 	
 	Logger::log("Time taken: " + std::to_string(output.total_run_time.count() / 1000000.0) + " seconds\n");
+
+	TSPFile file("test.bin");
+	file.addEntry(output);
+
+
 
 	if (output.validRoute) {
 		Logger::log("Route is valid\n");

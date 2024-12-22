@@ -26,7 +26,7 @@ public:
 	TspTemplate(const Square& size, std::array<TSPType, Size> cities) : m_data(size, cities) {};
 	~TspTemplate() = default;
 
-	TSPVerboseResult run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
+	TSPVerboseResultDynamic run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
 		// package task to cancel if it takes too long
 		std::packaged_task<void()> task(std::bind(&TspTemplate::_run, this, depth, max_threads));
 
@@ -56,7 +56,7 @@ public:
 	const TspDataTemplate<TSPType, Size, Caching, Partitioning>& getData() const { return m_data; };
 	const std::array<TSPType*, Size + 1>& getRoute() const { return m_data.getRoute(); };
 	bool validRoute() const { return m_data.validRoute(); };
-	const TSPVerboseResult& getOutput() const { return m_output; }
+	const TSPVerboseResultDynamic& getOutput() const { return m_output; }
 
 	void finaliseOutput() { 
 		for (const auto& r : m_data.getRoute()) {
@@ -77,7 +77,7 @@ public:
 
 private:
 	TspDataTemplate<TSPType, Size, Caching, Partitioning> m_data;
-	TSPVerboseResult m_output;
+	TSPVerboseResultDynamic m_output;
 	Timer m_timer;
 
 	void _run(size_t depth = 1, int max_threads = omp_get_max_threads()) {

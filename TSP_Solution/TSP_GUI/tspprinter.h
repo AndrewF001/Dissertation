@@ -9,12 +9,12 @@ class TspPrinter : public QWidget
 	Q_OBJECT
 
 public:
-	TspPrinter(TSPVerboseResult data, QWidget *parent = nullptr);
+	TspPrinter(TSPVerboseResultDynamic data, QWidget *parent = nullptr);
 	~TspPrinter();
 
 protected:
 	Ui::TspPrinterClass ui;
 
 	void paintEvent(QPaintEvent* event) override;
-	TSPVerboseResult data;
+	TSPVerboseResultDynamic data;
 };

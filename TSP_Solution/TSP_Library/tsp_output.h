@@ -34,17 +34,9 @@ public:
 	TimeScale initaliseCache_time;
 	TimeScale constructTour_time;
 	TimeScale optimiseTour_time;
-
-	std::string csvLine() {
-		std::string output = "";
-
-
-	}
-
 };
 
-// Fully reconstructable results
-class TSPVerboseResult : public TSPResult {
+class TSPVerboseResultStatic : public TSPResult {
 public:
 	// .tsp file data fields
 	std::string name;	// File name
@@ -52,13 +44,11 @@ public:
 	std::string comment;
 	std::string edge_weight_type;	// Type of data used for edge weights
 	std::string display_data_type;
+};
+
+// Fully reconstructable results
+class TSPVerboseResultDynamic : public TSPVerboseResultStatic {
+public:
 	std::vector<Point2D> node_coord_section;
-
 	std::vector<cityID> route;
-
-	std::string csvLine() {
-		std::string output = TSPResult::csvLine();
-
-		return output;
-	}
 };

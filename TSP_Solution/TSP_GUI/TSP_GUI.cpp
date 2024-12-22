@@ -10,7 +10,7 @@ TSP_GUI::TSP_GUI(QWidget *parent)
 TSP_GUI::~TSP_GUI()
 {}
 
-void TSP_GUI::setData(TSPVerboseResult data) {
+void TSP_GUI::setData(TSPVerboseResultDynamic data) {
     printer = std::make_unique<TspPrinter>(data);
 	ui.gridLayout->addWidget(printer.get());
     //ui.centralWidget->setLayout(new QVBoxLayout);

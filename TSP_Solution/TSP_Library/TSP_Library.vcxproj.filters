@@ -72,6 +72,9 @@
     <ClInclude Include="tsp_data\partitioning\quadtree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tsp_file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="tsp_output.h">
