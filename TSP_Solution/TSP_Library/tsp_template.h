@@ -46,7 +46,7 @@ public:
 			thr.detach();
 			Logger::error("Timeout");
 
-			m_output.validRoute = false;
+			m_output.validRoute = Timeout;
 			m_output.total_run_time = TimeScale::max();
 		}
 
@@ -68,7 +68,7 @@ public:
 		}
 
 		m_output.area = m_data.m_area;
-		m_output.validRoute = validRoute();
+		m_output.validRoute = validRoute() ? Valid : Invalid;
 		m_output.Caching = Caching;
 		m_output.Partitioning = Partitioning;
 		m_output.Construction = Construction;

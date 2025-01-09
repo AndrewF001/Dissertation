@@ -2,40 +2,35 @@
 #include "tsp_output.h"
 #include "file_handler.h"
 
-class StatisticEntry {
-	size_t number_of_runs;
-	size_t number_of_valid_routes;
-	size_t invalidRoutes;
-	size_t timeouts;
-
-	size_t num_cities;
-	PartitioningType Partitioning;
-	CachingType Caching;
-	ConstructionType Construction;
-	OptimisationType Optimisation;
-
-	double total_construct_tour_distance;
-	double total_final_distance;
-
-	TimeScale total_run_time;
-	TimeScale total_initalisePartition_time;
-	TimeScale total_initaliseCache_time;
-	TimeScale total_constructTour_time;
-	TimeScale total_optimiseTour_time;
-};
-
 class TSPFile {
 public:
-	TSPFile(std::string path) : m_path(path) {
+	TSPFile(std::string path) : m_path(path.append(FILEEXTENSION)) {
 		readFile();
 	};
 
 	void addEntry(const TSPVerboseResultDynamic& entry) {
 		m_entries.push_back(entry);
+		updateStatistics(entry);
+	};
 
-		// Do statistics
+	void writeFile() {
+		std::string file = "";
+		for (const auto& stat : m_statistics) {
+			file += objectToString<StatisticEntry>(&stat);
+		}
 
-		writeFile();
+		file += FILEDIVEDER;
+
+		for (const auto& entry : m_entries) {
+			file += objectToString<TSPResult>(&entry);
+			//for (const auto& point : entry.node_coord_section) {
+			//	file += objectToString<Point2D>(&point);
+			//}
+			//for (const auto& city : entry.route) {
+			//	file += objectToString<cityID>(&city);
+			//}
+		}
+		writeToFile(m_path, file);
 	};
 
 private:
@@ -43,7 +38,8 @@ private:
 	std::vector<StatisticEntry> m_statistics;
 	std::vector<TSPResult> m_entries;
 
-	const std::string FILEDIVEDER = "DOF";
+	const static std::string FILEDIVEDER;
+	const static std::string FILEEXTENSION;
 
 	void readFile() {
 		auto probe = readFromFile(m_path);
@@ -102,6 +98,27 @@ private:
 		}
 	}
 
+	void updateStatistics(const TSPVerboseResultDynamic& data) {
+		StatisticEntry* entry = nullptr;
+
+		for (size_t i = 0; i < m_statistics.size(); i++) {
+			if (m_statistics[i] == data) {
+				entry = &m_statistics[i];
+				break;
+			}
+		}
+
+		if (entry == nullptr) {
+			StatisticEntry newEntry{};
+
+			newEntry.set(data);
+
+			m_statistics.push_back(newEntry);
+			entry = &m_statistics.back();
+		}
+
+		entry->append(data);
+	};
 
 	//void readStatistics(uint8_t* statistics, size_t number) {
 	//	for (size_t i = 0; i < number; i++) {
@@ -132,25 +149,7 @@ private:
 	//		m_entries.push_back(entry);
 	//	}
 	//}
-
-
-	void writeFile() {
-		std::string file = "";
-		for (const auto& stat : m_statistics) {
-			file += objectToString<StatisticEntry>(&stat);
-		}
-
-		file += FILEDIVEDER;
-
-		for (const auto& entry : m_entries) {
-			file += objectToString<TSPResult>(&entry);
-			//for (const auto& point : entry.node_coord_section) {
-			//	file += objectToString<Point2D>(&point);
-			//}
-			//for (const auto& city : entry.route) {
-			//	file += objectToString<cityID>(&city);
-			//}
-		}
-		writeToFile(m_path, file);
-	};
 };
+
+const std::string TSPFile::FILEDIVEDER = "DOF";
+const std::string TSPFile::FILEEXTENSION = ".tsp1";

@@ -8,32 +8,60 @@
 #include "tour_construction/consturction_headers.h"
 #include "timer.h"
 
-// Not enough info to reproduce results but sames timing results
-class TSPResult {
+enum Validity {
+	Valid,
+	Invalid,
+	Timeout
+};
+
+// TSP Run Settings
+class RunMode {
 public:
-	// Contruction parameters
-	Square area;
-	unsigned int seed;
+	size_t num_cities;
 	GenerationType genType;
-	size_t num_cities;	// Number of cities
 
-	// Completed route
-	double constructTour_distance;
-	double final_distance;
-
-	// Run settings
 	CachingType Caching;
 	PartitioningType Partitioning;
 	ConstructionType Construction;
 	OptimisationType Optimisation;
 
+	void set(const RunMode& copy) {
+		num_cities = copy.num_cities;
+		genType = copy.genType;
+		Caching = copy.Caching;
+		Partitioning = copy.Partitioning;
+		Construction = copy.Construction;
+		Optimisation = copy.Optimisation;
+	}
+
+	friend auto operator==(const RunMode& lhs, const RunMode& rhs) {
+		return lhs.num_cities == rhs.num_cities &&
+			lhs.genType == rhs.genType &&
+			lhs.Caching == rhs.Caching &&
+			lhs.Partitioning == rhs.Partitioning &&
+			lhs.Construction == rhs.Construction &&
+			lhs.Optimisation == rhs.Optimisation;
+	}
+};
+
+// Not enough info to reproduce results but saves timing results
+class TSPResult : public RunMode {
+public:
+	// Additional Contruction Parameters
+	Square area;
+	unsigned int seed;
+
+	// Completed route
+	double constructTour_distance;
+	double final_distance;
+
 	// Run statistics
-	bool validRoute;
-	TimeScale total_run_time;
-	TimeScale initalisePartition_time;
-	TimeScale initaliseCache_time;
-	TimeScale constructTour_time;
-	TimeScale optimiseTour_time;
+	Validity validRoute;
+	TimeScale total_run_time{};
+	TimeScale initalisePartition_time{};
+	TimeScale initaliseCache_time{};
+	TimeScale constructTour_time{};
+	TimeScale optimiseTour_time{};
 };
 
 class TSPVerboseResultStatic : public TSPResult {
@@ -51,4 +79,47 @@ class TSPVerboseResultDynamic : public TSPVerboseResultStatic {
 public:
 	std::vector<Point2D> node_coord_section;
 	std::vector<cityID> route;
+};
+
+// Statistics for multiple runs
+class StatisticEntry : public RunMode {
+public:
+	size_t number_of_runs;
+	size_t number_of_valid_routes;
+	size_t invalidRoutes;
+	size_t timeouts;
+
+	double total_construct_tour_distance;
+	double total_final_distance;
+
+	TimeScale total_run_time;
+	TimeScale total_initalisePartition_time;
+	TimeScale total_initaliseCache_time;
+	TimeScale total_constructTour_time;
+	TimeScale total_optimiseTour_time;
+
+	void append(const TSPVerboseResultDynamic& data) {
+		number_of_runs++;
+
+		switch (data.validRoute) {
+		case (Valid):
+			number_of_valid_routes++;
+			break;
+		case (Invalid):
+			invalidRoutes++;
+			return;
+		case (Timeout):
+			timeouts++;
+			return;
+		}
+
+		total_construct_tour_distance += data.constructTour_distance;
+		total_final_distance += data.final_distance;
+
+		total_run_time += data.total_run_time;
+		total_initaliseCache_time += data.initaliseCache_time;
+		total_initalisePartition_time += data.initalisePartition_time;
+		total_constructTour_time += data.constructTour_time;
+		total_optimiseTour_time += data.optimiseTour_time;
+	}
 };
