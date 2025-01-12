@@ -43,8 +43,10 @@ private:
 
 	void readFile() {
 		auto probe = readFromFile(m_path);
-		if (!probe.has_value())
+		if (!probe.has_value()) {
+			std::cout << "No file detected";
 			return;
+		}
 
 		std::string file = probe.value();
 
@@ -152,4 +154,4 @@ private:
 };
 
 const std::string TSPFile::FILEDIVEDER = "DOF";
-const std::string TSPFile::FILEEXTENSION = ".tsp1";
+const std::string TSPFile::FILEEXTENSION = ".mytsp";

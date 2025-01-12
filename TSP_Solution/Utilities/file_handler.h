@@ -33,6 +33,20 @@ static std::optional<std::string> readFromFile(const std::string& path) {
 	return data;
 }
 
+static bool fileExists(const std::string& path) {
+	std::ifstream file(path);
+	return file.good();
+}
+
+static std::string nextFileName(const std::string& path) {
+	int i = 1;
+	std::string extension = "";
+	while (fileExists(path + extension)) {
+		extension = "(" + std::to_string(i++) + ")";
+	}
+	return path + extension;
+}
+
 //std::optional<std::vector<uint8_t>> readFromFile(const std::string& path)
 //{
 //	std::ifstream file(path, std::ios::binary);

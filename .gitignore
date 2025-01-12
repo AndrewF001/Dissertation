@@ -1,3 +1,7 @@
+# TSP Files
+*.mytsp
+
+
 # C++ GitIgnore
 # Prerequisites
 *.d

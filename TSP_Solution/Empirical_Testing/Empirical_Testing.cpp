@@ -20,11 +20,16 @@ int main(int argc, char* argv[]) {
 	file.addEntry(output);
 	file.writeFile();
 	
-	if (output.validRoute) {
+	switch (output.validRoute) {
+	case Valid:
 		Logger::log("Route is valid\n");
-	}
-	else {
+		break;
+	case Invalid:
 		Logger::log("Invalid route!!!\n");
+		break;
+	case Timeout:
+		Logger::log("Timeout!!!\n");
+		break;
 	}
 
 	for (cityID i = 0; i < output.num_cities; i++) {
