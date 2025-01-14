@@ -3,6 +3,8 @@
 #include <chrono>
 #include <random>
 
+#include "rapidjson/document.h"
+
 #include "tsp_data/tsp_constructs.h"
 #include "tour_optimisation/optimisation_headers.h"
 #include "tour_construction/consturction_headers.h"

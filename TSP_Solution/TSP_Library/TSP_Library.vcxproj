@@ -90,7 +90,7 @@
       <OpenMP>GenerateParallelCode</OpenMP>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <OptimizationDiagnosticLevel>Disable</OptimizationDiagnosticLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)..\CPP_Libraries\rapidjson\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <Link>
@@ -110,7 +110,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <OptimizationDiagnosticLevel>Level3</OptimizationDiagnosticLevel>
       <SYCLOptimization>MaxSpeedHighLevel</SYCLOptimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)..\CPP_Libraries\rapidjson\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
