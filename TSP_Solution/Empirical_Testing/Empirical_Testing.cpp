@@ -4,7 +4,7 @@
 #include "tsp_template.h"
 
 #include "logger.h"
-#include <tsp_file.h>
+#include "file_handling/tsp_file.h"
 
 int main(int argc, char* argv[]) {
 	const Square area = {{0, 0}, 1000, 1000 };

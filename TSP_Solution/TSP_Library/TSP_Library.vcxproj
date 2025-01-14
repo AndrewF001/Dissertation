@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="file_handling\json_convertion.h" />
     <ClInclude Include="tour_construction\consturction_headers.h" />
     <ClInclude Include="tour_construction\convex_hull.h" />
     <ClInclude Include="tour_construction\convex_hull_insertion.h" />
@@ -29,11 +30,11 @@
     <ClInclude Include="tour_optimisation\optimisation_base.h" />
     <ClInclude Include="tour_construction\construction_base.h" />
     <ClInclude Include="tsp_data\types_headers.h" />
-    <ClInclude Include="tsp_file.h" />
+    <ClInclude Include="file_handling\tsp_file.h" />
     <ClInclude Include="tsp_template.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tsp_output.h" />
+    <ClCompile Include="file_handling\tsp_output.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">

@@ -5,16 +5,12 @@
 
 #include "rapidjson/document.h"
 
-#include "tsp_data/tsp_constructs.h"
-#include "tour_optimisation/optimisation_headers.h"
-#include "tour_construction/consturction_headers.h"
+#include "../tsp_data/tsp_constructs.h"
+#include "../tour_optimisation/optimisation_headers.h"
+#include "../tour_construction/consturction_headers.h"
 #include "timer.h"
+#include "json_convertion.h"
 
-enum Validity {
-	Valid,
-	Invalid,
-	Timeout
-};
 
 // TSP Run Settings
 class RunMode {

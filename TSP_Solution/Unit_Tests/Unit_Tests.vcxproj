@@ -106,6 +106,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="json_converstion_test.cpp" />
     <ClCompile Include="quadtree_test.cpp" />
     <ClCompile Include="search_test.cpp" />
     <ClCompile Include="square_test.cpp" />
