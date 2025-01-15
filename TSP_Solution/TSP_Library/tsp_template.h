@@ -72,6 +72,7 @@ public:
 		m_output.Caching = Caching;
 		m_output.Partitioning = Partitioning;
 		m_output.Construction = Construction;
+		m_output.Optimisation = Optimisation;
 		m_output.num_cities = Size;
 	};
 
@@ -81,6 +82,7 @@ private:
 	Timer m_timer;
 
 	void _run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
+		m_output.depth = depth;	// TODO: make arguments a struct
 		if (m_data.getNumberOfCities() != Size)
 			throw std::invalid_argument("Number of cities does not match the size of the template! Fill all data entries");
 

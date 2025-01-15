@@ -18,6 +18,8 @@ enum Validity {
 // TSP Run Settings
 class RunMode {
 public:
+	size_t id = 0;
+
 	size_t num_cities;
 	GenerationType genType;
 
@@ -26,7 +28,7 @@ public:
 	ConstructionType Construction;
 	OptimisationType Optimisation;
 
-	size_t depth;
+	size_t depth = 0;
 
 	void set(const RunMode& copy) {
 		num_cities = copy.num_cities;

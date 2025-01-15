@@ -1,102 +1,81 @@
 #pragma once
 #include "tsp_output.h"
 #include "file_handler.h"
+#include "json_convertion.h"
 
 class TSPFile {
 public:
 	TSPFile(std::string path) : m_path(path.append(FILEEXTENSION)) {
 		readFile();
+		//m_statisticsArray = m_doc["statistics"].GetArray();
+		//m_entriesArray = m_doc["entries"].GetArray();
 	};
 
-	void addEntry(const TSPVerboseResultDynamic& entry) {
+	void addEntry(TSPVerboseResultDynamic& entry) {
+		entry.id = m_entries.size();
 		m_entries.push_back(entry);
-		updateStatistics(entry);
+
+		rapidjson::Value v;
+		jsonconversion::TSPVerboseResultDynamicToJson(entry, v, m_doc.GetAllocator());
+		m_doc["entries"].GetArray().PushBack(v, m_doc.GetAllocator());
+
+		updateStatistics(entry);	// TODO: This need to update m_doc
 	};
 
 	void writeFile() {
-		std::string file = "";
-		for (const auto& stat : m_statistics) {
-			file += objectToString<StatisticEntry>(&stat);
-		}
-
-		file += FILEDIVEDER;
-
-		for (const auto& entry : m_entries) {
-			file += objectToString<TSPResult>(&entry);
-			//for (const auto& point : entry.node_coord_section) {
-			//	file += objectToString<Point2D>(&point);
-			//}
-			//for (const auto& city : entry.route) {
-			//	file += objectToString<cityID>(&city);
-			//}
-		}
-		writeToFile(m_path, file);
+		_writeFile();
 	};
 
 private:
+	const std::string FILEEXTENSION = ".mytsp";
+	const char* N_STATISTICS = "statistics";
+	const char* N_ENTRIES = "entries";
+
 	const std::string m_path;
 	std::vector<StatisticEntry> m_statistics;
-	std::vector<TSPResult> m_entries;
-
-	const static std::string FILEDIVEDER;
-	const static std::string FILEEXTENSION;
+	std::vector<TSPVerboseResultDynamic> m_entries;
+	rapidjson::Document m_doc;
+	//rapidjson::GenericArray<false, rapidjson::Value> m_statisticsArray;
+	//rapidjson::GenericArray<false, rapidjson::Value> m_entriesArray;
 
 	void readFile() {
-		auto probe = readFromFile(m_path);
-		if (!probe.has_value()) {
-			std::cout << "No file detected";
+		auto file = readFromFile(m_path);
+
+		if (!file.has_value()) {
+			Logger::log("File not found: " + m_path);
+			createBlankDoc();
 			return;
 		}
 
-		std::string file = probe.value();
+		m_doc = jsonconversion::stringToDocument(file.value());
+		m_doc.IsObject();
 
-		size_t divider = file.find(FILEDIVEDER);
-		if (divider == std::string::npos)
-			throw std::invalid_argument("File is corrupt");
+		if (m_doc.HasParseError())
+			throw std::runtime_error("Error parsing file: " + m_path);
 
-		std::string statistics = file.substr(0,divider);
-		std::string entries = file.substr(divider + FILEDIVEDER.size());
+		if (!m_doc.HasMember(N_STATISTICS) && !m_doc[N_STATISTICS].IsArray())
+			throw std::runtime_error("Error parsing Statistics array: " + m_path);
 
-		if (statistics.size() % sizeof(StatisticEntry) != 0)
-			throw std::invalid_argument("File is corrupt");
+		if (!m_doc.HasMember(N_ENTRIES) && !m_doc[N_ENTRIES].IsArray())
+			throw std::runtime_error("Error parsing Entries array: " + m_path);
 
-		auto k = entries.size() - 1;
-		auto s = sizeof(TSPResult);
-		auto t = k % s;
-
-		if (t != 0)
-			throw std::invalid_argument("File is corrupt");
-
-		readStatistics(statistics);
-		readEntries(entries);
+		readStatistics(m_doc[N_STATISTICS]);
+		readEntries(m_doc[N_ENTRIES]);
 	};
 
-	void readStatistics(const std::string& statistics) {
-		const char* statistics_ptr = statistics.c_str();
-		for (size_t i = 0; i < statistics.size() / sizeof(StatisticEntry); i++) {
-			m_statistics.push_back(stringToObject<StatisticEntry>(statistics_ptr));
-			statistics_ptr += sizeof(StatisticEntry);
+	void readStatistics(const rapidjson::Value& v) {
+		for (auto& s : v.GetArray()) {
+			StatisticEntry entry{};
+			jsonconversion::JsonToStatisticEntry(entry, s);
+			m_statistics.push_back(entry);
 		}
 	};
 
-	void readEntries(const std::string& entries) {
-		const char* entries_ptr = entries.c_str();
-		for (size_t i = 0; i < entries.size() / sizeof(TSPResult); i++) {
-			m_entries.push_back(stringToObject<TSPResult>(entries_ptr));
-			entries_ptr += sizeof(TSPResult);
-
-			////entry.node_coord_section = std::vector<Point2D>(entry.num_cities);
-			//for (size_t i = 0; i < 100; i++) {
-			//	entry.node_coord_section.push_back(stringToObject<Point2D>(entries_ptr));
-			//	entries_ptr += sizeof(Point2D);
-			//}
-
-			////entry.route = std::vector<cityID>(entry.num_cities + 1);
-			//for (size_t i = 0; i < 101; i++) {
-			//	entry.route.push_back(stringToObject<cityID>(entries_ptr));
-			//	entries_ptr += sizeof(cityID);
-			//}
-			//m_entries.push_back(entry);
+	void readEntries(const rapidjson::Value& v) {
+		for (auto& s : v.GetArray()) {
+			TSPVerboseResultDynamic entry{};
+			jsonconversion::JsonToTSPVerboseResultDynamic(entry, s);
+			m_entries.push_back(entry);
 		}
 	}
 
@@ -114,44 +93,33 @@ private:
 			StatisticEntry newEntry{};
 
 			newEntry.set(data);
+			newEntry.id = m_statistics.size();
 
 			m_statistics.push_back(newEntry);
+			m_doc[N_STATISTICS].GetArray().PushBack(rapidjson::Value(), m_doc.GetAllocator());
+			
 			entry = &m_statistics.back();
 		}
 
 		entry->append(data);
+		jsonconversion::StatisticEntryToJson(*entry, m_doc[N_STATISTICS].GetArray()[entry->id], m_doc.GetAllocator());
 	};
 
-	//void readStatistics(uint8_t* statistics, size_t number) {
-	//	for (size_t i = 0; i < number; i++) {
-	//		m_statistics.push_back(bytesToObject<StatisticEntry>(statistics));
-	//		statistics += sizeof(StatisticEntry);
-	//	}
-	//};
+	void _writeFile() {
+		auto file = jsonconversion::documentToString(m_doc);
+		writeToFile(m_path, file);
+	};
 
-	//void readEntries(uint8_t* entries, uint8_t* end) {
-	//	
-	//	while (entries != end) {
-	//		TSPVerboseResultStatic entry = bytesToObject<TSPVerboseResultStatic>(entries);
-	//		entries += sizeof(TSPVerboseResultDynamic);
+    void createBlankDoc() {
+        m_doc.SetObject();
+        
+        // Add a new line break
+        rapidjson::Value val;
+        val.SetArray();
+        m_doc.AddMember("statistics", val, m_doc.GetAllocator());
 
-	//		//entry.node_coord_section = std::vector<Point2D>(entry.num_cities);
-	//		//entry.node_coord_section = std::vector<Point2D>();
-	//		//for (size_t i = 0; i < 100; i++) {
-	//		//	entry.node_coord_section.push_back(bytesToObject<Point2D>(entries));
-	//		//	entries += sizeof(Point2D);
-	//		//}
-
-	//		////entry.route = std::vector<cityID>(entry.num_cities + 1);
-	//		//entry.route = std::vector<cityID>();
-	//		//for (size_t i = 0; i < 101; i++) {
-	//		//	entry.route.push_back(bytesToObject<cityID>(entries));
-	//		//	entries += sizeof(cityID);
-	//		//}
-	//		m_entries.push_back(entry);
-	//	}
-	//}
+        rapidjson::Value val2;
+        val2.SetArray();
+        m_doc.AddMember("entries", val2, m_doc.GetAllocator());
+    }
 };
-
-const std::string TSPFile::FILEDIVEDER = "DOF";
-const std::string TSPFile::FILEEXTENSION = ".mytsp";

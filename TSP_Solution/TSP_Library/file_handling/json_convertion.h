@@ -201,6 +201,7 @@ namespace jsonconversion {
 
 	static void runModeToJson(const RunMode& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
 		v.SetObject();
+		v.AddMember("id", s.id, a);
 		v.AddMember("num_cities", s.num_cities, a);
 		addStringMember(v, "genType", GenerationTypeToString(s.genType), a);
 		addStringMember(v, "Caching", cachingTypeToString(s.Caching), a);
@@ -211,6 +212,7 @@ namespace jsonconversion {
 	}
 
 	static void JsonToRunMode(RunMode& s, const rapidjson::Value& v) {
+		s.id = v["id"].GetUint64();
 		s.num_cities = v["num_cities"].GetUint64();
 		s.genType = stringToGenerationType(v["genType"].GetString());
 		s.Caching = stringToCachingType(v["Caching"].GetString());
