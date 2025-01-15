@@ -3,14 +3,17 @@
 #include <chrono>
 #include <random>
 
-#include "rapidjson/document.h"
-
 #include "../tsp_data/tsp_constructs.h"
 #include "../tour_optimisation/optimisation_headers.h"
 #include "../tour_construction/consturction_headers.h"
 #include "timer.h"
-#include "json_convertion.h"
 
+
+enum Validity {
+	Valid,
+	Invalid,
+	Timeout
+};
 
 // TSP Run Settings
 class RunMode {
@@ -23,6 +26,8 @@ public:
 	ConstructionType Construction;
 	OptimisationType Optimisation;
 
+	size_t depth;
+
 	void set(const RunMode& copy) {
 		num_cities = copy.num_cities;
 		genType = copy.genType;
@@ -30,6 +35,7 @@ public:
 		Partitioning = copy.Partitioning;
 		Construction = copy.Construction;
 		Optimisation = copy.Optimisation;
+		depth = copy.depth;
 	}
 
 	friend auto operator==(const RunMode& lhs, const RunMode& rhs) {
@@ -38,7 +44,9 @@ public:
 			lhs.Caching == rhs.Caching &&
 			lhs.Partitioning == rhs.Partitioning &&
 			lhs.Construction == rhs.Construction &&
-			lhs.Optimisation == rhs.Optimisation;
+			lhs.Optimisation == rhs.Optimisation &&
+			lhs.depth == rhs.depth;
+
 	}
 };
 

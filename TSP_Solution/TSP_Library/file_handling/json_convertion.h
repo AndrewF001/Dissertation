@@ -9,12 +9,9 @@
 #include "../tour_optimisation/optimisation_headers.h"
 #include "../tour_construction/consturction_headers.h"
 #include "timer.h"
+#include "tsp_output.h"
 
-enum Validity {	// TODO: This should be in tsp_output.h
-	Valid,
-	Invalid,
-	Timeout
-};
+
 
 namespace jsonconversion {
 
@@ -26,13 +23,23 @@ namespace jsonconversion {
 		return buffer.GetString();
 	}
 
+	static rapidjson::Document stringToDocument(const std::string& s) {
+		rapidjson::Document doc;
+		doc.Parse(s.c_str());
+		return doc;
+	}
+
+	static void addStringMember(rapidjson::Value& v, const std::string& name, const std::string& value, rapidjson::Document::AllocatorType& a) {
+		v.AddMember(rapidjson::Value(name.c_str(), a), rapidjson::Value(value.c_str(), a), a);
+	}
+
 	static std::string validityToString(Validity v) {
 		switch (v) {
-			case Valid:
+			case Validity::Valid:
 				return "Valid";
-			case Invalid:
+			case Validity::Invalid:
 				return "Invalid";
-			case Timeout:
+			case Validity::Timeout:
 				return "Timeout";
 		}
 		return "N/A";
@@ -40,11 +47,11 @@ namespace jsonconversion {
 
 	static Validity stringToValidity(const std::string& s) {
 		if (s == "Valid")
-			return Valid;
+			return Validity::Valid;
 		if (s == "Invalid")
-			return Invalid;
+			return Validity::Invalid;
 		if (s == "Timeout")
-			return Timeout;
+			return Validity::Timeout;
 		return Invalid;
 	}
 
@@ -163,7 +170,7 @@ namespace jsonconversion {
 	}
 
 	static TimeScale stringToTimeScale(const std::string& s) {
-		return std::chrono::milliseconds(std::stoll(s));
+		return TimeScale(std::stoll(s));
 	}
 
 	static void point2DToJSON(const Point2D& p, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
@@ -190,5 +197,142 @@ namespace jsonconversion {
 
 	static Square JSONToSquare(const rapidjson::Value& v) {
 		return Square(JSONToPoint2D(v["p1"]), JSONToPoint2D(v["p2"]));
+	}
+
+	static void runModeToJson(const RunMode& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
+		v.SetObject();
+		v.AddMember("num_cities", s.num_cities, a);
+		addStringMember(v, "genType", GenerationTypeToString(s.genType), a);
+		addStringMember(v, "Caching", cachingTypeToString(s.Caching), a);
+		addStringMember(v, "Partitioning", partitioningTypeToString(s.Partitioning), a);
+		addStringMember(v, "Construction", constructionTypeToString(s.Construction), a);
+		addStringMember(v, "Optimisation", optimisationTypeToString(s.Optimisation), a);
+		v.AddMember("depth", s.depth, a);
+	}
+
+	static void JsonToRunMode(RunMode& s, const rapidjson::Value& v) {
+		s.num_cities = v["num_cities"].GetUint64();
+		s.genType = stringToGenerationType(v["genType"].GetString());
+		s.Caching = stringToCachingType(v["Caching"].GetString());
+		s.Partitioning = stringToPartitioningType(v["Partitioning"].GetString());
+		s.Construction = stringToConstructionType(v["Construction"].GetString());
+		s.Optimisation = stringToOptimisationType(v["Optimisation"].GetString());
+		s.depth = v["depth"].GetUint64();
+	}
+
+	static void TSPResultToJson(const TSPResult& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
+		runModeToJson(s, v, a);
+		
+		rapidjson::Value val;
+		squareToJSON(s.area, val, a);
+		v.AddMember("area", val, a);
+		
+		v.AddMember("seed", s.seed, a);
+		v.AddMember("constructTour_distance", s.constructTour_distance, a);
+		v.AddMember("final_distance", s.final_distance, a);
+		addStringMember(v, "validRoute", validityToString(s.validRoute), a);
+		addStringMember(v, "total_run_time", timeScaletoString(s.total_run_time), a);
+		addStringMember(v, "initalisePartition_time", timeScaletoString(s.initalisePartition_time), a);
+		addStringMember(v, "initaliseCache_time", timeScaletoString(s.initaliseCache_time), a);
+		addStringMember(v, "constructTour_time", timeScaletoString(s.constructTour_time), a);
+		addStringMember(v, "optimiseTour_time", timeScaletoString(s.optimiseTour_time), a);
+	}
+
+	static void JsonToTSPResult(TSPResult& s, const rapidjson::Value& v) {
+		JsonToRunMode(s, v);
+		s.area = JSONToSquare(v["area"]);
+		s.seed = v["seed"].GetInt();
+		s.constructTour_distance = v["constructTour_distance"].GetDouble();
+		s.final_distance = v["final_distance"].GetDouble();
+		s.validRoute = stringToValidity(v["validRoute"].GetString());
+		s.total_run_time = stringToTimeScale(v["total_run_time"].GetString());
+		s.initalisePartition_time = stringToTimeScale(v["initalisePartition_time"].GetString());
+		s.initaliseCache_time = stringToTimeScale(v["initaliseCache_time"].GetString());
+		s.constructTour_time = stringToTimeScale(v["constructTour_time"].GetString());
+		s.optimiseTour_time = stringToTimeScale(v["optimiseTour_time"].GetString());
+	}
+
+	static void TSPVerboseResultStaticToJson(const TSPVerboseResultStatic& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
+		TSPResultToJson(s, v, a);
+		addStringMember(v, "name", s.name, a);
+		addStringMember(v, "type", s.type, a);
+		addStringMember(v, "comment", s.comment, a);
+		addStringMember(v, "edge_weight_type", s.edge_weight_type, a);
+		addStringMember(v, "display_data_type", s.display_data_type, a);
+	}
+
+	static void JsonToTSPVerboseResultStatic(TSPVerboseResultStatic& s, const rapidjson::Value& v) {
+		JsonToTSPResult(s, v);
+		s.name = v["name"].GetString();
+		s.type = v["type"].GetString();
+		s.comment = v["comment"].GetString();
+		s.edge_weight_type = v["edge_weight_type"].GetString();
+		s.display_data_type = v["display_data_type"].GetString();
+	}
+
+	static void TSPVerboseResultDynamicToJson(const TSPVerboseResultDynamic& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
+		TSPVerboseResultStaticToJson(s, v, a);
+
+		rapidjson::Value node_coord_section;
+		node_coord_section.SetArray();
+		for (auto& p : s.node_coord_section) {
+			rapidjson::Value point;
+			point.SetObject();
+			point2DToJSON(p, point, a);
+			node_coord_section.PushBack(point, a);
+		}
+		v.AddMember("node_coord_section", node_coord_section, a);
+
+		rapidjson::Value route;
+		route.SetArray();
+		for (auto& r : s.route) {
+			route.PushBack(r, a);
+		}
+		v.AddMember("route", route, a);
+	}
+
+	static void JsonToTSPVerboseResultDynamic(TSPVerboseResultDynamic& s, const rapidjson::Value& v) {
+		JsonToTSPVerboseResultStatic(s, v);
+
+		s.node_coord_section.clear();
+		for (auto& p : v["node_coord_section"].GetArray()) {
+			s.node_coord_section.push_back(JSONToPoint2D(p));
+		}
+
+		s.route.clear();
+		for (auto& r : v["route"].GetArray()) {
+			s.route.push_back(r.GetUint64());
+		}
+	}
+
+	static void StatisticEntryToJson(const StatisticEntry& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
+		v.SetObject();
+		runModeToJson(s, v, a);
+		v.AddMember("number_of_runs", s.number_of_runs, a);
+		v.AddMember("number_of_valid_routes", s.number_of_valid_routes, a);
+		v.AddMember("invalidRoutes", s.invalidRoutes, a);
+		v.AddMember("timeouts", s.timeouts, a);
+		v.AddMember("total_construct_tour_distance", s.total_construct_tour_distance, a);
+		v.AddMember("total_final_distance", s.total_final_distance, a);
+		addStringMember(v, "total_run_time", timeScaletoString(s.total_run_time), a);
+		addStringMember(v, "total_initalisePartition_time", timeScaletoString(s.total_initalisePartition_time), a);
+		addStringMember(v, "total_initaliseCache_time", timeScaletoString(s.total_initaliseCache_time), a);
+		addStringMember(v, "total_constructTour_time", timeScaletoString(s.total_constructTour_time), a);
+		addStringMember(v, "total_optimiseTour_time", timeScaletoString(s.total_optimiseTour_time), a);
+	}
+
+	static void JsonToStatisticEntry(StatisticEntry& s, const rapidjson::Value& v) {
+		JsonToRunMode(s, v);
+		s.number_of_runs = v["number_of_runs"].GetUint64();
+		s.number_of_valid_routes = v["number_of_valid_routes"].GetUint64();
+		s.invalidRoutes = v["invalidRoutes"].GetUint64();
+		s.timeouts = v["timeouts"].GetUint64();
+		s.total_construct_tour_distance = v["total_construct_tour_distance"].GetDouble();
+		s.total_final_distance = v["total_final_distance"].GetDouble();
+		s.total_run_time = stringToTimeScale(v["total_run_time"].GetString());
+		s.total_initalisePartition_time = stringToTimeScale(v["total_initalisePartition_time"].GetString());
+		s.total_initaliseCache_time = stringToTimeScale(v["total_initaliseCache_time"].GetString());
+		s.total_constructTour_time = stringToTimeScale(v["total_constructTour_time"].GetString());
+		s.total_optimiseTour_time = stringToTimeScale(v["total_optimiseTour_time"].GetString());
 	}
 }
