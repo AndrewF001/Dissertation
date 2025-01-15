@@ -85,8 +85,8 @@ TEST(QuadTreeTest, StaticLookahead) {
 
 	auto cities = TspDataTemplate<Type2d, size, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
 
-	auto quad = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run(2);
-	auto linear = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::linearSearch, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run(2);
+	auto quad = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run({2});
+	auto linear = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::linearSearch, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, cities)->run({2});
 
 	EXPECT_EQ(quad.route, linear.route);
 }
@@ -97,8 +97,8 @@ TEST(QuadTreeTest, StaticNearestNeighbour) {
 
 	auto cities = TspDataTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
 
-	auto quad = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree, ConstructionType::NearestNeighbour, OptimisationType::TwoOpt>>(area, cities)->run(2);
-	auto linear = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::NearestNeighbour, OptimisationType::TwoOpt>>(area, cities)->run(2);
+	auto quad = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree, ConstructionType::NearestNeighbour, OptimisationType::TwoOpt>>(area, cities)->run({2});
+	auto linear = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::NearestNeighbour, OptimisationType::TwoOpt>>(area, cities)->run({2});
 
 	EXPECT_EQ(quad.route, linear.route);
 }
@@ -109,8 +109,8 @@ TEST(QuadTreeTest, ClostestInerstion) {
 
 	auto cities = TspDataTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
 
-	auto quad = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree, ConstructionType::ShortestInsertion, OptimisationType::TwoOpt>>(area, cities)->run(2);
-	auto linear = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::ShortestInsertion, OptimisationType::TwoOpt>>(area, cities)->run(2);
+	auto quad = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree, ConstructionType::ShortestInsertion, OptimisationType::TwoOpt>>(area, cities)->run({2});
+	auto linear = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::ShortestInsertion, OptimisationType::TwoOpt>>(area, cities)->run({2});
 
 	EXPECT_EQ(quad.route, linear.route);
 }
@@ -121,8 +121,8 @@ TEST(QuadTreeTest, ConvexHull) {
 
 	auto cities = TspDataTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
 
-	auto quad = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree, ConstructionType::ConvexHullInsertion, OptimisationType::TwoOpt>>(area, cities)->run(2);
-	auto linear = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::ConvexHullInsertion, OptimisationType::TwoOpt>>(area, cities)->run(2);
+	auto quad = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree, ConstructionType::ConvexHullInsertion, OptimisationType::TwoOpt>>(area, cities)->run({2});
+	auto linear = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::ConvexHullInsertion, OptimisationType::TwoOpt>>(area, cities)->run({2});
 
 	EXPECT_EQ(quad.route, linear.route);
 }

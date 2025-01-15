@@ -2,17 +2,29 @@
 #include <vector>
 #include <chrono>
 #include <random>
+#include <omp.h>
 
 #include "../tsp_data/tsp_constructs.h"
 #include "../tour_optimisation/optimisation_headers.h"
 #include "../tour_construction/consturction_headers.h"
 #include "timer.h"
 
-
 enum Validity {
 	Valid,
 	Invalid,
 	Timeout
+};
+
+class TSPArgs {
+public:
+	size_t max_depth = 1;
+	int num_threads = omp_get_max_threads();
+	std::chrono::milliseconds timeout_ms = std::chrono::milliseconds(60000);
+	
+	friend auto operator==(const TSPArgs& lhs, const TSPArgs& rhs) {
+		return lhs.max_depth == rhs.max_depth &&
+			lhs.num_threads == rhs.num_threads;
+	}
 };
 
 // TSP Run Settings
@@ -28,7 +40,7 @@ public:
 	ConstructionType Construction;
 	OptimisationType Optimisation;
 
-	size_t depth = 0;
+	TSPArgs args;
 
 	void set(const RunMode& copy) {
 		num_cities = copy.num_cities;
@@ -37,7 +49,7 @@ public:
 		Partitioning = copy.Partitioning;
 		Construction = copy.Construction;
 		Optimisation = copy.Optimisation;
-		depth = copy.depth;
+		args = copy.args;
 	}
 
 	friend auto operator==(const RunMode& lhs, const RunMode& rhs) {
@@ -47,7 +59,7 @@ public:
 			lhs.Partitioning == rhs.Partitioning &&
 			lhs.Construction == rhs.Construction &&
 			lhs.Optimisation == rhs.Optimisation &&
-			lhs.depth == rhs.depth;
+			lhs.args == rhs.args;
 
 	}
 };

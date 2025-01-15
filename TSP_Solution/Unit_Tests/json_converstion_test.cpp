@@ -97,7 +97,7 @@ namespace {
 		s.Partitioning = PartitioningType::quadTree;
 		s.Construction = ConstructionType::StaticLookaheadConvexHullInserstion;
 		s.Optimisation = OptimisationType::TwoOpt;
-		s.depth = 5;
+		s.args = { 1, 2, std::chrono::milliseconds(100) };
 
 		rapidjson::Document doc;
 		doc.SetObject();
@@ -114,7 +114,7 @@ namespace {
 		EXPECT_EQ(s.Partitioning, r.Partitioning);
 		EXPECT_EQ(s.Construction, r.Construction);
 		EXPECT_EQ(s.Optimisation, r.Optimisation);
-		EXPECT_EQ(s.depth, r.depth);
+		EXPECT_EQ(s.args, r.args);
 	}
 
 	TEST(JsonConversionTest, TSPResultTest) {
@@ -125,7 +125,7 @@ namespace {
 		s.Partitioning = PartitioningType::quadTree;
 		s.Construction = ConstructionType::StaticLookaheadConvexHullInserstion;
 		s.Optimisation = OptimisationType::TwoOpt;
-		s.depth = 5;
+		s.args = { 1, 2, std::chrono::milliseconds(100) };
 		s.area = { {1, 2}, {3, 4} };
 		s.seed = 100;
 		s.constructTour_distance = 100;
@@ -149,7 +149,7 @@ namespace {
 		EXPECT_EQ(s.Partitioning, r.Partitioning);
 		EXPECT_EQ(s.Construction, r.Construction);
 		EXPECT_EQ(s.Optimisation, r.Optimisation);
-		EXPECT_EQ(s.depth, r.depth);
+		EXPECT_EQ(s.args, r.args);
 		EXPECT_EQ(s.area.m_p1.m_x, r.area.m_p1.m_x);
 		EXPECT_EQ(s.area.m_p1.m_y, r.area.m_p1.m_y);
 		EXPECT_EQ(s.area.m_p2.m_x, r.area.m_p2.m_x);
@@ -170,7 +170,7 @@ namespace {
 		s.Partitioning = PartitioningType::quadTree;
 		s.Construction = ConstructionType::StaticLookaheadConvexHullInserstion;
 		s.Optimisation = OptimisationType::TwoOpt;
-		s.depth = 5;
+		s.args = { 1, 2, std::chrono::milliseconds(100) };
 		s.area = { {1, 2}, {3, 4} };
 		s.seed = 100;
 		s.constructTour_distance = 100;
@@ -197,7 +197,7 @@ namespace {
 		EXPECT_EQ(s.Partitioning, r.Partitioning);
 		EXPECT_EQ(s.Construction, r.Construction);
 		EXPECT_EQ(s.Optimisation, r.Optimisation);
-		EXPECT_EQ(s.depth, r.depth);
+		EXPECT_EQ(s.args, r.args);
 		EXPECT_EQ(s.area.m_p1.m_x, r.area.m_p1.m_x);
 		EXPECT_EQ(s.area.m_p1.m_y, r.area.m_p1.m_y);
 		EXPECT_EQ(s.area.m_p2.m_x, r.area.m_p2.m_x);
@@ -221,7 +221,7 @@ namespace {
 		s.Partitioning = PartitioningType::quadTree;
 		s.Construction = ConstructionType::StaticLookaheadConvexHullInserstion;
 		s.Optimisation = OptimisationType::TwoOpt;
-		s.depth = 5;
+		s.args = { 1, 2, std::chrono::milliseconds(100) };
 		s.number_of_runs = 100;
 		s.total_constructTour_time = TimeScale(100);
 		s.total_final_distance = 100;
@@ -242,7 +242,7 @@ namespace {
 		EXPECT_EQ(s.Partitioning, r.Partitioning);
 		EXPECT_EQ(s.Construction, r.Construction);
 		EXPECT_EQ(s.Optimisation, r.Optimisation);
-		EXPECT_EQ(s.depth, r.depth);
+		EXPECT_EQ(s.args, r.args);
 		EXPECT_EQ(s.number_of_runs, s.number_of_runs);
 		EXPECT_EQ(s.total_constructTour_time, s.total_constructTour_time);
 		EXPECT_EQ(s.total_final_distance, s.total_final_distance);

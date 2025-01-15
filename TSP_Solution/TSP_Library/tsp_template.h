@@ -7,7 +7,7 @@
 #include "timer.h"
 #include "logger.h"
 
-#include "file_handling/tsp_output.h"
+#include "file_handling/tsp_structs.h"
 #include "tsp_data/types_headers.h"
 #include "tour_construction/consturction_headers.h"
 #include "tour_optimisation/optimisation_headers.h"
@@ -26,9 +26,9 @@ public:
 	TspTemplate(const Square& size, std::array<TSPType, Size> cities) : m_data(size, cities) {};
 	~TspTemplate() = default;
 
-	TSPVerboseResultDynamic run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
+	TSPVerboseResultDynamic run(const TSPArgs& args) {
 		// package task to cancel if it takes too long
-		std::packaged_task<void()> task(std::bind(&TspTemplate::_run, this, depth, max_threads));
+		std::packaged_task<void()> task(std::bind(&TspTemplate::_run, this, args));
 
 		// Future for probing status
 		auto future = task.get_future();
@@ -37,7 +37,7 @@ public:
 		std::thread thr(std::move(task));
 
 		// Wait for the task to finish or timeout
-		if (future.wait_for(std::chrono::seconds(10)) != std::future_status::timeout) {
+		if (future.wait_for(args.timeout_ms) != std::future_status::timeout) {
 			// Task was succefully completed
 			thr.join();
 			future.get();
@@ -81,12 +81,12 @@ private:
 	TSPVerboseResultDynamic m_output;
 	Timer m_timer;
 
-	void _run(size_t depth = 1, int max_threads = omp_get_max_threads()) {
-		m_output.depth = depth;	// TODO: make arguments a struct
+	void _run(const TSPArgs& args) {
+		m_output.args = args;
 		if (m_data.getNumberOfCities() != Size)
 			throw std::invalid_argument("Number of cities does not match the size of the template! Fill all data entries");
 
-		omp_set_num_threads(max_threads);
+		omp_set_num_threads(args.num_threads);
 		m_timer.start_timer();
 
 		m_data.initalisePartition();
@@ -95,7 +95,7 @@ private:
 		m_data.initaliseCache();
 		m_output.initaliseCache_time = m_timer.interval();
 
-		constructTour(depth, max_threads);
+		constructTour(args);
 		m_output.constructTour_time = m_timer.interval();
 		double distance = m_data.getRouteLength();
 		Logger::log("Original Route Length: " + std::to_string(distance) + "\n", 2);
@@ -103,7 +103,7 @@ private:
 		m_timer.start_timer();
 
 
-		optimiseTour(max_threads);
+		optimiseTour(args);
 		m_output.optimiseTour_time = m_timer.interval();
 		m_output.total_run_time = m_timer.stopTimer();
 		distance = m_data.getRouteLength();
@@ -113,9 +113,9 @@ private:
 		finaliseOutput();
 	};
 
-	void constructTour(size_t depth, size_t max_threads) {
+	void constructTour(const TSPArgs& args) {
 		if constexpr (Construction == ConstructionType::StaticLookaheadConvexHullInserstion)
-			StaticLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(depth).constructTour(m_data);
+			StaticLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(args.max_depth).constructTour(m_data);
 
 		if constexpr (Construction == ConstructionType::NearestNeighbour)
 			NearestNeighbour<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
@@ -128,7 +128,7 @@ private:
 			
 	};
 
-	void optimiseTour(size_t max_threads) {
+	void optimiseTour(const TSPArgs& args) {
 		if constexpr (Optimisation == OptimisationType::TwoOpt)
 			TwoOpt<TSPType, Size, Caching, Partitioning>().optimiseTour(m_data);
 		

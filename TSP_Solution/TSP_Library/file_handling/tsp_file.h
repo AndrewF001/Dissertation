@@ -1,5 +1,5 @@
 #pragma once
-#include "tsp_output.h"
+#include "tsp_structs.h"
 #include "file_handler.h"
 #include "json_convertion.h"
 

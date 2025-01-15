@@ -9,7 +9,7 @@
 #include "../tour_optimisation/optimisation_headers.h"
 #include "../tour_construction/consturction_headers.h"
 #include "timer.h"
-#include "tsp_output.h"
+#include "tsp_structs.h"
 
 
 
@@ -199,6 +199,19 @@ namespace jsonconversion {
 		return Square(JSONToPoint2D(v["p1"]), JSONToPoint2D(v["p2"]));
 	}
 
+	static void TSPArgsToJson(const TSPArgs& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
+		v.SetObject();
+		v.AddMember("num_threads", s.num_threads, a);
+		v.AddMember("depth", s.max_depth, a);
+		v.AddMember("timeout", s.timeout_ms.count(), a);
+	}
+
+	static void JsonToTSPArgs(TSPArgs& s, const rapidjson::Value& v) {
+		s.num_threads = v["num_threads"].GetUint64();
+		s.max_depth = v["depth"].GetUint64();
+		s.timeout_ms = std::chrono::milliseconds(v["timeout"].GetInt64());
+	}
+
 	static void runModeToJson(const RunMode& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
 		v.SetObject();
 		v.AddMember("id", s.id, a);
@@ -208,7 +221,10 @@ namespace jsonconversion {
 		addStringMember(v, "Partitioning", partitioningTypeToString(s.Partitioning), a);
 		addStringMember(v, "Construction", constructionTypeToString(s.Construction), a);
 		addStringMember(v, "Optimisation", optimisationTypeToString(s.Optimisation), a);
-		v.AddMember("depth", s.depth, a);
+		
+		rapidjson::Value args;
+		TSPArgsToJson(s.args, args, a);
+		v.AddMember("args", args, a);
 	}
 
 	static void JsonToRunMode(RunMode& s, const rapidjson::Value& v) {
@@ -219,7 +235,7 @@ namespace jsonconversion {
 		s.Partitioning = stringToPartitioningType(v["Partitioning"].GetString());
 		s.Construction = stringToConstructionType(v["Construction"].GetString());
 		s.Optimisation = stringToOptimisationType(v["Optimisation"].GetString());
-		s.depth = v["depth"].GetUint64();
+		JsonToTSPArgs(s.args, v["args"]);
 	}
 
 	static void TSPResultToJson(const TSPResult& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {

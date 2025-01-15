@@ -9,10 +9,11 @@
 int main(int argc, char* argv[]) {
 	const Square area = {{0, 0}, 1000, 1000 };
 	std::mt19937 engine(1);
+	TSPArgs args;
 
 	auto tsp = std::make_unique<TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, GenerationType::rectangle, 1);
 
-	auto output = tsp->run(2);
+	auto output = tsp->run(args);
 	
 	Logger::log("Time taken: " + std::to_string(output.total_run_time.count() / 1000000.0) + " seconds\n");
 

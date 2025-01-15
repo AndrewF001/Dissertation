@@ -34,7 +34,7 @@
     <ClInclude Include="tsp_template.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="file_handling\tsp_output.h" />
+    <ClCompile Include="file_handling\tsp_structs.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Utilities\Utilities.vcxproj">

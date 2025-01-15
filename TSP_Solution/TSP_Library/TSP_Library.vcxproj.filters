@@ -80,7 +80,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="file_handling\tsp_output.h">
+    <ClCompile Include="file_handling\tsp_structs.h">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
