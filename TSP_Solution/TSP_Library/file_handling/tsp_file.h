@@ -5,7 +5,7 @@
 
 class TSPFile {
 public:
-	TSPFile(std::string path) : m_path(path.append(FILEEXTENSION)) {
+	TSPFile(std::string path, jsonconversion::JsonType type = jsonconversion::JsonType::TSPResult) : m_path(path), m_type(type)  {
 		readFile();
 		//m_statisticsArray = m_doc["statistics"].GetArray();
 		//m_entriesArray = m_doc["entries"].GetArray();
@@ -16,7 +16,12 @@ public:
 		m_entries.push_back(entry);
 
 		rapidjson::Value v;
-		jsonconversion::TSPVerboseResultDynamicToJson(entry, v, m_doc.GetAllocator());
+		if (entry.validRoute == Invalid)	
+			jsonconversion::resultToJson(jsonconversion::JsonType::TSPVerboseResultDynamic, entry, v, m_doc.GetAllocator());
+		else 
+			jsonconversion::resultToJson(m_type, entry, v, m_doc.GetAllocator());
+
+
 		m_doc["entries"].GetArray().PushBack(v, m_doc.GetAllocator());
 
 		updateStatistics(entry);	// TODO: This need to update m_doc
@@ -32,6 +37,7 @@ private:
 	const char* N_ENTRIES = "entries";
 
 	const std::string m_path;
+	jsonconversion::JsonType m_type;
 	std::vector<StatisticEntry> m_statistics;
 	std::vector<TSPVerboseResultDynamic> m_entries;
 	rapidjson::Document m_doc;
@@ -39,7 +45,7 @@ private:
 	//rapidjson::GenericArray<false, rapidjson::Value> m_entriesArray;
 
 	void readFile() {
-		auto file = readFromFile(m_path);
+		auto file = readFromFile(m_path + FILEEXTENSION);
 
 		if (!file.has_value()) {
 			Logger::log("File not found: " + m_path);
@@ -74,8 +80,8 @@ private:
 	void readEntries(const rapidjson::Value& v) {
 		for (auto& s : v.GetArray()) {
 			TSPVerboseResultDynamic entry{};
-			jsonconversion::JsonToTSPVerboseResultDynamic(entry, s);
-			m_entries.push_back(entry);
+			jsonconversion::JsonToResult(s, entry);
+			m_entries.emplace_back(std::move(entry));
 		}
 	}
 
@@ -107,7 +113,7 @@ private:
 
 	void _writeFile() {
 		auto file = jsonconversion::documentToString(m_doc);
-		writeToFile(m_path, file);
+		writeToFile(m_path + FILEEXTENSION, file);
 	};
 
     void createBlankDoc() {

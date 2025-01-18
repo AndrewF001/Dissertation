@@ -3,6 +3,7 @@
 
 #include "rapidjson/document.h"
 #include "rapidjson/writer.h"
+#include "rapidjson/prettywriter.h"
 #include "rapidjson/stringbuffer.h"
 
 #include "../tsp_data/tsp_constructs.h"
@@ -17,7 +18,7 @@ namespace jsonconversion {
 
 	static std::string documentToString(const rapidjson::Document& doc) {
 		rapidjson::StringBuffer buffer;
-		rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+		rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 		doc.Accept(writer);
 
 		return buffer.GetString();
@@ -207,7 +208,7 @@ namespace jsonconversion {
 	}
 
 	static void JsonToTSPArgs(TSPArgs& s, const rapidjson::Value& v) {
-		s.num_threads = v["num_threads"].GetUint64();
+		s.num_threads = v["num_threads"].GetInt();
 		s.max_depth = v["depth"].GetUint64();
 		s.timeout_ms = std::chrono::milliseconds(v["timeout"].GetInt64());
 	}
@@ -352,5 +353,47 @@ namespace jsonconversion {
 		s.total_initaliseCache_time = stringToTimeScale(v["total_initaliseCache_time"].GetString());
 		s.total_constructTour_time = stringToTimeScale(v["total_constructTour_time"].GetString());
 		s.total_optimiseTour_time = stringToTimeScale(v["total_optimiseTour_time"].GetString());
+	}
+
+	enum class JsonType {
+		TSPResult,
+		TSPVerboseResultStatic,
+		TSPVerboseResultDynamic
+	};
+
+	static void resultToJson(const JsonType t, const TSPVerboseResultDynamic& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
+		v.SetObject();
+		rapidjson::Value val;
+		switch (t)
+		{
+			case jsonconversion::JsonType::TSPResult:
+				addStringMember(v, "type", "TSPResult", a);
+				TSPResultToJson(s, val, a);
+				break;
+			case jsonconversion::JsonType::TSPVerboseResultStatic:
+				addStringMember(v, "type", "TSPVerboseResultStatic", a);
+				TSPVerboseResultStaticToJson(s, val, a);
+				break;
+			case jsonconversion::JsonType::TSPVerboseResultDynamic:
+				addStringMember(v, "type", "TSPVerboseResultDynamic", a);
+				TSPVerboseResultDynamicToJson(s, val, a);
+				break;
+			default:
+				break;
+		}
+		v.AddMember("object", val, a);
+	}
+
+	static void JsonToResult(const rapidjson::Value& v, TSPVerboseResultDynamic& s) {
+		std::string type = v["type"].GetString();
+		if (type == "TSPResult") {
+			JsonToTSPResult(s, v["object"]);
+		}
+		else if (type == "TSPVerboseResultStatic") {
+			JsonToTSPVerboseResultStatic(s, v["object"]);
+		}
+		else if (type == "TSPVerboseResultDynamic") {
+			JsonToTSPVerboseResultDynamic(s, v["object"]);
+		}
 	}
 }
