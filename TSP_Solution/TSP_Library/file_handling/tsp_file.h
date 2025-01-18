@@ -108,7 +108,7 @@ private:
 		}
 
 		entry->append(data);
-		jsonconversion::StatisticEntryToJson(*entry, m_doc[N_STATISTICS].GetArray()[entry->id], m_doc.GetAllocator());
+		jsonconversion::StatisticEntryToJson(*entry, m_doc[N_STATISTICS].GetArray()[rapidjson::SizeType(entry->id)], m_doc.GetAllocator());
 	};
 
 	void _writeFile() {
