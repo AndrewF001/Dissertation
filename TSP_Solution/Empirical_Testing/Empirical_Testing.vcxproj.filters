@@ -18,5 +18,16 @@
     <ClCompile Include="Empirical_Testing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="test_class.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="test_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\example.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
