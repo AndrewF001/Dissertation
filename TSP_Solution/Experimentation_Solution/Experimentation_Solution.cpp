@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 	Logger::log("Time taken: " + std::to_string(output.total_run_time.count() / 1000000.0) + " seconds\n");
 
 	TSPFile file("test");
-	file.addEntry(output);
+	file.addEntry(std::move(output));
 	file.writeFile();
 
 	switch (output.validRoute) {

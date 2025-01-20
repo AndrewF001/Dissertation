@@ -90,10 +90,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Empirical_Testing.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="test_class.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Tests\basic_100_test.h" />
     <ClInclude Include="Tests\example.h" />
     <ClInclude Include="test_class.h" />
   </ItemGroup>

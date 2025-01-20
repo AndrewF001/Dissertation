@@ -34,7 +34,7 @@ public:
 
 	/// Static Creation Methods
 	static std::array<TSPType, Size> generateCities(const Square& size, GenerationType type, std::mt19937& seed);
-	static TSPType generateRandomCities(const Square& size, GenerationType type, std::mt19937& seed);
+	static TSPType generateRandomCity(const Square& size, GenerationType type, std::mt19937& seed);
 
 	/// Getters Methods
 	//const std::array<TSPType, Size>& getAllCities() const { return m_cities; };	// This is too much privalage
@@ -122,12 +122,12 @@ inline std::array<TSPType, Size> TspDataTemplate<TSPType, Size, Caching, Partiti
 	std::array<TSPType, Size> cities;
 
 	for (size_t i = 0; i < Size; i++)
-		cities[i] = generateRandomCities(size, type, seed);
+		cities[i] = generateRandomCity(size, type, seed);
 
 	return cities;
 }
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-inline TSPType TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCities(const Square& size, GenerationType type, std::mt19937& seed) {
+inline TSPType TspDataTemplate<TSPType, Size, Caching, Partitioning>::generateRandomCity(const Square& size, GenerationType type, std::mt19937& seed) {
 	return TSPType(type, size, seed);
 };
 

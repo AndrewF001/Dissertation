@@ -11,9 +11,9 @@ public:
 		//m_entriesArray = m_doc["entries"].GetArray();
 	};
 
-	void addEntry(TSPVerboseResultDynamic& entry) {
+	void addEntry(TSPVerboseResultDynamic&& entry) {
 		entry.id = m_entries.size();
-		m_entries.push_back(entry);
+		m_entries.emplace_back(entry);
 
 		rapidjson::Value v;
 		if (entry.validRoute == Invalid)	

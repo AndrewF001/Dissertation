@@ -1,5 +1,7 @@
 #pragma once
+#include <tsp_template.h>
 #include <file_handling/tsp_file.h>
+#include <chrono>
 
 class TestClass
 {
@@ -12,7 +14,7 @@ public:
 	static void Exit() { s_shouldExit = true; }
 
 protected:
-	void addResult(TSPVerboseResultDynamic& result);
+	void addResult(TSPVerboseResultDynamic&& result);
 
 private:
 	const std::string m_name;

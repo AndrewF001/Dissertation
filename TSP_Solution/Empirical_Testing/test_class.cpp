@@ -26,6 +26,7 @@ BOOL __stdcall ConsoleCtrlHandler(DWORD ctrlType) {
 
 
 void TestClass::RunTests() {
+	//_test();
 
 	if (!SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE)) {
 		std::cerr << "Error: Could not set control handler.\n";
@@ -52,8 +53,8 @@ void TestClass::RunTests() {
 	}
 }
 
-void TestClass::addResult(TSPVerboseResultDynamic& result) {
-	m_file.addEntry(result);
+void TestClass::addResult(TSPVerboseResultDynamic&& result) {
+	m_file.addEntry(std::move(result));
 }
 
 void TestClass::_test() {
