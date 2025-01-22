@@ -5,8 +5,10 @@
 
 class TSPFile {
 public:
+	inline static const std::string FILEEXTENSION = ".mytsp";
+
 	TSPFile(std::string path, jsonconversion::JsonType type = jsonconversion::JsonType::TSPResult) : m_path(path), m_type(type)  {
-		readFile();
+		m_completedReadFile = readFile();
 		//m_statisticsArray = m_doc["statistics"].GetArray();
 		//m_entriesArray = m_doc["entries"].GetArray();
 	};
@@ -22,7 +24,7 @@ public:
 			jsonconversion::resultToJson(m_type, entry, v, m_doc.GetAllocator());
 
 
-		m_doc["entries"].GetArray().PushBack(v, m_doc.GetAllocator());
+		m_doc[N_ENTRIES].GetArray().PushBack(v, m_doc.GetAllocator());
 
 		updateStatistics(entry);	// TODO: This need to update m_doc
 	};
@@ -31,42 +33,58 @@ public:
 		_writeFile();
 	};
 
+	bool completedReadFile() {
+		return m_completedReadFile;
+	}
+
 private:
-	const std::string FILEEXTENSION = ".mytsp";
-	const char* N_STATISTICS = "statistics";
-	const char* N_ENTRIES = "entries";
+	inline static const char* N_STATISTICS = "statistics";
+	inline static const char* N_ENTRIES = "entries";
 
 	const std::string m_path;
-	jsonconversion::JsonType m_type;
+
 	std::vector<StatisticEntry> m_statistics;
 	std::vector<TSPVerboseResultDynamic> m_entries;
-	rapidjson::Document m_doc;
-	//rapidjson::GenericArray<false, rapidjson::Value> m_statisticsArray;
-	//rapidjson::GenericArray<false, rapidjson::Value> m_entriesArray;
 
-	void readFile() {
+	bool m_completedReadFile = false;
+	jsonconversion::JsonType m_type;
+	rapidjson::Document m_doc;
+
+	bool readFile() {
 		auto file = readFromFile(m_path + FILEEXTENSION);
 
 		if (!file.has_value()) {
-			Logger::log("File not found: " + m_path);
+			Logger::log("File not found: " + m_path + "\n", 0);
 			createBlankDoc();
-			return;
+			return false;
 		}
 
 		m_doc = jsonconversion::stringToDocument(file.value());
-		m_doc.IsObject();
 
-		if (m_doc.HasParseError())
-			throw std::runtime_error("Error parsing file: " + m_path);
+		if (m_doc.HasParseError()) {
+			Logger::error("Error parsing file: " + m_path + "\n");
+			return false;	// Can't do the next checks
+		}
 
-		if (!m_doc.HasMember(N_STATISTICS) && !m_doc[N_STATISTICS].IsArray())
-			throw std::runtime_error("Error parsing Statistics array: " + m_path);
+		if (!m_doc.IsObject()) {
+			Logger::error("Error File isn't a JSON object: " + m_path + "\n");
+			return false;
+		};
 
-		if (!m_doc.HasMember(N_ENTRIES) && !m_doc[N_ENTRIES].IsArray())
-			throw std::runtime_error("Error parsing Entries array: " + m_path);
+		if (!m_doc.HasMember(N_STATISTICS) && !m_doc[N_STATISTICS].IsArray()) {
+			Logger::error("Error parsing Statistics array: " + m_path + "\n");
+			return false;
+		}
+
+		if (!m_doc.HasMember(N_ENTRIES) && !m_doc[N_ENTRIES].IsArray()) {
+			Logger::error("Error parsing Entries array: " + m_path + "\n");
+			return false;
+		}
 
 		readStatistics(m_doc[N_STATISTICS]);
 		readEntries(m_doc[N_ENTRIES]);
+
+		return true;
 	};
 
 	void readStatistics(const rapidjson::Value& v) {
@@ -122,10 +140,10 @@ private:
         // Add a new line break
         rapidjson::Value val;
         val.SetArray();
-        m_doc.AddMember("statistics", val, m_doc.GetAllocator());
+        m_doc.AddMember(rapidjson::Value(N_STATISTICS, m_doc.GetAllocator()), val, m_doc.GetAllocator());
 
         rapidjson::Value val2;
         val2.SetArray();
-        m_doc.AddMember("entries", val2, m_doc.GetAllocator());
+        m_doc.AddMember(rapidjson::Value(N_ENTRIES, m_doc.GetAllocator()), val2, m_doc.GetAllocator());
     }
 };
