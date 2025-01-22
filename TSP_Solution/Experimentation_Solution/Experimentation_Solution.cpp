@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
 
 	for (cityID i = 0; i < output.num_cities; i++) {
 		std::stringstream s;
-		s << i << " : " << output.node_coord_section[i] << "\n";
+		s << i << " : " << output.node_coord_section[i].getPoint() << "\n";
 		Logger::log(s);
 	}
 

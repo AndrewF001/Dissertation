@@ -1,5 +1,6 @@
 #include <iostream>
 #include <file_handling/tsp_file.h>
+#include <tsp_template.h>
 
 static std::unique_ptr<TSPFile> readFile() {
 	std::string file_path;
@@ -21,7 +22,67 @@ static std::unique_ptr<TSPFile> readFile() {
 	return file;
 }
 
+static int menu() {
+	int output;
+	
+	std::cout << "menu" << std::endl;
+	std::cout << "1. Replay entry id" << std::endl;
+	std::cout << "2. Failed runs" << std::endl;
+	std::cin >> output;
+
+	return output;
+}
+
+
+static void replayRun(const TSPVerboseResultDynamic& entry) {
+	auto cities = entry.node_coord_section;
+
+	// TODO: THIS IS THE PROBLEM WITH TEMPLATES!
+	//TspTemplate<
+	//	Type2d,
+	//	entry.num_cities,
+	//	entry.Caching,
+	//	entry.Partitioning,
+	//	entry.Construction,
+	//	entry.Optimisation
+	//>tsp(entry.area,cities, entry.seed);
+}
+
+static void replay(const TSPFile& file) {
+
+}
+
+static void failedRuns(const TSPFile& file) {
+	auto entries = file.getEntries();
+
+	for (auto& entry : entries) {
+		if (entry.validRoute != Invalid)
+			continue;
+
+		std::cout << "Replaying failed run: " << entry.id << std::endl;
+	}
+}
+
 int main() {
 	auto file = readFile();
+
+	
+	while (true) {
+
+		auto option = menu();
+
+		switch (option) {
+			case 1:
+				replay(*file);
+				break;
+			case 2:
+				failedRuns(*file);
+				break;
+			default:
+				return 0;
+		}
+	}
+
+	return 0;
 }
 

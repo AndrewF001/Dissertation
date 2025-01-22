@@ -297,7 +297,7 @@ namespace jsonconversion {
 		for (auto& p : s.node_coord_section) {
 			rapidjson::Value point;
 			point.SetObject();
-			point2DToJSON(p, point, a);
+			point2DToJSON(p.getPoint(), point, a);
 			node_coord_section.PushBack(point, a);
 		}
 		v.AddMember("node_coord_section", node_coord_section, a);

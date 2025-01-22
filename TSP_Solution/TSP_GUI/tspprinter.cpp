@@ -28,13 +28,13 @@ void TspPrinter::paintEvent(QPaintEvent * event) {
     // Draw the lines
     painter.setPen(QPen(Qt::black, 2));
     for (size_t i = 0; i < data.route.size() - 1; i++) {
-        painter.drawLine(data.node_coord_section[data.route[i]].m_x / scalex, data.node_coord_section[data.route[i]].m_y / scaley, data.node_coord_section[data.route[i+1]].m_x / scalex, data.node_coord_section[data.route[i+1]].m_y / scaley);
+        painter.drawLine(data.node_coord_section[data.route[i]].getPoint().m_x / scalex, data.node_coord_section[data.route[i]].getPoint().m_y / scaley, data.node_coord_section[data.route[i + 1]].getPoint().m_x / scalex, data.node_coord_section[data.route[i + 1]].getPoint().m_y / scaley);
     }
 
     // Draw the points
     painter.setPen(QPen(Qt::red, 3));
     for (int i = 0; i < data.node_coord_section.size(); i++) {
-        painter.drawPoint(data.node_coord_section[i].m_x / scalex, data.node_coord_section[i].m_y / scaley);
+        painter.drawPoint(data.node_coord_section[i].getPoint().m_x / scalex, data.node_coord_section[i].getPoint().m_y / scaley);
     }
 
     painter.setPen(QPen(Qt::black, 1));

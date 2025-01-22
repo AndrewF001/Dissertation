@@ -7,6 +7,7 @@
 #include "../tsp_data/tsp_constructs.h"
 #include "../tour_optimisation/optimisation_headers.h"
 #include "../tour_construction/consturction_headers.h"
+#include "../tsp_data/types/2d.h"
 #include "timer.h"
 
 enum Validity {
@@ -97,7 +98,7 @@ public:
 // Fully reconstructable results
 class TSPVerboseResultDynamic : public TSPVerboseResultStatic {
 public:
-	std::vector<Point2D> node_coord_section;
+	std::vector<Type2d> node_coord_section;
 	std::vector<cityID> route;
 };
 

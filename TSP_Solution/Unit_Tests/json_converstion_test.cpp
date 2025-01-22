@@ -180,7 +180,7 @@ namespace {
 		s.initalisePartition_time = TimeScale(200);
 		s.name = "Test";
 		s.route = { 1, 2, 3, 4 };
-		s.node_coord_section = { {1, 2}, {3, 4} };
+		s.node_coord_section = { Type2d({1, 2}), Type2d({3, 4}) };
 
 		rapidjson::Document doc;
 		doc.SetObject();
@@ -210,7 +210,7 @@ namespace {
 		EXPECT_EQ(s.initalisePartition_time, r.initalisePartition_time);
 		EXPECT_EQ(s.name, s.name);
 		EXPECT_EQ(s.route[2], s.route[2]);
-		EXPECT_EQ(s.node_coord_section[1].m_y, s.node_coord_section[1].m_y);
+		EXPECT_EQ(s.node_coord_section[1].getPoint().m_y, s.node_coord_section[1].getPoint().m_y);
 	}
 
 	TEST(JsonConversionTest, StatisticEntryTest) {

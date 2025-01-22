@@ -35,7 +35,15 @@ public:
 
 	bool completedReadFile() {
 		return m_completedReadFile;
-	}
+	};
+
+	const std::vector<StatisticEntry>& getStatistics() const {
+		return m_statistics;
+	};
+
+	const std::vector<TSPVerboseResultDynamic>& getEntries() const {
+		return m_entries;
+	};
 
 private:
 	inline static const char* N_STATISTICS = "statistics";
