@@ -3,11 +3,14 @@
 #include "logger.h"
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
-class ConvexHull
-{
+class ConvexHull : public ConstructionBase<TSPType, Size, Caching, Partitioning> {
 public:
-	ConvexHull() {};
-	~ConvexHull() {};
+	ConvexHull() : ConstructionBase<TSPType, Size, Caching, Partitioning>("ConvexHull") {};
+	~ConvexHull() = default;
+
+	void _constructTour(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) override {
+		runSingle(data);
+	};
 
 	static void runSingle(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
 		static_assert(Size >= 3, "Convex Hull requires at least 3 cities");
@@ -67,15 +70,9 @@ private:
 	// Reset function for gradiant variable
 	template<bool positive_gradent>
 	static inline double gradent_set() {
-		if (positive_gradent) {
-			return -DBL_MAX;
-		}
-		else {
-			return DBL_MAX;
-		}
+		return positive_gradent ? -DBL_MAX : DBL_MAX;
 	};
 
-	template<bool left, bool gradent>
 	static std::vector<cityID> convexHullQuatar(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data, cityID new_point, const cityID dest) {
 		std::vector<cityID> output;
 		cityID last_point = new_point;
@@ -84,17 +81,13 @@ private:
 			output.push_back(new_point);
 			last_point = new_point;
 			auto& last_city = data.getCityPoint(last_point);
-			double grad = ConvexHull::gradent_set<gradent>();
+			double grad = ConvexHull::gradent_set<true>();
 			const auto& search = data.getCitiesInArea(last_point, dest);
 			// find best fit
 			for (const auto& city : search) {	// TODO: Only find cities in correct quater
 				auto& new_city = data.getCityPoint(city);
 				double g = last_city.gradient(new_city);
-				if (gradent && g > grad) {
-					grad = g;
-					new_point = city;
-				}
-				else if (!gradent && g < grad) {
+				if (g > grad) {
 					grad = g;
 					new_point = city;
 				}
@@ -105,51 +98,51 @@ private:
 		return output;
 	};
 
-	template<bool left, bool gradent>
-	static std::vector<cityID> convexHullHalf(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data, cityID new_point) {
-		std::vector<cityID> output;
-		cityID last_point = new_point;
-		do {
-			// setup for new iteration
-			output.push_back(new_point);
-			last_point = new_point;
-			auto& last_city = data.getCityPoint(last_point);
-			double grad = ConvexHull::gradent_set<gradent>();
+	//template<bool left, bool gradent>
+	//static std::vector<cityID> convexHullHalf(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data, cityID new_point) {
+	//	std::vector<cityID> output;
+	//	cityID last_point = new_point;
+	//	do {
+	//		// setup for new iteration
+	//		output.push_back(new_point);
+	//		last_point = new_point;
+	//		auto& last_city = data.getCityPoint(last_point);
+	//		double grad = ConvexHull::gradent_set<gradent>();
 
-			// find best fit
-			for (cityID i = 0; i < Size; i++) {	// TODO: Only find cities in correct quater
-				auto& new_city = data.getCityPoint(i);
-				if (ConvexHull::left_statement<left>(last_city.m_x, new_city.m_x))
-					continue;
+	//		// find best fit
+	//		for (cityID i = 0; i < Size; i++) {	// TODO: Only find cities in correct quater
+	//			auto& new_city = data.getCityPoint(i);
+	//			if (ConvexHull::left_statement<left>(last_city.m_x, new_city.m_x))
+	//				continue;
 
-				double g = last_city.gradient(new_city);
-				if (gradent && g > grad) {
-					grad = g;
-					new_point = i;
-				}
-				else if (!gradent && g < grad) {
-					grad = g;
-					new_point = i;
-				}
+	//			double g = last_city.gradient(new_city);
+	//			if (gradent && g > grad) {
+	//				grad = g;
+	//				new_point = i;
+	//			}
+	//			else if (!gradent && g < grad) {
+	//				grad = g;
+	//				new_point = i;
+	//			}
 
-			}
-			// Check if a new best fit was found
-		} while (last_point != new_point);
+	//		}
+	//		// Check if a new best fit was found
+	//	} while (last_point != new_point);
 
-		return output;
-	};
+	//	return output;
+	//};
 
 	static void convexHullFull(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data) {
 		MaxPoints points = ConvexHull::maxPoints(data);
 
 		std::stringstream s;
 		s << "North: " << points.north << " East: " << points.east << " South: " << points.south << " West: " << points.west << "\n";
-		Logger::log(s, 2);
+		Logger::log(s, 1);
 
-		std::vector<cityID> upper_left = ConvexHull::convexHullQuatar<false, true>(data, points.west, points.north);
-		std::vector<cityID> upper_right = ConvexHull::convexHullQuatar<false, false>(data, points.north, points.east);
-		std::vector<cityID> lower_right = ConvexHull::convexHullQuatar<true, false>(data, points.east, points.south);
-		std::vector<cityID> lower_left = ConvexHull::convexHullQuatar<true, true>(data, points.south, points.west);
+		std::vector<cityID> upper_left = ConvexHull::convexHullQuatar(data, points.west, points.north);
+		std::vector<cityID> upper_right = ConvexHull::convexHullQuatar(data, points.north, points.east);
+		std::vector<cityID> lower_right = ConvexHull::convexHullQuatar(data, points.east, points.south);
+		std::vector<cityID> lower_left = ConvexHull::convexHullQuatar(data, points.south, points.west);
 
 		if (points.west == points.north)
 			upper_left.pop_back();

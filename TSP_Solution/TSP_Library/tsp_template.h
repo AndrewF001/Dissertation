@@ -31,6 +31,7 @@ public:
 
 	TSPVerboseResultDynamic run(const TSPArgs& args) {
 		//_run(args);
+		//return m_output;
 		// package task to cancel if it takes too long
 		std::packaged_task<void()> task(std::bind(&TspTemplate::_run, this, args));
 
@@ -63,8 +64,8 @@ public:
 	const TSPVerboseResultDynamic& getOutput() const { return m_output; }
 
 	void finaliseOutput() { 
-		for (const auto& r : m_data.getRoute()) {
-			m_output.route.push_back(m_data.getRouteCityID(r));
+		for (size_t i = 0; i < m_data.getRouteSize(); i++) {
+			m_output.route.push_back(m_data.getRouteCityID(m_data.getRoute()[i]));
 		}
 
 		for (size_t i = 0; i < Size; i++) {
@@ -129,6 +130,9 @@ private:
 
 		if constexpr (Construction == ConstructionType::ConvexHullInsertion)
 			ConvexHullInsertion<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
+
+		if constexpr (Construction == ConstructionType::ConvexHull)
+			ConvexHull<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
 			
 	};
 

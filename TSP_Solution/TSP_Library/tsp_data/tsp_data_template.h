@@ -204,6 +204,7 @@ inline double TspDataTemplate<TSPType, Size, Caching, Partitioning>::getRouteLen
 
 template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
 inline void TspDataTemplate<TSPType, Size, Caching, Partitioning>::setCityPos(const cityID city_id, const cityID pos) {
+	//std::cout << city_id << " : " << getCityPoint(city_id) << "\n";
 #ifdef _DEBUG
 	if (m_route_count >= Size)
 		throw std::out_of_range("TSP_Data::setCityPos: The number of cities in the route exceeds the maximum size of the array");
@@ -309,7 +310,7 @@ inline bool TspDataTemplate<TSPType, Size, Caching, Partitioning>::validRoute() 
 
 	// Check if a point is visited twice
     std::array<bool, Size> map = {false};
-	for (size_t i = 0; i < Size; i++) {
+	for (size_t i = 0; i < getRouteSize(); i++) {
 		if (map[getRouteCityID(m_route[i])]) {
 			Logger::error("Node " + std::to_string(i) + " visited twice!\n");
 			valid = false;

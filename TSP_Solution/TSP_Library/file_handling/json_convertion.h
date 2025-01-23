@@ -260,7 +260,7 @@ namespace jsonconversion {
 	static void JsonToTSPResult(TSPResult& s, const rapidjson::Value& v) {
 		JsonToRunMode(s, v);
 		s.area = JSONToSquare(v["area"]);
-		s.seed = v["seed"].GetInt();
+		s.seed = v["seed"].GetUint();
 		s.constructTour_distance = v["constructTour_distance"].GetDouble();
 		s.final_distance = v["final_distance"].GetDouble();
 		s.validRoute = stringToValidity(v["validRoute"].GetString());

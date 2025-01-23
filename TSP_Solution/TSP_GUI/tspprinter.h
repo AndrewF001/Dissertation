@@ -15,6 +15,7 @@ public:
 protected:
 	Ui::TspPrinterClass ui;
 
-	void paintEvent(QPaintEvent* event) override;
 	TSPVerboseResultDynamic data;
+	
+	void paintEvent(QPaintEvent* event) override;
 };

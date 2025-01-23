@@ -12,7 +12,7 @@ namespace {
 		val.SetInt(1);
 		doc.AddMember("test", val, doc.GetAllocator());
 		auto s = documentToString(doc);
-		EXPECT_EQ(s, "{\"test\":1}");
+		EXPECT_EQ(s, "{\n    \"test\": 1\n}");
 
 		auto d = stringToDocument(s);
 		EXPECT_EQ(d["test"].GetInt(), 1);

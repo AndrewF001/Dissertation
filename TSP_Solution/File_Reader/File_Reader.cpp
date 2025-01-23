@@ -35,7 +35,7 @@ static int menu() {
 
 
 static void replayRun(const TSPVerboseResultDynamic& entry) {
-	auto cities = entry.node_coord_section;
+	//auto cities = entry.node_coord_section;
 
 	// TODO: THIS IS THE PROBLEM WITH TEMPLATES!
 	//TspTemplate<
@@ -45,11 +45,26 @@ static void replayRun(const TSPVerboseResultDynamic& entry) {
 	//	entry.Partitioning,
 	//	entry.Construction,
 	//	entry.Optimisation
-	//>tsp(entry.area,cities, entry.seed);
+	//>tsp(entry.area,cities, entry.genType, entry.seed);area, cities, GenerationType::rectangle, seed
+	
+	std::array<Type2d, 100> cities;
+	std::copy_n(entry.node_coord_section.begin(), 100, cities.begin());
+
+	TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>tsp(entry.area, cities, entry.genType, entry.seed);
+	tsp.run(entry.args);
 }
 
 static void replay(const TSPFile& file) {
+	size_t id;
+	std::cout << "Enter the entry id: ";
+	std::cin >> id;
 
+	if (id >= file.getEntries().size()) {
+		std::cout << "Invalid entry id" << std::endl;
+		return;
+	}
+
+	replayRun(file.getEntries()[id]);
 }
 
 static void failedRuns(const TSPFile& file) {

@@ -10,7 +10,7 @@ TspPrinter::TspPrinter(TSPVerboseResultDynamic data, QWidget* parent)
 TspPrinter::~TspPrinter()
 {}
 
-void TspPrinter::paintEvent(QPaintEvent * event) {
+void TspPrinter::paintEvent(QPaintEvent* event) {
     Q_UNUSED(event);
 
     QPainter painter(this);

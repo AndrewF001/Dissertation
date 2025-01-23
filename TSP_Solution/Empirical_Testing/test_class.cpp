@@ -26,7 +26,6 @@ BOOL __stdcall ConsoleCtrlHandler(DWORD ctrlType) {
 
 
 void TestClass::RunTests() {
-	//_test();
 
 	if (!SetConsoleCtrlHandler(ConsoleCtrlHandler, TRUE)) {
 		std::cerr << "Error: Could not set control handler.\n";
@@ -42,6 +41,7 @@ void TestClass::RunTests() {
 	std::thread thr(std::move(task));
 
 	// Wait for the task to finish or timeout
+	std::cout << "Test running\n";
 	if (future.wait_for(m_timeout) != std::future_status::timeout) {
 		// Task was succefully completed
 		thr.join();
@@ -58,14 +58,14 @@ void TestClass::addResult(TSPVerboseResultDynamic&& result) {
 }
 
 void TestClass::_test() {
-	int i = 0;
+	size_t i = 0;
 	while (!TestClass::s_shouldExit) {
 		
 		Test();
 		
-		if (++i >= m_printintervals) {
+		if (++i % m_printintervals == 0) {
 			m_file.writeFile();
-			i = 0;
+			std::cout << "Test" << i << ": file written\n";
 		}
 	}
 

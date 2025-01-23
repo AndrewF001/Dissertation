@@ -8,5 +8,6 @@ enum class ConstructionType {
 	StaticLookaheadConvexHullInserstion,
 	NearestNeighbour,
 	ShortestInsertion,
-	ConvexHullInsertion
+	ConvexHullInsertion,
+	ConvexHull,
 };

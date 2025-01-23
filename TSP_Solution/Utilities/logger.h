@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#define LOGLEVEL 2
+static size_t LOGLEVEL = 0;
 
 namespace Logger
 {
@@ -18,12 +18,12 @@ namespace Logger
 
 
 	static void error(const std::string& message) {
-		if constexpr (LOGLEVEL > 0)
+		//if (LOGLEVEL > 0)
 			std::cerr << message << std::fflush;
 	}
 
 	static void error(const std::stringstream& message) {
-		if constexpr (LOGLEVEL > 0)
+		//if (LOGLEVEL > 0)
 			std::cerr << message.str() << std::fflush;
 	}
 }
