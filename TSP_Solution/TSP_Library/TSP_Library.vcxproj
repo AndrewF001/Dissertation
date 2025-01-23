@@ -15,6 +15,7 @@
     <ClInclude Include="tour_construction\consturction_headers.h" />
     <ClInclude Include="tour_construction\convex_hull.h" />
     <ClInclude Include="tour_construction\convex_hull_insertion.h" />
+    <ClInclude Include="tour_construction\static_lookahead.h" />
     <ClInclude Include="tour_construction\static_lookahead_convex_hull.h" />
     <ClInclude Include="tour_construction\nearest_neighbour.h" />
     <ClInclude Include="tour_construction\shortest_insertion.h" />

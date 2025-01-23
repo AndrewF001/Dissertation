@@ -122,6 +122,9 @@ private:
 		if constexpr (Construction == ConstructionType::StaticLookaheadConvexHullInserstion)
 			StaticLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(args.max_depth).constructTour(m_data);
 
+		if constexpr (Construction == ConstructionType::StaticLookahead)
+			StaticLookahead<TSPType, Size, Caching, Partitioning>(args.max_depth).constructTour(m_data);
+
 		if constexpr (Construction == ConstructionType::NearestNeighbour)
 			NearestNeighbour<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
 
@@ -131,6 +134,7 @@ private:
 		if constexpr (Construction == ConstructionType::ConvexHullInsertion)
 			ConvexHullInsertion<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
 
+		// This is only intended for showing the convex hull, it won't create a full tour
 		if constexpr (Construction == ConstructionType::ConvexHull)
 			ConvexHull<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
 			

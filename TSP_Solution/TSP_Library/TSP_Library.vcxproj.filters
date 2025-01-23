@@ -78,6 +78,9 @@
     <ClInclude Include="file_handling\json_convertion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tour_construction\static_lookahead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="file_handling\tsp_structs.h">

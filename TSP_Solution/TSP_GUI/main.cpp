@@ -20,11 +20,11 @@ int main(int argc, char* argv[])
 
     auto cities = TspDataTemplate<Type2d, size, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
 
-    auto quad = std::make_unique<TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::ConvexHull, OptimisationType::TwoOpt>>(area, cities)->run({ 1 });
-    //auto linear = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::linearSearch, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::None>>(area, cities)->run({ 2 });
+    //auto quad = std::make_unique<TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::ConvexHull, OptimisationType::TwoOpt>>(area, cities)->run({ 1 });
+    auto linear = std::make_unique<TspTemplate<Type2d, size, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::None>>(area, cities)->run({ 2 });
 
 
-    w.setData(quad);
+    w.setData(linear);
     //w.setData(linear);
 
     w.show();
