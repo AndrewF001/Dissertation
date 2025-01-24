@@ -18,18 +18,18 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="test_class.cpp">
+    <ClCompile Include="Tests\test_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="test_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Tests\example.h">
+    <ClInclude Include="Tests\test_class.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Tests\basic_100_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="test_selection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

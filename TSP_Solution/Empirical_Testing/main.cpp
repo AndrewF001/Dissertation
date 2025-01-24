@@ -1,7 +1,7 @@
-#include "Tests/example.h"
 #include "Tests/basic_100_test.h"
+#include "test_selection.h"
 
 int main(int argc, char* argv[]) {
-	Basic100Test test("Basic_100_Test", 200);
-	test.RunTests();
+	//TSP_Selection::menu(1, 1000);
+	TSP_Selection::menu({}, {}, true);
 }

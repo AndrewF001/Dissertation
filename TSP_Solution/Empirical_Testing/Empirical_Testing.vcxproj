@@ -91,12 +91,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="test_class.cpp" />
+    <ClCompile Include="Tests\test_class.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tests\basic_100_test.h" />
-    <ClInclude Include="Tests\example.h" />
-    <ClInclude Include="test_class.h" />
+    <ClInclude Include="Tests\test_class.h" />
+    <ClInclude Include="test_selection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

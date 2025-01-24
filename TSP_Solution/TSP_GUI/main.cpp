@@ -9,6 +9,8 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
     TSP_GUI w;
 
+    //auto output = 
+
     //const Square area = { {0, 0}, 10, 10 };
     //std::mt19937 engine(2);
     //auto tsp = std::make_unique<TspTemplate<Type2d, 100, CachingType::full, PartitioningType::linearSearch, ConstructionType::NearestNeighbour, OptimisationType::TwoOpt>>(area, GenerationType::rectangle, engine);
