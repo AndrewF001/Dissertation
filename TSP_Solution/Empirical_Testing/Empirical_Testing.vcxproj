@@ -91,7 +91,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Tests\test_class.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tests\basic_100_test.h" />

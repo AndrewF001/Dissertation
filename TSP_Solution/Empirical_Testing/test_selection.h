@@ -12,7 +12,7 @@ namespace TSP_Selection {
 		return input;
 	}
 
-	const TSPFile& menu(std::optional<size_t> choice, std::optional<size_t> ittr, bool use_file) {
+	std::shared_ptr<TSPFile> menu(std::optional<size_t> choice, std::optional<size_t> ittr, bool use_file) {
 		size_t input;
 
 		while (!choice.has_value()) {
@@ -35,5 +35,8 @@ namespace TSP_Selection {
 				Basic100Test test(use_file);
 				return test.RunTests(ittr.value());
 		}
+
+		std::cout << "Invalid choice\n";
+		return nullptr;
 	}
 }
