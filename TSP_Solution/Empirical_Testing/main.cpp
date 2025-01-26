@@ -1,4 +1,4 @@
-#include "Tests/basic_100_test.h"
+#include "Tests/basic_test.h"
 #include "test_selection.h"
 
 int main(int argc, char* argv[]) {

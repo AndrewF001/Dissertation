@@ -93,7 +93,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tests\basic_100_test.h" />
+    <ClInclude Include="Tests\basic_test.h" />
     <ClInclude Include="Tests\test_class.h" />
     <ClInclude Include="test_selection.h" />
   </ItemGroup>

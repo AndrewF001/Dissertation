@@ -128,6 +128,8 @@ namespace jsonconversion {
 				return "ShortestInsertion";
 			case ConstructionType::ConvexHullInsertion:
 				return "ConvexHullInsertion";
+			case ConstructionType::StaticLookahead:
+				return "StaticLookahead";
 		}
 		return "N/A";
 	}
@@ -141,6 +143,8 @@ namespace jsonconversion {
 			return ConstructionType::ShortestInsertion;
 		if (s == "ConvexHullInsertion")
 			return ConstructionType::ConvexHullInsertion;
+		if (s == "StaticLookahead")
+			return ConstructionType::StaticLookahead;
 		return ConstructionType::StaticLookaheadConvexHullInserstion;
 	}
 
