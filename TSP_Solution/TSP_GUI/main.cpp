@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
     TSP_GUI w;
 
-    auto output = TSP_Selection::menu({}, 1, false);
+    auto output = TSP_Selection::menu({}, {}, 1, false);
 
 	if (output != nullptr)
         w.setData(output.get()->getEntries()[0]);

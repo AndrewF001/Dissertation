@@ -4,81 +4,124 @@
 
 namespace TSP_Selection {
 
+	constexpr std::array<size_t, 10> sizes{ 10, 100, 200, 300, 500, 1000, 2000, 3000, 4000, 5000 };
+
 	const size_t choiceSelect() {
 		size_t input;
 		std::cout << "Select test:\n";
-		std::cout << "1. Basic 100\n";
-		std::cout << "2. Basic 200\n";
-		std::cout << "3. Basic 500\n";
-		std::cout << "4. Basic 1000\n";
-		std::cout << "5. Basic 2000\n";
-		std::cout << "6. Basic 3000\n";
-		std::cout << "7. Basic 4000\n";
-		std::cout << "8. Basic 5000\n";
+		std::cout << "1. Basic\n";
+		std::cout << "2. Multi\n";
+		std::cout << "3. TSPlib\n";
 
 		std::cin >> input;
 		return input;
 	}
 
-	std::shared_ptr<TSPFile> menu(std::optional<size_t> choice, std::optional<size_t> ittr, bool use_file) {
+	const size_t sizeSelect(size_t size) {
+		size_t input;
+		if (size == 1) {
+			std::cout << "Select size:\n";
+		}
+		else {
+			std::cout << "Select max size:\n";
+		}
+		for (size_t i = 0; i < sizes.size(); i++) {
+			std::cout << i + 1 << ". " << sizes[i] << "\n";
+		}
+		std::cin >> input;
+		return input;
+	}
+
+	std::shared_ptr<TSPFile> BasicTestRun(size_t size, size_t ittr, bool use_file) {
+		switch (size) {
+			case 1:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[0], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 2:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[1], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 3:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[2], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 4:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[3], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 5:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[4], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 6:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[5], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 7:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[6], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 8:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[7], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 9:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[8], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+			case 10:
+			{
+				auto tester = std::make_unique<BasicTest<sizes[9], OptimisationType::TwoOpt>>(use_file);
+				return tester->RunTests(ittr);
+			}
+		}
+		return nullptr;
+	}
+
+	std::shared_ptr<TSPFile> menu(std::optional<size_t> choice, std::optional<size_t> size, std::optional<size_t> ittr, bool use_file) {
 		size_t input;
 
 		while (!choice.has_value()) {
 			choice = choiceSelect();
 		}
 
-		while (choice.value() < 1 || choice.value() > 8) {
+		while (choice.value() < 1 || choice.value() > 3) {
 			std::cout << "Invalid choice\n";
 			choice = choiceSelect();
 		}
 
-		while(!ittr.has_value()) {
-			std::cout << "Number of iterations: ";
-			std::cin >> input;
-			ittr = input;
+		if (choice.value() != 3 ) {
+			if (!size.has_value())
+				size = sizeSelect(choice.value());
+
+			while (!ittr.has_value()) {
+				std::cout << "Number of iterations: ";
+				std::cin >> input;
+				ittr = input;
+			}
 		}
 
 		switch (choice.value()) {
-		case 1:
-		{
-			BasicTest<100> test(use_file);
-			return test.RunTests(ittr.value());
-		}
-		case 2:
-		{
-			BasicTest<200> test(use_file);
-			return test.RunTests(ittr.value());
-		}
-		case 3:
-		{
-			BasicTest<500> test(use_file);
-			return test.RunTests(ittr.value());
-		}
-		case 4:
-		{
-			BasicTest<1000> test(use_file);
-			return test.RunTests(ittr.value());
-		}
-		case 5:
-		{
-			BasicTest<2000> test(use_file);
-			return test.RunTests(ittr.value());
-		}
-		case 6:
-		{
-			BasicTest<3000> test(use_file);
-			return test.RunTests(ittr.value());
-		}
-		case 7:
-		{
-			BasicTest<4000> test(use_file);
-			return test.RunTests(ittr.value());
-		}
-		case 8:
-		{
-			BasicTest<5000> test(use_file);
-			return test.RunTests(ittr.value());
-		}
+			case 1:
+				return BasicTestRun(size.value(), ittr.value(), use_file);
+				
+			case 2:
+				//return MultiTestRun(size, ittr, use_file);
+				break;
+			case 3:
+				//return TSPLibTestRun(use_file);
+				break;
+			
 		}
 
 		std::cout << "Invalid choice\n";

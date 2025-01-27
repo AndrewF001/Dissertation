@@ -29,5 +29,14 @@
     <ClInclude Include="test_selection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tests\multi_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\dynamic_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\Test_Compenents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

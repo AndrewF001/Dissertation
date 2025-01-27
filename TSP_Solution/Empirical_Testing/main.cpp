@@ -3,5 +3,5 @@
 
 int main(int argc, char* argv[]) {
 	//TSP_Selection::menu(1, 1000);
-	TSP_Selection::menu({}, {}, true);
+	TSP_Selection::menu({}, {}, {}, true);
 }

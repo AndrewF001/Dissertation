@@ -94,7 +94,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tests\basic_test.h" />
+    <ClInclude Include="Tests\dynamic_test.h" />
+    <ClInclude Include="Tests\multi_test.h" />
     <ClInclude Include="Tests\test_class.h" />
+    <ClInclude Include="Tests\Test_Compenents.h" />
     <ClInclude Include="test_selection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

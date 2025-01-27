@@ -254,11 +254,11 @@ namespace jsonconversion {
 		v.AddMember("constructTour_distance", s.constructTour_distance, a);
 		v.AddMember("final_distance", s.final_distance, a);
 		addStringMember(v, "validRoute", validityToString(s.validRoute), a);
-		addStringMember(v, "total_run_time", timeScaletoString(s.total_run_time), a);
-		addStringMember(v, "initalisePartition_time", timeScaletoString(s.initalisePartition_time), a);
-		addStringMember(v, "initaliseCache_time", timeScaletoString(s.initaliseCache_time), a);
-		addStringMember(v, "constructTour_time", timeScaletoString(s.constructTour_time), a);
-		addStringMember(v, "optimiseTour_time", timeScaletoString(s.optimiseTour_time), a);
+		addStringMember(v, "total_run_time_us", timeScaletoString(s.total_run_time), a);
+		addStringMember(v, "initalisePartition_time_us", timeScaletoString(s.initalisePartition_time), a);
+		addStringMember(v, "initaliseCache_time_us", timeScaletoString(s.initaliseCache_time), a);
+		addStringMember(v, "constructTour_time_us", timeScaletoString(s.constructTour_time), a);
+		addStringMember(v, "optimiseTour_time_us", timeScaletoString(s.optimiseTour_time), a);
 	}
 
 	static void JsonToTSPResult(TSPResult& s, const rapidjson::Value& v) {
@@ -268,11 +268,11 @@ namespace jsonconversion {
 		s.constructTour_distance = v["constructTour_distance"].GetDouble();
 		s.final_distance = v["final_distance"].GetDouble();
 		s.validRoute = stringToValidity(v["validRoute"].GetString());
-		s.total_run_time = stringToTimeScale(v["total_run_time"].GetString());
-		s.initalisePartition_time = stringToTimeScale(v["initalisePartition_time"].GetString());
-		s.initaliseCache_time = stringToTimeScale(v["initaliseCache_time"].GetString());
-		s.constructTour_time = stringToTimeScale(v["constructTour_time"].GetString());
-		s.optimiseTour_time = stringToTimeScale(v["optimiseTour_time"].GetString());
+		s.total_run_time = stringToTimeScale(v["total_run_time_us"].GetString());
+		s.initalisePartition_time = stringToTimeScale(v["initalisePartition_time_us"].GetString());
+		s.initaliseCache_time = stringToTimeScale(v["initaliseCache_time_us"].GetString());
+		s.constructTour_time = stringToTimeScale(v["constructTour_time_us"].GetString());
+		s.optimiseTour_time = stringToTimeScale(v["optimiseTour_time_us"].GetString());
 	}
 
 	static void TSPVerboseResultStaticToJson(const TSPVerboseResultStatic& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {
@@ -337,11 +337,11 @@ namespace jsonconversion {
 		v.AddMember("timeouts", s.timeouts, a);
 		v.AddMember("total_construct_tour_distance", s.total_construct_tour_distance, a);
 		v.AddMember("total_final_distance", s.total_final_distance, a);
-		addStringMember(v, "total_run_time", timeScaletoString(s.total_run_time), a);
-		addStringMember(v, "total_initalisePartition_time", timeScaletoString(s.total_initalisePartition_time), a);
-		addStringMember(v, "total_initaliseCache_time", timeScaletoString(s.total_initaliseCache_time), a);
-		addStringMember(v, "total_constructTour_time", timeScaletoString(s.total_constructTour_time), a);
-		addStringMember(v, "total_optimiseTour_time", timeScaletoString(s.total_optimiseTour_time), a);
+		addStringMember(v, "total_run_time_us", timeScaletoString(s.total_run_time), a);
+		addStringMember(v, "total_initalisePartition_time_us", timeScaletoString(s.total_initalisePartition_time), a);
+		addStringMember(v, "total_initaliseCache_time_us", timeScaletoString(s.total_initaliseCache_time), a);
+		addStringMember(v, "total_constructTour_time_us", timeScaletoString(s.total_constructTour_time), a);
+		addStringMember(v, "total_optimiseTour_time_us", timeScaletoString(s.total_optimiseTour_time), a);
 	}
 
 	static void JsonToStatisticEntry(StatisticEntry& s, const rapidjson::Value& v) {
@@ -352,11 +352,11 @@ namespace jsonconversion {
 		s.timeouts = v["timeouts"].GetUint64();
 		s.total_construct_tour_distance = v["total_construct_tour_distance"].GetDouble();
 		s.total_final_distance = v["total_final_distance"].GetDouble();
-		s.total_run_time = stringToTimeScale(v["total_run_time"].GetString());
-		s.total_initalisePartition_time = stringToTimeScale(v["total_initalisePartition_time"].GetString());
-		s.total_initaliseCache_time = stringToTimeScale(v["total_initaliseCache_time"].GetString());
-		s.total_constructTour_time = stringToTimeScale(v["total_constructTour_time"].GetString());
-		s.total_optimiseTour_time = stringToTimeScale(v["total_optimiseTour_time"].GetString());
+		s.total_run_time = stringToTimeScale(v["total_run_time_us"].GetString());
+		s.total_initalisePartition_time = stringToTimeScale(v["total_initalisePartition_time_us"].GetString());
+		s.total_initaliseCache_time = stringToTimeScale(v["total_initaliseCache_time_us"].GetString());
+		s.total_constructTour_time = stringToTimeScale(v["total_constructTour_time_us"].GetString());
+		s.total_optimiseTour_time = stringToTimeScale(v["total_optimiseTour_time_us"].GetString());
 	}
 
 	enum class JsonType {

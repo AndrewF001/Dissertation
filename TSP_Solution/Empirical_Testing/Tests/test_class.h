@@ -8,7 +8,7 @@
 
 #include "tsp_template.h"
 #include "file_handling/tsp_file.h"
-
+#include "Test_Compenents.h"
 // TODO: MOVE ALL IMPLEMENTATION TO A .CPP FILE!!!
 
 BOOL __stdcall ConsoleCtrlHandler(DWORD ctrlType); // TODO: THIS IS HORRIBLE!!!
