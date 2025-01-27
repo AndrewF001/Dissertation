@@ -3,6 +3,7 @@
 
 
 const Square AREA = { {0, 0}, 1000, 1000 };
+constexpr std::array<size_t, 10> SIZES{ 10, 100, 200, 300, 500, 1000, 2000, 3000, 4000, 5000 };
 
 namespace Tests {
 
