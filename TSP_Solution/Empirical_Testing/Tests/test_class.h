@@ -79,6 +79,7 @@ private:
 
 		while (!TestClass::s_shouldExit && i < num_of_ittr) {
 
+			SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
 			Test();
 			i++;
 
@@ -87,7 +88,8 @@ private:
 				start = std::chrono::steady_clock::now();
 			}
 		}
-		writeToFile(std::chrono::duration<double>(std::chrono::steady_clock::now() - const_start).count(), i);
+		writeToFile(std::chrono::duration<double>(std::chrono::steady_clock::now() - const_start).count(), i); 
+		SetThreadExecutionState(ES_CONTINUOUS);
 	}
 
 	void writeToFile(double time, size_t i)
