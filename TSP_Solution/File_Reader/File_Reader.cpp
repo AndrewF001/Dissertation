@@ -1,6 +1,8 @@
 #include <iostream>
-#include <file_handling/tsp_file.h>
-#include <tsp_template.h>
+
+#include "file_handling/tsp_file.h"
+#include "tsp_template.h"
+#include "file_handling/ExcelCreator.h"
 
 static std::unique_ptr<TSPFile> readFile() {
 	std::string file_path;
@@ -28,6 +30,7 @@ static int menu() {
 	std::cout << "menu" << std::endl;
 	std::cout << "1. Replay entry id" << std::endl;
 	std::cout << "2. Failed runs" << std::endl;
+	std::cout << "3. Create Excel" << std::endl;
 	std::cin >> output;
 
 	return output;
@@ -35,6 +38,7 @@ static int menu() {
 
 
 static void replayRun(const TSPVerboseResultDynamic& entry) {
+	std::cout << "This doesn't work yet" << std::endl;
 	//auto cities = entry.node_coord_section;
 
 	// TODO: THIS IS THE PROBLEM WITH TEMPLATES!
@@ -47,11 +51,11 @@ static void replayRun(const TSPVerboseResultDynamic& entry) {
 	//	entry.Optimisation
 	//>tsp(entry.area,cities, entry.genType, entry.seed);area, cities, GenerationType::rectangle, seed
 	
-	std::array<Type2d, 100> cities;
-	std::copy_n(entry.node_coord_section.begin(), 100, cities.begin());
+	//std::array<Type2d, 100> cities;
+	//std::copy_n(entry.node_coord_section.begin(), 100, cities.begin());
 
-	TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>tsp(entry.area, cities, entry.genType, entry.seed);
-	tsp.run(entry.args);
+	//TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>tsp(entry.area, cities, entry.genType, entry.seed);
+	//tsp.run(entry.args);
 }
 
 static void replay(const TSPFile& file) {
@@ -92,6 +96,9 @@ int main() {
 				break;
 			case 2:
 				failedRuns(*file);
+				break;
+			case 3:
+				ExcelCreator::createExcel(*file.get());
 				break;
 			default:
 				return 0;

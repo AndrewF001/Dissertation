@@ -3,14 +3,18 @@
 #include "file_handler.h"
 #include "json_convertion.h"
 
+//class TSPFile;	// Forward declaration
+//
+//#include "ExcelCreator.h"
+
+
 class TSPFile {
 public:
 	inline static const std::string FILEEXTENSION = ".mytsp";
+	const std::string m_name;
 
-	TSPFile(std::string path, jsonconversion::JsonType type = jsonconversion::JsonType::TSPResult) : m_path(path), m_type(type)  {
+	TSPFile(std::string path, jsonconversion::JsonType type = jsonconversion::JsonType::TSPResult) : m_name(path), m_type(type)  {
 		m_completedReadFile = readFile();
-		//m_statisticsArray = m_doc["statistics"].GetArray();
-		//m_entriesArray = m_doc["entries"].GetArray();
 	};
 
 	void addEntry(TSPVerboseResultDynamic&& entry) {
@@ -26,14 +30,31 @@ public:
 
 		m_doc[N_ENTRIES].GetArray().PushBack(v, m_doc.GetAllocator());
 
-		updateStatistics(entry);	// TODO: This need to update m_doc
+		updateStatistics(entry);
 	};
+
+	// Avoid using this one
+	void addEntryCopy(TSPVerboseResultDynamic entry) {
+		entry.id = m_entries.size();
+		m_entries.emplace_back(entry);
+
+		rapidjson::Value v;
+		if (entry.validRoute == Invalid)
+			jsonconversion::resultToJson(jsonconversion::JsonType::TSPVerboseResultDynamic, entry, v, m_doc.GetAllocator());
+		else
+			jsonconversion::resultToJson(m_type, entry, v, m_doc.GetAllocator());
+
+
+		m_doc[N_ENTRIES].GetArray().PushBack(v, m_doc.GetAllocator());
+
+		updateStatistics(entry);
+	}
 
 	void writeFile() {
 		_writeFile();
 	};
 
-	bool completedReadFile() {
+	bool completedReadFile() const {
 		return m_completedReadFile;
 	};
 
@@ -45,11 +66,20 @@ public:
 		return m_entries;
 	};
 
+	void mergeFiles(const TSPFile& file) {
+		for (const auto& entry : file.getEntries()) {
+			addEntryCopy(entry);	// Has to copy each one 
+		}
+	};
+
+	//void createExcel() const {
+	//	ExcelCreator::createExcel(*this);
+	//}
+
 private:
 	inline static const char* N_STATISTICS = "statistics";
 	inline static const char* N_ENTRIES = "entries";
 
-	const std::string m_path;
 
 	std::vector<StatisticEntry> m_statistics;
 	std::vector<TSPVerboseResultDynamic> m_entries;
@@ -59,10 +89,10 @@ private:
 	rapidjson::Document m_doc;
 
 	bool readFile() {
-		auto file = readFromFile(m_path + FILEEXTENSION);
+		auto file = readFromFile(m_name + FILEEXTENSION);
 
 		if (!file.has_value()) {
-			Logger::log("File not found: " + m_path + "\n", 0);
+			Logger::log("File not found: " + m_name + "\n", 0);
 			createBlankDoc();
 			return false;
 		}
@@ -70,22 +100,22 @@ private:
 		m_doc = jsonconversion::stringToDocument(file.value());
 
 		if (m_doc.HasParseError()) {
-			Logger::error("Error parsing file: " + m_path + "\n");
+			Logger::error("Error parsing file: " + m_name + "\n");
 			return false;	// Can't do the next checks
 		}
 
 		if (!m_doc.IsObject()) {
-			Logger::error("Error File isn't a JSON object: " + m_path + "\n");
+			Logger::error("Error File isn't a JSON object: " + m_name + "\n");
 			return false;
 		};
 
 		if (!m_doc.HasMember(N_STATISTICS) && !m_doc[N_STATISTICS].IsArray()) {
-			Logger::error("Error parsing Statistics array: " + m_path + "\n");
+			Logger::error("Error parsing Statistics array: " + m_name + "\n");
 			return false;
 		}
 
 		if (!m_doc.HasMember(N_ENTRIES) && !m_doc[N_ENTRIES].IsArray()) {
-			Logger::error("Error parsing Entries array: " + m_path + "\n");
+			Logger::error("Error parsing Entries array: " + m_name + "\n");
 			return false;
 		}
 
@@ -139,7 +169,7 @@ private:
 
 	void _writeFile() {
 		auto file = jsonconversion::documentToString(m_doc);
-		writeToFile(m_path + FILEEXTENSION, file);
+		writeToFile(m_name + FILEEXTENSION, file);
 	};
 
     void createBlankDoc() {

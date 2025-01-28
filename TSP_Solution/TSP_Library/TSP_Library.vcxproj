@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="file_handling\ExcelCreator.h" />
     <ClInclude Include="file_handling\json_convertion.h" />
     <ClInclude Include="tour_construction\consturction_headers.h" />
     <ClInclude Include="tour_construction\convex_hull.h" />
@@ -92,7 +93,9 @@
       <OpenMP>GenerateParallelCode</OpenMP>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <OptimizationDiagnosticLevel>Disable</OptimizationDiagnosticLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)..\CPP_Libraries\rapidjson\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)..\CPP_Libraries\ExcelLibrary\include</AdditionalIncludeDirectories>
+      <AdditionalModuleDependencies>
+      </AdditionalModuleDependencies>
     </ClCompile>
     <Link>
       <Link>
@@ -112,7 +115,9 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <OptimizationDiagnosticLevel>Level3</OptimizationDiagnosticLevel>
       <SYCLOptimization>MaxSpeedHighLevel</SYCLOptimization>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)..\CPP_Libraries\rapidjson\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)..\CPP_Libraries\ExcelLibrary\include</AdditionalIncludeDirectories>
+      <AdditionalModuleDependencies>
+      </AdditionalModuleDependencies>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
