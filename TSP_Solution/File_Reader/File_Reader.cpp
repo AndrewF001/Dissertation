@@ -2,7 +2,7 @@
 
 #include "file_handling/tsp_file.h"
 #include "tsp_template.h"
-#include "file_handling/ExcelCreator.h"
+#include "ExcelCreator.h"
 
 static std::unique_ptr<TSPFile> readFile() {
 	std::string file_path;

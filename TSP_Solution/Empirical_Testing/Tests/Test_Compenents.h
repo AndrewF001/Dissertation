@@ -9,7 +9,7 @@ namespace Tests {
 
 	inline static unsigned int seed_gen() {
 		auto now = std::chrono::high_resolution_clock::now().time_since_epoch();
-		return std::chrono::duration_cast<std::chrono::microseconds>(now).count();
+		return (unsigned int)std::chrono::duration_cast<std::chrono::microseconds>(now).count();	// TODO: potential loss of data
 	}
 
 	template<size_t Size>

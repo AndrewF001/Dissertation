@@ -100,6 +100,9 @@
     <ClInclude Include="Tests\Test_Compenents.h" />
     <ClInclude Include="test_selection.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="MultiTest_Copy.mytsp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
