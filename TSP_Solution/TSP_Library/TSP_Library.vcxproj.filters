@@ -81,6 +81,12 @@
     <ClInclude Include="tour_construction\static_lookahead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tour_construction\dynamic_lookahead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tour_construction\dynamic_lookahead_convex_hull.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="file_handling\tsp_structs.h">

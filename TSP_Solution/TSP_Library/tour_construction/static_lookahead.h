@@ -28,10 +28,6 @@ public:
 		}
 	}
 
-private:
-	const size_t m_depth;
-
-
 	static std::pair<cityID, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, size_t depth) {
 		double min_dist = DBL_MAX;
 		std::pair<cityID, size_t> output;
@@ -50,6 +46,11 @@ private:
 		}
 		return output;
 	}
+
+private:
+	const size_t m_depth;
+
+
 
 	static std::pair<double, cityID> ShortestRoute(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, cityID point, size_t depth, const double best_distance) {
 		std::pair<double, cityID> output = { DBL_MAX, SIZE_MAX };

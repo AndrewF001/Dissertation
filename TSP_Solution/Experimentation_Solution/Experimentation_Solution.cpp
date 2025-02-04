@@ -11,7 +11,7 @@ int main(int argc, char* argv[]) {
 	std::mt19937 engine(1);
 	TSPArgs args;
 
-	auto tsp = std::make_unique<TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, GenerationType::rectangle, 1);
+	auto tsp = std::make_unique<TspTemplate<Type2d, 100, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, GenerationType::rectangle, 1);
 
 	auto output = tsp->run(args);
 

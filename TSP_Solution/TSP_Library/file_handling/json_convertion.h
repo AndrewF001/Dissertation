@@ -130,6 +130,12 @@ namespace jsonconversion {
 				return "ConvexHullInsertion";
 			case ConstructionType::StaticLookahead:
 				return "StaticLookahead";
+			case ConstructionType::ConvexHull:
+				return "ConvexHull";
+			case ConstructionType::DynamicLookahead:
+				return "DynamicLookahead";
+			case ConstructionType::DynamicLookaheadConvexHullInserstion:
+				return "DynamicLookaheadConvexHullInserstion";
 		}
 		return "N/A";
 	}
@@ -145,6 +151,12 @@ namespace jsonconversion {
 			return ConstructionType::ConvexHullInsertion;
 		if (s == "StaticLookahead")
 			return ConstructionType::StaticLookahead;
+		if (s == "ConvexHull")
+			return ConstructionType::ConvexHull;
+		if (s == "DynamicLookahead")
+			return ConstructionType::DynamicLookahead;
+		if (s == "DynamicLookaheadConvexHullInserstion")
+			return ConstructionType::DynamicLookaheadConvexHullInserstion;
 		return ConstructionType::StaticLookaheadConvexHullInserstion;
 	}
 
