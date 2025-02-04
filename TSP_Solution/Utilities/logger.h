@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-static size_t LOGLEVEL = 3;
+static size_t LOGLEVEL = 0;
 
 namespace Logger
 {

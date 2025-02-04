@@ -49,4 +49,16 @@ namespace Tests {
 		return ConvexHullInsertion->run(args);
 	};
 
+	template<size_t Size, OptimisationType Opt>
+	inline static TSPVerboseResultDynamic TestDynamicLookahead(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
+		auto ConvexHullInsertion = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookahead, Opt>>(AREA, cities, GenerationType::rectangle, seed);
+		return ConvexHullInsertion->run(args);
+	};
+
+	template<size_t Size, OptimisationType Opt>
+	inline static TSPVerboseResultDynamic TestDynamicLookaheadConvexHullInserstion(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
+		auto ConvexHullInsertion = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookaheadConvexHullInserstion, Opt>>(AREA, cities, GenerationType::rectangle, seed);
+		return ConvexHullInsertion->run(args);
+	};
+
 }

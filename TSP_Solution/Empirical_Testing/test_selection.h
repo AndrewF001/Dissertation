@@ -1,6 +1,7 @@
 #pragma once
 #include "Tests/basic_test.h"
 #include "Tests/multi_test.h"
+#include "Tests/dynamic_test.h"
 
 
 namespace TSP_Selection {
@@ -9,7 +10,8 @@ namespace TSP_Selection {
 		std::cout << "Select test:\n";
 		std::cout << "1. Basic\n";
 		std::cout << "2. Multi\n";
-		std::cout << "3. TSPlib\n";
+		std::cout << "3. Dynamic\n";
+		std::cout << "4. TSPlib\n";
 
 		std::cin >> input;
 		return input;
@@ -32,6 +34,11 @@ namespace TSP_Selection {
 
 	std::shared_ptr<TSPFile> MultiTestRun(size_t size, size_t ittr, bool use_file) {
 		auto tester = std::make_unique<MultiTest>(use_file, size);
+		return tester->RunTests(ittr);
+	}
+
+	std::shared_ptr<TSPFile> DynamicTestRun(size_t size, size_t ittr, bool use_file) {
+		auto tester = std::make_unique<DynamicTest>(use_file, size);
 		return tester->RunTests(ittr);
 	}
 
@@ -98,12 +105,12 @@ namespace TSP_Selection {
 			choice = choiceSelect();
 		}
 
-		while (choice.value() < 1 || choice.value() > 3) {
+		while (choice.value() < 1 || choice.value() > 4) {
 			std::cout << "Invalid choice\n";
 			choice = choiceSelect();
 		}
 
-		if (choice.value() != 3 ) {
+		if (choice.value() != 4 ) {
 			if (!size.has_value())
 				size = sizeSelect(choice.value());
 
@@ -117,10 +124,11 @@ namespace TSP_Selection {
 		switch (choice.value()) {
 			case 1:
 				return BasicTestRun(size.value(), ittr.value(), use_file);
-				
 			case 2:
 				return MultiTestRun(size.value(), ittr.value(), use_file);
 			case 3:
+				return DynamicTestRun(size.value(), ittr.value(), use_file);
+			case 4:
 				//return TSPLibTestRun(use_file);
 				break;
 			
