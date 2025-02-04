@@ -53,6 +53,15 @@ public:
 		args = copy.args;
 	}
 
+	bool equalAlgorithm(const RunMode& other) const {
+		return genType == other.genType &&
+			Caching == other.Caching &&
+			Partitioning == other.Partitioning &&
+			Construction == other.Construction &&
+			Optimisation == other.Optimisation &&
+			args == other.args;
+	}
+
 	friend auto operator==(const RunMode& lhs, const RunMode& rhs) {
 		return lhs.num_cities == rhs.num_cities &&
 			lhs.genType == rhs.genType &&
@@ -118,6 +127,11 @@ public:
 	TimeScale total_initaliseCache_time;
 	TimeScale total_constructTour_time;
 	TimeScale total_optimiseTour_time;
+
+	/*double time_std_dev;
+	double distance_std_dev;
+
+	std::vector<size_t> entries_ids;*/
 
 	void append(const TSPVerboseResultDynamic& data) {
 		number_of_runs++;
