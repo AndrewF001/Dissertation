@@ -1,5 +1,7 @@
-#include "tspprinter.h"
 #include <QPainter>
+
+#include "tspprinter.h"
+#include "file_handling/json_convertion.h"
 
 TspPrinter::TspPrinter(TSPVerboseResultDynamic data, QWidget* parent)
 	: data(data), QWidget(parent)
@@ -30,6 +32,7 @@ void TspPrinter::paintEvent(QPaintEvent* event) {
     for (size_t i = 0; i < data.route.size() - 1; i++) {
         painter.drawLine(data.node_coord_section[data.route[i]].getPoint().m_x / scalex, data.node_coord_section[data.route[i]].getPoint().m_y / scaley, data.node_coord_section[data.route[i + 1]].getPoint().m_x / scalex, data.node_coord_section[data.route[i + 1]].getPoint().m_y / scaley);
     }
+    painter.drawLine(data.node_coord_section[data.route[data.route.size() - 1]].getPoint().m_x / scalex, data.node_coord_section[data.route[data.route.size() - 1]].getPoint().m_y / scaley, data.node_coord_section[data.route[0]].getPoint().m_x / scalex, data.node_coord_section[data.route[0]].getPoint().m_y / scaley);
 
     // Draw the points
     painter.setPen(QPen(Qt::red, 3));
@@ -37,8 +40,7 @@ void TspPrinter::paintEvent(QPaintEvent* event) {
         painter.drawPoint(data.node_coord_section[i].getPoint().m_x / scalex, data.node_coord_section[i].getPoint().m_y / scaley);
     }
 
-    painter.setPen(QPen(Qt::black, 1));
+    painter.setPen(QPen(Qt::green, 1));
     painter.setFont(QFont("Arial", 10));
-    //painter.drawText(rect(), Qt::AlignCenter, QString::fromStdString(name))
-
+    painter.drawText(rect(), Qt::AlignCenter, QString::fromStdString(jsonconversion::runModeToName(data)));
 }

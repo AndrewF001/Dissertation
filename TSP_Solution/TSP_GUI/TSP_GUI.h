@@ -12,9 +12,9 @@ class TSP_GUI : public QMainWindow
 public:
     TSP_GUI(QWidget *parent = nullptr);
     ~TSP_GUI();
-    void setData(TSPVerboseResultDynamic data);
+    void setData(const std::vector<TSPVerboseResultDynamic>& data);
 
 private:
     Ui::TSP_GUIClass ui;
-	std::unique_ptr<TspPrinter> printer;
+	std::vector<std::unique_ptr<TspPrinter>> m_printers;
 };

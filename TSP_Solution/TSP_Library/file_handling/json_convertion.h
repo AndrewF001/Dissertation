@@ -148,6 +148,14 @@ namespace jsonconversion {
 		return ConstructionType::StaticLookaheadConvexHullInserstion;
 	}
 
+	static std::string runModeToName(const RunMode& r) {
+		std::string name = jsonconversion::constructionTypeToString(r.Construction);
+		if (r.Construction == ConstructionType::StaticLookahead ||
+			r.Construction == ConstructionType::StaticLookaheadConvexHullInserstion)
+			name += "(" + std::to_string(r.args.max_depth) + ")";
+		return name;
+	}
+
 	static std::string optimisationTypeToString(OptimisationType o) {
 		switch (o) {
 			case OptimisationType::TwoOpt:

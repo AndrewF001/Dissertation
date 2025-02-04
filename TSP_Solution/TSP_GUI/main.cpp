@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     auto output = TSP_Selection::menu({}, {}, 1, false);
 
 	if (output != nullptr)
-        w.setData(output.get()->getEntries()[0]);
+        w.setData(output.get()->getEntries());
     else
 		std::cout << "No output\n";
 

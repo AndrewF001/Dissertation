@@ -75,10 +75,7 @@ private:
 			for (const auto& entry : entries) {
 				row++;
 
-				std::string name = jsonconversion::constructionTypeToString(entry->Construction);
-				if(entry->Construction == ConstructionType::StaticLookahead ||
-					entry->Construction == ConstructionType::StaticLookaheadConvexHullInserstion)
-					name += "(" + std::to_string(entry->args.max_depth) + ")";
+				std::string name = jsonconversion::runModeToName(*entry);
 
 				worksheet_write_string(worksheet, row, 1, name.c_str(), NULL);
 				worksheet_write_number(worksheet, row, 2, entry->total_run_time.count() / (double)entry->number_of_valid_routes, double_format);
@@ -105,8 +102,6 @@ private:
 			chart_axis_set_name(distance_chart->x_axis, "Algorithm");
 			worksheet_insert_chart(worksheet, start_row, 17, distance_chart);
 			row += 3;
-
 		}
 	};
-
 };
