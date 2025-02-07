@@ -9,18 +9,18 @@ public:
 
 	void Test() override {
 		// Control
-		auto seed = Tests::seed_gen();
-		auto cities = Tests::generateCities<Size>(seed);
+		auto seed = Tester::seed_gen();
+		auto cities = Tester::generateCities<Size>(seed);
 		TSPArgs args;
 
-		addResult(Tests::TestConvexHullInsertion<Size, Opt>(seed, cities, args));
-		addResult(Tests::TestNearestNeighbour<Size, Opt>(seed, cities, args));
-		addResult(Tests::TestShortestInsertion<Size, Opt>(seed, cities, args));
+		m_tester.TestConvexHullInsertion<Size, Opt>(seed, cities, args);
+		m_tester.TestNearestNeighbour<Size, Opt>(seed, cities, args);
+		m_tester.TestShortestInsertion<Size, Opt>(seed, cities, args);
 
 		for (size_t i = 1; i < 9; i++) {
 			args.max_depth = i;
-			addResult(Tests::TestStaticLookahead<Size, Opt>(seed, cities, args));
-			addResult(Tests::TestStaticLookaheadConvexHullInserstion<Size, Opt>(seed, cities, args));
+			m_tester.TestStaticLookahead<Size, Opt>(seed, cities, args);
+			m_tester.TestStaticLookaheadConvexHullInserstion<Size, Opt>(seed, cities, args);
 		}
 	};
 

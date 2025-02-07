@@ -2,6 +2,7 @@
 #include "Tests/basic_test.h"
 #include "Tests/multi_test.h"
 #include "Tests/dynamic_test.h"
+#include "Tests/dynamic_args_refined.h"
 
 
 namespace TSP_Selection {
@@ -11,7 +12,8 @@ namespace TSP_Selection {
 		std::cout << "1. Basic\n";
 		std::cout << "2. Multi\n";
 		std::cout << "3. Dynamic\n";
-		std::cout << "4. TSPlib\n";
+		std::cout << "4. DynamicArgs\n";
+		std::cout << "5. TSPlib\n";
 
 		std::cin >> input;
 		return input;
@@ -39,6 +41,11 @@ namespace TSP_Selection {
 
 	std::shared_ptr<TSPFile> DynamicTestRun(size_t size, size_t ittr, bool use_file) {
 		auto tester = std::make_unique<DynamicTest>(use_file, size);
+		return tester->RunTests(ittr);
+	}
+
+	std::shared_ptr<TSPFile> DynamicArgsTestRun(size_t size, size_t ittr, bool use_file) {
+		auto tester = std::make_unique<DynamicArgsTest>(use_file, size);
 		return tester->RunTests(ittr);
 	}
 
@@ -105,12 +112,12 @@ namespace TSP_Selection {
 			choice = choiceSelect();
 		}
 
-		while (choice.value() < 1 || choice.value() > 4) {
+		while (choice.value() < 1 || choice.value() > 5) {
 			std::cout << "Invalid choice\n";
 			choice = choiceSelect();
 		}
 
-		if (choice.value() != 4 ) {
+		if (choice.value() != 5 ) {
 			if (!size.has_value())
 				size = sizeSelect(choice.value());
 
@@ -129,6 +136,8 @@ namespace TSP_Selection {
 			case 3:
 				return DynamicTestRun(size.value(), ittr.value(), use_file);
 			case 4:
+				return DynamicArgsTestRun(size.value(), ittr.value(), use_file);
+			case 5:
 				//return TSPLibTestRun(use_file);
 				break;
 			

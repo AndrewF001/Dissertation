@@ -35,7 +35,10 @@
     <ClInclude Include="Tests\dynamic_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Tests\Test_Compenents.h">
+    <ClInclude Include="Tests\multithread_tester.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Tests\dynamic_args_refined.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

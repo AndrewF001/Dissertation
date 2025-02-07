@@ -2,7 +2,7 @@
 #include <xlsxwriter.h>
 
 #include "file_handling/tsp_file.h"
-#include "Tests/Test_Compenents.h"
+#include "Tests/multithread_tester.h"
 
 class ExcelCreator {
 public:
@@ -206,7 +206,7 @@ private:
 			row += 3;
 
 			if (row < start_row + 15)
-				row = start_row + 15;
+				row = lxw_row_t(start_row) + 15;
 		}
 
 	}

@@ -8,7 +8,7 @@
 
 #include "tsp_template.h"
 #include "file_handling/tsp_file.h"
-#include "Test_Compenents.h"
+#include "multithread_tester.h"
 // TODO: MOVE ALL IMPLEMENTATION TO A .CPP FILE!!!
 
 BOOL __stdcall ConsoleCtrlHandler(DWORD ctrlType); // TODO: THIS IS HORRIBLE!!!
@@ -57,6 +57,8 @@ public:
 	static void Exit() { s_shouldExit = true; }
 
 protected:
+	Tester m_tester;
+
 	void addResult(TSPVerboseResultDynamic&& result) {
 		std::lock_guard<std::mutex> lock(m_mutex);
 		m_file->addEntry(std::move(result));
@@ -67,7 +69,7 @@ private:
 	const bool m_use_file;
 	
 	std::mutex m_mutex;
-	std::shared_ptr<TSPFile> m_file;	// Maybe make this std::shared_ptr<TSPFile>
+	std::shared_ptr<TSPFile> m_file;
 
 	static inline std::atomic<bool> s_shouldExit = false;
 
@@ -81,6 +83,12 @@ private:
 
 			SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED | ES_AWAYMODE_REQUIRED);
 			Test();
+
+			auto r = m_tester.collectResults();
+			for (auto& res : r) {
+				addResult(std::move(res));
+			}
+
 			i++;
 
 			if (std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count() > 1) {
