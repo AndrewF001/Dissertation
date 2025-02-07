@@ -21,10 +21,12 @@ public:
 	size_t max_depth = 1;
 	int num_threads = omp_get_max_threads();
 	std::chrono::milliseconds timeout_ms = std::chrono::milliseconds(60000);
+	DynamicArgs dynamic_args;
 	
 	friend auto operator==(const TSPArgs& lhs, const TSPArgs& rhs) {
 		return lhs.max_depth == rhs.max_depth &&
-			lhs.num_threads == rhs.num_threads;
+			lhs.num_threads == rhs.num_threads &&
+			lhs.dynamic_args == rhs.dynamic_args;
 	}
 };
 

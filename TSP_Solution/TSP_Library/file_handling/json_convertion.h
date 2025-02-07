@@ -228,13 +228,31 @@ namespace jsonconversion {
 		v.SetObject();
 		v.AddMember("num_threads", s.num_threads, a);
 		v.AddMember("depth", s.max_depth, a);
-		v.AddMember("timeout", s.timeout_ms.count(), a);
+		v.AddMember("timeout_ms", s.timeout_ms.count(), a);
+
+		rapidjson::Value dynamic_args;
+		dynamic_args.SetObject();
+		dynamic_args.AddMember("logrithm", s.dynamic_args.logrithm, a);
+		dynamic_args.AddMember("multiplier", s.dynamic_args.multiplier, a);
+		dynamic_args.AddMember("constant", s.dynamic_args.constant, a);
+		v.AddMember("dynamic_args", dynamic_args, a);
+
 	}
 
 	static void JsonToTSPArgs(TSPArgs& s, const rapidjson::Value& v) {
 		s.num_threads = v["num_threads"].GetInt();
 		s.max_depth = v["depth"].GetUint64();
-		s.timeout_ms = std::chrono::milliseconds(v["timeout"].GetInt64());
+
+		if (v.FindMember("timeout_ms") != v.MemberEnd())
+			s.timeout_ms = std::chrono::milliseconds(v["timeout_ms"].GetInt64());
+		else
+			s.timeout_ms = std::chrono::milliseconds(v["timeout"].GetInt64());
+
+		if (v.FindMember("dynamic_args") != v.MemberEnd()) {
+			s.dynamic_args.logrithm = v["dynamic_args"]["logrithm"].GetDouble();
+			s.dynamic_args.multiplier = v["dynamic_args"]["multiplier"].GetDouble();
+			s.dynamic_args.constant = v["dynamic_args"]["constant"].GetDouble();
+		}
 	}
 
 	static void runModeToJson(const RunMode& s, rapidjson::Value& v, rapidjson::Document::AllocatorType& a) {

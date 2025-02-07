@@ -135,10 +135,10 @@ private:
 			ConvexHullInsertion<TSPType, Size, Caching, Partitioning>().constructTour(m_data);
 
 		if constexpr (Construction == ConstructionType::DynamicLookahead)
-			DynamicLookahead<TSPType, Size, Caching, Partitioning>(args.max_depth).constructTour(m_data);
+			DynamicLookahead<TSPType, Size, Caching, Partitioning>(args.max_depth, args.dynamic_args).constructTour(m_data);
 
 		if constexpr (Construction == ConstructionType::DynamicLookaheadConvexHullInserstion)
-			DynamicLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(args.max_depth).constructTour(m_data);
+			DynamicLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(args.max_depth, args.dynamic_args).constructTour(m_data);
 
 		// This is only intended for showing the convex hull, it won't create a full tour
 		if constexpr (Construction == ConstructionType::ConvexHull)
