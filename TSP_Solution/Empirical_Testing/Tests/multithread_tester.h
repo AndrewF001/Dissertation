@@ -1,5 +1,30 @@
 #pragma once
-#include <tsp_template.h>
+#include <windows.h>
+
+#include "tsp_template.h"
+
+// Honestly no clue how this works
+int getPhysicalCoreCount() {
+	DWORD length = 0;
+	GetLogicalProcessorInformationEx(RelationProcessorCore, nullptr, &length);
+
+	std::vector<uint8_t> buffer(length);
+	PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX info =
+		reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(buffer.data());
+
+	if (!GetLogicalProcessorInformationEx(RelationProcessorCore, info, &length))
+		return -1;
+
+	int coreCount = 0;
+	for (DWORD offset = 0; offset < length; offset += info->Size) {
+		info = reinterpret_cast<PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX>(
+			buffer.data() + offset);
+		if (info->Relationship == RelationProcessorCore)
+			++coreCount;
+	}
+	return coreCount;
+}
+
 
 
 const Square AREA = { {0, 0}, 1000, 1000 };
@@ -7,7 +32,7 @@ constexpr std::array<size_t, 10> SIZES{ 10, 100, 200, 300, 500, 1000, 2000, 3000
 
 class Tester {
 public:
-	Tester() : m_max_threads(std::thread::hardware_concurrency() - 2) {
+	Tester() : m_max_threads(getPhysicalCoreCount() - 1) {
 		for (size_t i = 0; i < m_max_threads; i++) {
 			m_threads.emplace_back();
 		}
@@ -25,95 +50,16 @@ public:
 		return TspDataTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree>::generateCities(AREA, GenerationType::rectangle, engine);
 	}
 
-	template<size_t Size, OptimisationType Opt>
-	void TestConvexHullInsertion(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
+	template<size_t Size, ConstructionType Con, OptimisationType Opt>
+	void TestAlgorithm(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
 		auto thread = freeThread();
 
 		std::promise<TSPVerboseResultDynamic> promise;
 		m_results.emplace_back(promise.get_future());
 
 		*thread = std::thread([this, promise = std::move(promise), seed, cities, args]() mutable {
-			auto ConvexHullInsertion = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::ConvexHullInsertion, Opt>>(AREA, cities, GenerationType::rectangle, seed);
-			promise.set_value(ConvexHullInsertion->run(args));
-			});
-	};
-
-	template<size_t Size, OptimisationType Opt>
-	void TestNearestNeighbour(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
-		auto thread = freeThread();
-		
-		std::promise<TSPVerboseResultDynamic> promise;
-		m_results.emplace_back(promise.get_future());
-
-		*thread = std::thread([this, promise = std::move(promise), seed, cities, args]() mutable {
-			auto NearestNeighbour = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::NearestNeighbour, Opt>>(AREA, cities, GenerationType::rectangle, seed);
-			promise.set_value(NearestNeighbour->run(args));
-			});
-	};
-
-	template<size_t Size, OptimisationType Opt>
-	void TestShortestInsertion(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
-		auto thread = freeThread();
-
-		std::promise<TSPVerboseResultDynamic> promise;
-		m_results.emplace_back(promise.get_future());
-
-		*thread = std::thread([this, promise = std::move(promise), seed, cities, args]() mutable {
-			auto ShortestInsertion = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::ShortestInsertion, Opt>>(AREA, cities, GenerationType::rectangle, seed);
-			promise.set_value(ShortestInsertion->run(args));
-			});
-	};
-
-
-	template<size_t Size, OptimisationType Opt>
-	void TestStaticLookahead(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
-		auto thread = freeThread();
-
-		std::promise<TSPVerboseResultDynamic> promise;
-		m_results.emplace_back(promise.get_future());
-
-		*thread = std::thread([this, promise = std::move(promise), seed, cities, args]() mutable {
-			auto StaticLookahead = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookahead, Opt>>(AREA, cities, GenerationType::rectangle, seed);
-			promise.set_value(StaticLookahead->run(args));
-			});
-	};
-
-	template<size_t Size, OptimisationType Opt>
-	void TestStaticLookaheadConvexHullInserstion(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
-		auto thread = freeThread();
-
-		std::promise<TSPVerboseResultDynamic> promise;
-		m_results.emplace_back(promise.get_future());
-
-		*thread = std::thread([this, promise = std::move(promise), seed, cities, args]() mutable {
-			auto StaticLookaheadConvexHullInserstion = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::StaticLookaheadConvexHullInserstion, Opt>>(AREA, cities, GenerationType::rectangle, seed);
-			promise.set_value(StaticLookaheadConvexHullInserstion->run(args));
-			});
-	};
-
-	template<size_t Size, OptimisationType Opt>
-	void TestDynamicLookahead(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
-		auto thread = freeThread();
-
-		std::promise<TSPVerboseResultDynamic> promise;
-		m_results.emplace_back(promise.get_future());
-
-		*thread = std::thread([this, promise = std::move(promise), seed, cities, args]() mutable {
-			auto DynamicLookahead = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookahead, Opt>>(AREA, cities, GenerationType::rectangle, seed);
-			promise.set_value(DynamicLookahead->run(args));
-			});
-	};
-
-	template<size_t Size, OptimisationType Opt>
-	void TestDynamicLookaheadConvexHullInserstion(unsigned int seed, std::array<Type2d, Size>& cities, TSPArgs& args) {
-		auto thread = freeThread();
-
-		std::promise<TSPVerboseResultDynamic> promise;
-		m_results.emplace_back(promise.get_future());
-
-		*thread = std::thread([this, promise = std::move(promise), seed, cities, args]() mutable {
-			auto DynamicLookaheadConvexHullInserstion = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookaheadConvexHullInserstion, Opt>>(AREA, cities, GenerationType::rectangle, seed);
-			promise.set_value(DynamicLookaheadConvexHullInserstion->run(args));
+			auto algorithm = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, Con, Opt>>(AREA, cities, GenerationType::rectangle, seed);
+			promise.set_value(algorithm->run(args));
 			});
 	};
 

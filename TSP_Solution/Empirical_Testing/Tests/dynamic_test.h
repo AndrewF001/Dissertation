@@ -41,13 +41,13 @@ private:
 
 		args.max_depth = 8;
 
-		m_tester.TestDynamicLookahead<Size, OptimisationType::TwoOpt>(seed, cities, args);
-		m_tester.TestDynamicLookaheadConvexHullInserstion<Size, OptimisationType::TwoOpt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookahead, OptimisationType::TwoOpt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 
 		for (size_t i = 1; i < 9; i++) {
 			args.max_depth = i;
-			m_tester.TestStaticLookahead<Size, OptimisationType::TwoOpt>(seed, cities, args);
-			m_tester.TestStaticLookaheadConvexHullInserstion<Size, OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::StaticLookahead,OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 		}
 	}
 };

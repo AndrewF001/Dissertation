@@ -13,14 +13,14 @@ public:
 		auto cities = Tester::generateCities<Size>(seed);
 		TSPArgs args;
 
-		m_tester.TestConvexHullInsertion<Size, Opt>(seed, cities, args);
-		m_tester.TestNearestNeighbour<Size, Opt>(seed, cities, args);
-		m_tester.TestShortestInsertion<Size, Opt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::ConvexHullInsertion, Opt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::NearestNeighbour, Opt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::ShortestInsertion ,Opt>(seed, cities, args);
 
 		for (size_t i = 1; i < 9; i++) {
 			args.max_depth = i;
-			m_tester.TestStaticLookahead<Size, Opt>(seed, cities, args);
-			m_tester.TestStaticLookaheadConvexHullInserstion<Size, Opt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::StaticLookahead, Opt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::StaticLookaheadConvexHullInserstion, Opt>(seed, cities, args);
 		}
 	};
 

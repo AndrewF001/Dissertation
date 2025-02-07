@@ -49,8 +49,8 @@ private:
 		args.dynamic_args = BASE;
 
 		// Base Case
-		m_tester.TestDynamicLookahead<Size, OptimisationType::TwoOpt>(seed, cities, args);
-		m_tester.TestDynamicLookaheadConvexHullInserstion<Size, OptimisationType::TwoOpt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookahead, OptimisationType::TwoOpt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 
 		// Constant change
 		for (int i = -2; i <= 2; i++) {
@@ -58,8 +58,8 @@ private:
 				continue;
 
 			args.dynamic_args.constant = BASE.constant + (i * gaps.constant);
-			m_tester.TestDynamicLookahead<Size, OptimisationType::TwoOpt>(seed, cities, args);
-			m_tester.TestDynamicLookaheadConvexHullInserstion<Size, OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookahead, OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 		}
 
 		args.dynamic_args.constant = BASE.constant;
@@ -70,8 +70,8 @@ private:
 				continue;
 
 			args.dynamic_args.logrithm = BASE.logrithm + (i * gaps.logrithm);
-			m_tester.TestDynamicLookahead<Size, OptimisationType::TwoOpt>(seed, cities, args);
-			m_tester.TestDynamicLookaheadConvexHullInserstion<Size, OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookahead, OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 		}
 
 		args.dynamic_args.logrithm = BASE.logrithm;
@@ -82,8 +82,8 @@ private:
 				continue;
 
 			args.dynamic_args.multiplier = BASE.multiplier + (i * gaps.multiplier);
-			m_tester.TestDynamicLookahead<Size, OptimisationType::TwoOpt>(seed, cities, args);
-			m_tester.TestDynamicLookaheadConvexHullInserstion<Size, OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookahead, OptimisationType::TwoOpt>(seed, cities, args);
+			m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 		}
 	}
 };
