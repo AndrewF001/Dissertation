@@ -4,3 +4,6 @@
 [submodule "CPP_Libraries/ExcelLibrary"]
 	path = CPP_Libraries/ExcelLibrary
 	url = https://github.com/jmcnamara/libxlsxwriter.git
+[submodule "CPP_Libraries/TSPLib"]
+	path = CPP_Libraries/TSPLib
+	url = https://github.com/mastqe/tsplib.git

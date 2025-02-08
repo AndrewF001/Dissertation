@@ -41,6 +41,9 @@
     <ClInclude Include="Tests\dynamic_args_refined.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tests\tsplib_test.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MultiTest_Copy.mytsp" />

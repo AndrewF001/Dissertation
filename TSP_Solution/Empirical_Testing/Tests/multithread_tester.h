@@ -65,7 +65,8 @@ public:
 
 	std::vector<TSPVerboseResultDynamic> collectResults() {
 		for (auto& thread : m_threads) {
-			thread.join();
+			if (thread.get_id() != std::thread::id())
+				thread.join();
 		}
 
 		std::vector<TSPVerboseResultDynamic> output;

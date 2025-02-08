@@ -23,10 +23,7 @@ public:
 		const auto& route = data.getRoute();
 
 		for (cityID idx = 0; idx < data.getRouteSize(); idx++) {
-
 			double offset = min_dist * min_dist;
-
-			//auto point = route[idx]->getPoint();
 			std::vector<cityID> city_search = data.getCitiesInArea(idx, offset);
 
 			for (size_t i = 0; i < city_search.size(); i++) {

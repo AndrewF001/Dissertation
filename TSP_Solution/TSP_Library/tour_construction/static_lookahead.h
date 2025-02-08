@@ -20,6 +20,7 @@ public:
 		lookaheadInsertion(data, m_depth);
 	};
 
+	// Used for StaticLookaheadConvexHullInserstion
 	static void lookaheadInsertion(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, size_t depth) {
 		const size_t additions = Size - data.getRouteSize();
 		for (size_t i = 0; i < additions; i++) {
@@ -28,6 +29,7 @@ public:
 		}
 	}
 
+	// Used for DynamicLookahead
 	static std::pair<cityID, size_t> FindClosestPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, size_t depth) {
 		double min_dist = DBL_MAX;
 		std::pair<cityID, size_t> output;
@@ -50,18 +52,16 @@ public:
 private:
 	const size_t m_depth;
 
-
-
 	static std::pair<double, cityID> ShortestRoute(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, cityID point, size_t depth, const double best_distance) {
-		std::pair<double, cityID> output = { DBL_MAX, SIZE_MAX };
-		std::vector<cityID> partail_route;
-		partail_route.reserve(depth + 2);
-		partail_route.resize(3);
+		std::pair<double, cityID> output = { DBL_MAX, SIZE_MAX };	// distance, position
+		std::vector<cityID> partail_route;	// This is the extended route with the point added
+		partail_route.reserve(depth + 2);	// Length of chain is known already
+		partail_route.resize(3);			// First step is having the start and end of the chain being part of the existing route
 		partail_route[1] = point;
 
-
+		
+		// find the best place to insert the point
 		const auto& route = data.getRoute();
-		// find closest point to point
 		for (size_t i = 0; i < data.getRouteSize(); i++) {
 			double distance = data.calcDeivation(partail_route[1], data.getRouteCityID(route[i]), data.getRouteCityID(route[i + 1]));
 			if (distance < output.first) {

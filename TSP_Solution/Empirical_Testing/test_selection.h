@@ -3,7 +3,7 @@
 #include "Tests/multi_test.h"
 #include "Tests/dynamic_test.h"
 #include "Tests/dynamic_args_refined.h"
-
+#include "Tests/tsplib_test.h"
 
 namespace TSP_Selection {
 	const size_t choiceSelect() {
@@ -47,6 +47,11 @@ namespace TSP_Selection {
 	std::shared_ptr<TSPFile> DynamicArgsTestRun(size_t size, size_t ittr, bool use_file) {
 		auto tester = std::make_unique<DynamicArgsTest>(use_file, size);
 		return tester->RunTests(ittr);
+	}
+
+	std::shared_ptr<TSPFile> TSPLibRun(bool use_file) {
+		auto tester = std::make_unique<TSPLib>(use_file);
+		return tester->RunTests(1);
 	}
 
 	std::shared_ptr<TSPFile> BasicTestRun(size_t size, size_t ittr, bool use_file) {
@@ -138,8 +143,7 @@ namespace TSP_Selection {
 			case 4:
 				return DynamicArgsTestRun(size.value(), ittr.value(), use_file);
 			case 5:
-				//return TSPLibTestRun(use_file);
-				break;
+				return TSPLibRun(use_file);
 			
 		}
 
