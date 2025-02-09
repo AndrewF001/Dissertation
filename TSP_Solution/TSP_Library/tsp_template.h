@@ -23,7 +23,7 @@ public:
 		m_output.seed = seed;
 		m_output.genType = type;
 	};
-	TspTemplate(const Square& size, std::array<TSPType, Size> cities, GenerationType type = rectangle, unsigned int seed = 0) : m_data(size, cities) {
+	TspTemplate(const Square& size, std::array<TSPType, Size>& cities, GenerationType type = rectangle, unsigned int seed = 0) : m_data(size, cities) {
 		m_output.seed = seed;
 		m_output.genType = type;
 	};

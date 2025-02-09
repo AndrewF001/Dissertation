@@ -60,16 +60,17 @@ private:
 	template<size_t Size>
 	static Square maxPoints(std::array<Type2d, Size> const& data) {
 		Square output;
-		
+
 		for (const auto& d : data) {
-			if (d.m_x > output.m_p2.m_x)
-				output.m_p2.m_x = d.m_x;
-			if (d.m_x < output.m_p1.m_x)
-				output.m_p1.m_x = d.m_x;
-			if (d.m_y > output.m_p2.m_y)
-				output.m_p2.m_y = d.m_y;
-			if (d.m_y < output.m_p1.m_y)
-				output.m_p1.m_y = d.m_y;
+			auto& p = d.getPoint();
+			if (p.m_x > output.m_p2.m_x)
+				output.m_p2.m_x = p.m_x;
+			if (p.m_x < output.m_p1.m_x)
+				output.m_p1.m_x = p.m_x;
+			if (p.m_y > output.m_p2.m_y)
+				output.m_p2.m_y = p.m_y;
+			if (p.m_y < output.m_p1.m_y)
+				output.m_p1.m_y = p.m_y;
 		}
 
 		return output;
@@ -85,31 +86,32 @@ private:
 	}
 
 	template<size_t Size>
-	std::optional<std::array<Type2d, Size>> readCities(std::filesystem::directory_entry& file) {
+	std::unique_ptr<std::array<Type2d, Size>> readCities(std::filesystem::directory_entry& file) {
+		// Read file
 		std::optional<std::vector<std::string>> s = readLinesFromFile(file.path().string());
 		if (!s.has_value())
-			return std::nullopt;
+			return nullptr;
 
-		auto data = s.value();
-		std::array<Type2d, Size> output;
+		auto output = std::make_unique<std::array<Type2d, Size>>();
+		
+		// Find the NODE_COORD_SECTION
 		size_t idx = 0;
+		auto data = s.value();
 		for (; idx < data.size(); idx++) {
 			if (data[idx].find("NODE_COORD_SECTION") != std::string::npos)
 				break;
 		}
 		idx++;
 
+		// Read the cities data
 		for (size_t i = 0; i < Size; i++) {
-			std::stringstream ss(data[idx + i]);
-			std::string segment;
-			std::vector<std::string> seglist;
+			std::vector<std::string> result;
+			std::istringstream iss(data[idx + i]);
+			for (std::string s; iss >> s; )	// Split the whitespace separated string
+				result.push_back(s);
 
-			while (std::getline(ss, segment, ' ')) {
-				seglist.push_back(segment);
-			}
-
-			Point2D p(std::stod(seglist[1]), std::stod(seglist[2]));
-			output[i] = Type2d(p);
+			Point2D p(std::stod(result[1]), std::stod(result[2]));
+			(*output)[i] = Type2d(p);
 		}
 		return output;
 	}
@@ -117,7 +119,13 @@ private:
 	template<size_t Size>
 	void _test(std::filesystem::directory_entry file) {
 		std::cout << file.path().filename().string() << " : " << Size << "\n";
-		auto c = readCities<Size>(file);
+		auto cities = readCities<Size>(file);
+		auto area = maxPoints<Size>(*cities);
+
+		TSPArgs args{ .max_depth = 8, .timeout_ms = std::chrono::milliseconds(1800000) };
+
+		auto algorithm = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, *cities);
+		auto result = algorithm->run(args);
 	}
 
 	template <typename T, T... ints>
