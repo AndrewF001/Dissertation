@@ -44,6 +44,9 @@
     <ClInclude Include="Tests\tsplib_test.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Tests\tsplib_data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MultiTest_Copy.mytsp" />

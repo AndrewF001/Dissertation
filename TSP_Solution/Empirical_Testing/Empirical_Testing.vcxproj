@@ -99,6 +99,7 @@
     <ClInclude Include="Tests\multi_test.h" />
     <ClInclude Include="Tests\test_class.h" />
     <ClInclude Include="Tests\multithread_tester.h" />
+    <ClInclude Include="Tests\tsplib_data.h" />
     <ClInclude Include="Tests\tsplib_test.h" />
     <ClInclude Include="test_selection.h" />
   </ItemGroup>

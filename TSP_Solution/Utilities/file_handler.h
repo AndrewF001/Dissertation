@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <fstream>
+#include <filesystem>
 
 
 static void writeToFile(const std::string& path, const std::string& data) {
@@ -33,6 +34,16 @@ static std::optional<std::string> readFromFile(const std::string& path) {
 	return data;
 }
 
+static std::vector<std::string> readLinesFromFile(const std::string& path) {
+	std::ifstream file(path);
+	std::vector<std::string> lines;
+	std::string line;
+	while (std::getline(file, line)) {
+		lines.push_back(line);
+	}
+	return lines;
+}
+
 static bool fileExists(const std::string& path) {
 	std::ifstream file(path);
 	return file.good();
@@ -45,6 +56,15 @@ static std::string nextFileName(const std::string& path) {
 		extension = "(" + std::to_string(i++) + ")";
 	}
 	return path + extension;
+}
+
+static std::vector<std::filesystem::directory_entry> listFiles(const std::string& path, const std::string& extension) {
+	std::vector<std::filesystem::directory_entry> files;
+	for (const auto& entry : std::filesystem::directory_iterator(path)) {
+		if (entry.path().extension() == extension)
+			files.push_back(entry);
+	}
+	return files;
 }
 
 //std::optional<std::vector<uint8_t>> readFromFile(const std::string& path)
