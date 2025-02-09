@@ -34,8 +34,11 @@ static std::optional<std::string> readFromFile(const std::string& path) {
 	return data;
 }
 
-static std::vector<std::string> readLinesFromFile(const std::string& path) {
+static std::optional<std::vector<std::string>> readLinesFromFile(const std::string& path) {
 	std::ifstream file(path);
+	if (!file.is_open())
+		return std::nullopt;
+
 	std::vector<std::string> lines;
 	std::string line;
 	while (std::getline(file, line)) {

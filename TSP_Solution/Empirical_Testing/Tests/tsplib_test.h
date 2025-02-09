@@ -22,7 +22,12 @@ public:
 		//std::cin >> path;
 
 		auto files = listFiles(path, ".tsp");
+		siveFiles(files);
+
 		auto input = selectTest(files);
+
+		
+
 
 		if (input == 1)
 			selectAll(files);
@@ -80,22 +85,102 @@ private:
 	}
 
 	template<size_t Size>
+	std::optional<std::array<Type2d, Size>> readCities(std::filesystem::directory_entry& file) {
+		std::optional<std::vector<std::string>> s = readLinesFromFile(file.path().string());
+		if (!s.has_value())
+			return std::nullopt;
+
+		auto data = s.value();
+		std::array<Type2d, Size> output;
+		size_t idx = 0;
+		for (; idx < data.size(); idx++) {
+			if (data[idx].find("NODE_COORD_SECTION") != std::string::npos)
+				break;
+		}
+		idx++;
+
+		for (size_t i = 0; i < Size; i++) {
+			std::stringstream ss(data[idx + i]);
+			std::string segment;
+			std::vector<std::string> seglist;
+
+			while (std::getline(ss, segment, ' ')) {
+				seglist.push_back(segment);
+			}
+
+			Point2D p(std::stod(seglist[1]), std::stod(seglist[2]));
+			output[i] = Type2d(p);
+		}
+		return output;
+	}
+
+	template<size_t Size>
 	void _test(std::filesystem::directory_entry file) {
 		std::cout << file.path().filename().string() << " : " << Size << "\n";
+		auto c = readCities<Size>(file);
 	}
 
 	template <typename T, T... ints>
-	void selectOne(std::filesystem::directory_entry file, std::integer_sequence<T, ints...> int_seq)
-	{
+	void selectOne(std::filesystem::directory_entry file, std::integer_sequence<T, ints...> int_seq) {
 		size_t size = getSize(file);
 		((ints == size ? (void)(_test<ints>(file)) : (void)0), ...);
 	}
 
-	void selectAll(std::vector<std::filesystem::directory_entry> files)
-	{
-		for (const auto& f : files) {
+	void selectAll(std::vector<std::filesystem::directory_entry> files) {
+		for (const auto& f : files)
 			selectOne(f, tsplib::SIZES_seq{});
+	}
+
+	void siveFiles(std::vector<std::filesystem::directory_entry>& files) {
+		std::vector<std::pair<std::size_t, std::filesystem::directory_entry>> sizes;
+
+		for (size_t i = 0; i < files.size(); i++) {
+			std::string s = readFromFile(files[i].path().string()).value();
+
+			if (s.find("NODE_COORD_SECTION") == std::string::npos) {
+				files.erase(files.begin() + i);
+				i--;
+				continue;
+			}
+
+			auto f1 = s.find("EDGE_WEIGHT_TYPE");
+			f1 += 19;
+			auto l1 = s.find("\n", f1);
+			std::string type = s.substr(f1, l1 - f1);
+			if (type != "EUC_2D") {
+				files.erase(files.begin() + i);
+				i--;
+				continue;
+			}
+
+			auto f2 = s.find("TYPE");
+			f2 += 7;
+			auto l2 = s.find("\n", f2);
+			std::string type2 = s.substr(f2, l2 - f2);
+			if (type2 != "TSP") {
+				files.erase(files.begin() + i);
+				i--;
+				continue;
+			}
+
+			auto f3 = s.find("DIMENSION");
+			f3 += 11;
+			auto l3 = s.find("\n", f3);
+			std::string size = s.substr(f3, l3 - f3);
+			sizes.push_back(std::make_pair(std::stoull(size), files[i]));
 		}
+
+		files.clear();
+		std::sort(sizes.begin(), sizes.end(), [](auto& a, auto& b) { return a.first < b.first; });
+		for (const auto& p : sizes)
+			files.push_back(p.second);
+
+		for (const auto& f : sizes)
+		{
+			std::cout << f.first << ",";
+		}
+
+		std::cout << "\n\n";
 	}
 
 };
