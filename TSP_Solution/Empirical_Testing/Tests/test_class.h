@@ -16,11 +16,11 @@ BOOL __stdcall ConsoleCtrlHandler(DWORD ctrlType); // TODO: THIS IS HORRIBLE!!!
 class TestClass
 {
 public:
-	TestClass(std::string name, bool use_file) :
+	TestClass(std::string name, bool use_file, jsonconversion::JsonType type = jsonconversion::JsonType::TSPResult) :
 		m_name(name),
 		m_use_file(use_file)
 	{
-		m_file = std::make_shared<TSPFile>(use_file ? name : "");
+		m_file = std::make_shared<TSPFile>(use_file ? name : "", type);
 	}
 	~TestClass() = default;
 
@@ -64,12 +64,13 @@ protected:
 		m_file->addEntry(std::move(result));
 	}
 
+	std::shared_ptr<TSPFile> m_file;
+
 private:
 	const std::string m_name;
 	const bool m_use_file;
 	
 	std::mutex m_mutex;
-	std::shared_ptr<TSPFile> m_file;
 
 	static inline std::atomic<bool> s_shouldExit = false;
 

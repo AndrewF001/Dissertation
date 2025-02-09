@@ -27,34 +27,34 @@ private:
 		cityID north, east, south, west;
 	};
 
-	static MaxPoints maxPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data) {
+    static MaxPoints maxPoints(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data) {
 		MaxPoints output{};
 		double max_x = DBL_MIN, max_y = DBL_MIN, min_x = DBL_MAX, min_y = DBL_MAX;
 		for (cityID i = 0; i < Size; i++) {
 			auto& city = data.getCityPoint(i);
 			// Most North Point
-			if (city.m_y > max_y) {
+			if (city.m_y > max_y || (city.m_y == max_y && city.m_x < data.getCityPoint(output.north).m_x)) {
 				max_y = city.m_y;
 				output.north = i;
 			}
 			// Most South Point
-			if (city.m_y < min_y) {
+			if (city.m_y < min_y || (city.m_y == min_y && city.m_x > data.getCityPoint(output.south).m_x)) {
 				min_y = city.m_y;
 				output.south = i;
 			}
 			// Most East Point
-			if (city.m_x > max_x) {
+			if (city.m_x > max_x || (city.m_x == max_x && city.m_y < data.getCityPoint(output.east).m_y)) {
 				max_x = city.m_x;
 				output.east = i;
 			}
 			// Most West Point
-			if (city.m_x < min_x) {
+			if (city.m_x < min_x || (city.m_x == min_x && city.m_y > data.getCityPoint(output.west).m_y)) {
 				min_x = city.m_x;
 				output.west = i;
 			}
 		}
 		return output;
-	};
+    };
 
 	// Check if the point is to the left or right of the line
 	template<bool left_direction>
@@ -73,7 +73,7 @@ private:
 		return positive_gradent ? -DBL_MAX : DBL_MAX;
 	};
 
-	static std::vector<cityID> convexHullQuatar(TspDataTemplate<TSPType, Size, Caching, Partitioning> const& data, cityID new_point, const cityID dest) {
+	static std::vector<cityID> convexHullQuatar(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, cityID new_point, const cityID dest) {
 		std::vector<cityID> output;
 		cityID last_point = new_point;
 		do {
@@ -85,9 +85,11 @@ private:
 			const auto& search = data.getCitiesInArea(last_point, dest);
 			// find best fit
 			for (const auto& city : search) {	// TODO: Only find cities in correct quater
+				if (city == last_point)
+					continue;
 				auto& new_city = data.getCityPoint(city);
 				double g = last_city.gradient(new_city);
-				if (g > grad) {
+				if (g > grad || (g == grad && data.calcDeivation(city, new_point, last_point) > 0)) {
 					grad = g;
 					new_point = city;
 				}

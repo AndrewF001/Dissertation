@@ -5,16 +5,8 @@
 
 class TSPLib : public TestClass {
 public:
-	TSPLib(bool use_file) : TestClass("TSPLib", false) {};
+	TSPLib(bool use_file) : TestClass("TSPLib", true, jsonconversion::JsonType::TSPVerboseResultDynamic) {};
 	~TSPLib() = default;
-
-	template<size_t Size>
-	inline static std::array<Type2d, Size> gatherCities(std::string path) {
-		std::array<Type2d, Size> output;
-		//std::string file = readFromFile(path);
-
-		return output;
-	}
 
 	void Test() override {
 		std::string path = "E:\\Dissertation\\CPP_Libraries\\TSPLib";
@@ -25,10 +17,6 @@ public:
 		siveFiles(files);
 
 		auto input = selectTest(files);
-
-		
-
-
 		if (input == 1)
 			selectAll(files);
 		else
@@ -64,13 +52,13 @@ private:
 		for (const auto& d : data) {
 			auto& p = d.getPoint();
 			if (p.m_x > output.m_p2.m_x)
-				output.m_p2.m_x = p.m_x;
+				output.m_p2.m_x = p.m_x + 1;
 			if (p.m_x < output.m_p1.m_x)
-				output.m_p1.m_x = p.m_x;
+				output.m_p1.m_x = p.m_x - 1;
 			if (p.m_y > output.m_p2.m_y)
-				output.m_p2.m_y = p.m_y;
+				output.m_p2.m_y = p.m_y + 1;
 			if (p.m_y < output.m_p1.m_y)
-				output.m_p1.m_y = p.m_y;
+				output.m_p1.m_y = p.m_y - 1;
 		}
 
 		return output;
@@ -96,7 +84,7 @@ private:
 		
 		// Find the NODE_COORD_SECTION
 		size_t idx = 0;
-		auto data = s.value();
+		auto& data = s.value();
 		for (; idx < data.size(); idx++) {
 			if (data[idx].find("NODE_COORD_SECTION") != std::string::npos)
 				break;
@@ -125,7 +113,16 @@ private:
 		TSPArgs args{ .max_depth = 8, .timeout_ms = std::chrono::milliseconds(1800000) };
 
 		auto algorithm = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(area, *cities);
-		auto result = algorithm->run(args);
+		auto res = algorithm->run(args);
+		res.name = file.path().filename().string();
+		res.type = "TSP";
+		res.comment = "TSPLib";
+		res.edge_weight_type = "EUC_2D";
+
+		std::cout << file.path().filename().string() << " = " << res.final_distance << "\n";
+		
+		addResult(std::move(res));
+		m_file->writeFile();
 	}
 
 	template <typename T, T... ints>

@@ -30,7 +30,10 @@ public:
 	double m_x, m_y;	// TODO: This should be const
 
 	double gradient(const Point2D& p2) const {
-		return (p2.m_y - m_y) / (p2.m_x - m_x);
+		auto d = (p2.m_x - m_x);
+		if (d == 0)
+			return INFINITY;
+		return (p2.m_y - m_y) / d;
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const Point2D& point) {
