@@ -49,7 +49,7 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
-    <VcpkgEnabled>false</VcpkgEnabled>
+    <VcpkgEnabled>true</VcpkgEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -61,7 +61,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions) /bigobj</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)..\CPP_Libraries\gradient_descent\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMP>GenerateParallelCode</OpenMP>
     </ClCompile>
     <Link>
@@ -79,7 +79,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/Zc:__cplusplus %(AdditionalOptions) /bigobj</AdditionalOptions>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)..\CPP_Libraries\gradient_descent\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OpenMP>GenerateParallelCode</OpenMP>
     </ClCompile>
     <Link>
@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tests\basic_test.h" />
+    <ClInclude Include="Tests\dynamic_args_gradient_descent.h" />
     <ClInclude Include="Tests\dynamic_args_refined.h" />
     <ClInclude Include="Tests\dynamic_test.h" />
     <ClInclude Include="Tests\multi_test.h" />

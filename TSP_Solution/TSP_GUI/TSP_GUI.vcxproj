@@ -62,18 +62,18 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg">
-    <VcpkgEnabled>false</VcpkgEnabled>
+    <VcpkgEnabled>true</VcpkgEnabled>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)Empirical_Testing;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)Empirical_Testing;$(SolutionDir)..\CPP_Libraries\gradient_descent\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/bigobj</AdditionalOptions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)Empirical_Testing;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Utilities;$(SolutionDir)TSP_Library;$(SolutionDir)..\CPP_Libraries\rapidjson\include;$(SolutionDir)Empirical_Testing;$(SolutionDir)..\CPP_Libraries\gradient_descent\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/bigobj</AdditionalOptions>
     </ClCompile>

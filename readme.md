@@ -53,7 +53,7 @@ Only tested on Windows but theortically can be built on Linux.
     2. `cd vcpkg`
     3. `./bootstrap-vcpkg.bat`
 2. Install libxlsxwriter: `./vcpkg install libxlsxwriter`
-3. Integrate with Visual Studio: `vcpkg integrate install`
+3. Integrate with Visual Studio: `./vcpkg integrate install`
 
 ## Building
 

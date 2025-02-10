@@ -3,6 +3,7 @@
 #include "Tests/multi_test.h"
 #include "Tests/dynamic_test.h"
 #include "Tests/dynamic_args_refined.h"
+#include "Tests/dynamic_args_gradient_descent.h"
 #include "Tests/tsplib_test.h"
 
 namespace TSP_Selection {
@@ -13,7 +14,8 @@ namespace TSP_Selection {
 		std::cout << "2. Multi\n";
 		std::cout << "3. Dynamic\n";
 		std::cout << "4. DynamicArgs\n";
-		std::cout << "5. TSPlib\n";
+		std::cout << "5. DynamicArgsGD\n";
+		std::cout << "6. TSPlib\n";
 
 		std::cin >> input;
 		return input;
@@ -47,6 +49,11 @@ namespace TSP_Selection {
 	std::shared_ptr<TSPFile> DynamicArgsTestRun(size_t size, size_t ittr, bool use_file) {
 		auto tester = std::make_unique<DynamicArgsTest>(use_file, size);
 		return tester->RunTests(ittr);
+	}
+
+	std::shared_ptr<TSPFile> DynamicArgsGDRun(size_t size, size_t ittr) {
+		auto tester = std::make_unique<DynamicArgsGD>(size, ittr);
+		return tester->RunTests(1);
 	}
 
 	std::shared_ptr<TSPFile> TSPLibRun(bool use_file) {
@@ -117,15 +124,14 @@ namespace TSP_Selection {
 			choice = choiceSelect();
 		}
 
-		while (choice.value() < 1 || choice.value() > 5) {
+		while (choice.value() < 1 || choice.value() > 6) {
 			std::cout << "Invalid choice\n";
 			choice = choiceSelect();
 		}
 
-		if (choice.value() != 5 ) {
+		if (choice.value() < 6 ) {
 			if (!size.has_value())
 				size = sizeSelect(choice.value());
-
 			while (!ittr.has_value()) {
 				std::cout << "Number of iterations: ";
 				std::cin >> input;
@@ -143,6 +149,8 @@ namespace TSP_Selection {
 			case 4:
 				return DynamicArgsTestRun(size.value(), ittr.value(), use_file);
 			case 5:
+				return DynamicArgsGDRun(size.value(), ittr.value());
+			case 6:
 				return TSPLibRun(use_file);
 			
 		}

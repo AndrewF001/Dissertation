@@ -7,3 +7,6 @@
 [submodule "CPP_Libraries/TSPLib"]
 	path = CPP_Libraries/TSPLib
 	url = https://github.com/mastqe/tsplib.git
+[submodule "CPP_Libraries/gradient_descent"]
+	path = CPP_Libraries/gradient_descent
+	url = https://github.com/Rookfighter/gradient-descent-cpp.git
