@@ -1,6 +1,7 @@
 # TSP Files
 *.mytsp
 *.xlsx
+*.data
 
 # C++ GitIgnore
 # Prerequisites

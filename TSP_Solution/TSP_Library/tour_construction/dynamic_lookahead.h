@@ -3,10 +3,10 @@
 #include "convex_hull.h"
 #include "../tsp_data/tsp_data_template.h"
 
-struct DynamicArgs {
-	double multiplier = 1.2;
-	double logrithm = 1;
-	double constant = -1.7;
+struct DynamicArgs {	// These numbers are from a Gradient descent analysis
+	double multiplier = 1.2348586676954691;
+	double logrithm = 0.90649189814814557;
+	double constant = -1.6065204475308614;
 
 	friend auto operator==(const DynamicArgs& lhs, const DynamicArgs& rhs) {
 		return lhs.multiplier == rhs.multiplier &&

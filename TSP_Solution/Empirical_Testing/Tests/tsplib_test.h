@@ -13,7 +13,7 @@ public:
 		//std::cout << "Path to .tsp directory: ";
 		//std::cin >> path;
 
-		auto files = listFiles(path, ".tsp");
+		auto files = FileHandler::listFiles(path, ".tsp");
 		siveFiles(files);
 
 		auto input = selectTest(files);
@@ -65,7 +65,7 @@ private:
 	};
 
 	size_t getSize(std::filesystem::directory_entry f) {
-		std::string s = readFromFile(f.path().string()).value();
+		std::string s = FileHandler::readFromFile(f.path().string()).value();
 		auto f1 = s.find("DIMENSION");
 		f1 += 11;
 		auto l1 = s.find("\n", f1);
@@ -76,7 +76,7 @@ private:
 	template<size_t Size>
 	std::unique_ptr<std::array<Type2d, Size>> readCities(std::filesystem::directory_entry& file) {
 		// Read file
-		std::optional<std::vector<std::string>> s = readLinesFromFile(file.path().string());
+		std::optional<std::vector<std::string>> s = FileHandler::readLinesFromFile(file.path().string());
 		if (!s.has_value())
 			return nullptr;
 
@@ -140,7 +140,7 @@ private:
 		std::vector<std::pair<std::size_t, std::filesystem::directory_entry>> sizes;
 
 		for (size_t i = 0; i < files.size(); i++) {
-			std::string s = readFromFile(files[i].path().string()).value();
+			std::string s = FileHandler::readFromFile(files[i].path().string()).value();
 
 			if (s.find("NODE_COORD_SECTION") == std::string::npos) {
 				files.erase(files.begin() + i);

@@ -3,71 +3,73 @@
 #include <fstream>
 #include <filesystem>
 
+namespace FileHandler {
 
-static void writeToFile(const std::string& path, const std::string& data) {
-	std::ofstream file;
-	file.open(path);
-	file << data;
-	file.close();
-}
-
-static void appendToFile(const std::string& path, const std::string& data) {
-	std::ofstream file;
-	file.open(path, std::ios::app);
-	file << data;
-	file.close();
-}
-
-static std::optional<std::string> readFromFile(const std::string& path) {
-	std::ifstream file(path);
-
-	if (!file.is_open())
-		return std::nullopt;
-
-	std::string data;
-	std::string line;
-	while (std::getline(file, line)) {
-		data += line + "\n";
+	static void writeToFile(const std::string& path, const std::string& data) {
+		std::ofstream file;
+		file.open(path);
+		file << data;
+		file.close();
 	}
 
-	file.close();
-	return data;
-}
-
-static std::optional<std::vector<std::string>> readLinesFromFile(const std::string& path) {
-	std::ifstream file(path);
-	if (!file.is_open())
-		return std::nullopt;
-
-	std::vector<std::string> lines;
-	std::string line;
-	while (std::getline(file, line)) {
-		lines.push_back(line);
+	static void appendToFile(const std::string& path, const std::string& data) {
+		std::ofstream file;
+		file.open(path, std::ios::app);
+		file << data;
+		file.close();
 	}
-	return lines;
-}
 
-static bool fileExists(const std::string& path) {
-	std::ifstream file(path);
-	return file.good();
-}
+	static std::optional<std::string> readFromFile(const std::string& path) {
+		std::ifstream file(path);
 
-static std::string nextFileName(const std::string& path) {
-	int i = 1;
-	std::string extension = "";
-	while (fileExists(path + extension)) {
-		extension = "(" + std::to_string(i++) + ")";
+		if (!file.is_open())
+			return std::nullopt;
+
+		std::string data;
+		std::string line;
+		while (std::getline(file, line)) {
+			data += line + "\n";
+		}
+
+		file.close();
+		return data;
 	}
-	return path + extension;
-}
 
-static std::vector<std::filesystem::directory_entry> listFiles(const std::string& path, const std::string& extension) {
-	std::vector<std::filesystem::directory_entry> files;
-	for (const auto& entry : std::filesystem::directory_iterator(path)) {
-		if (entry.path().extension() == extension)
-			files.push_back(entry);
+	static std::optional<std::vector<std::string>> readLinesFromFile(const std::string& path) {
+		std::ifstream file(path);
+		if (!file.is_open())
+			return std::nullopt;
+
+		std::vector<std::string> lines;
+		std::string line;
+		while (std::getline(file, line)) {
+			lines.push_back(line);
+		}
+		return lines;
 	}
-	return files;
+
+	static bool fileExists(const std::string& path) {
+		std::ifstream file(path);
+		return file.good();
+	}
+
+	static std::string nextFileName(const std::string& path) {
+		int i = 1;
+		std::string extension = "";
+		while (fileExists(path + extension)) {
+			extension = "(" + std::to_string(i++) + ")";
+		}
+		return path + extension;
+	}
+
+	static std::vector<std::filesystem::directory_entry> listFiles(const std::string& path, const std::string& extension) {
+		std::vector<std::filesystem::directory_entry> files;
+		for (const auto& entry : std::filesystem::directory_iterator(path)) {
+			if (entry.path().extension() == extension)
+				files.push_back(entry);
+		}
+		return files;
+	}
 }
 
 //std::optional<std::vector<uint8_t>> readFromFile(const std::string& path)

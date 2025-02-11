@@ -52,7 +52,7 @@ namespace TSP_Selection {
 	}
 
 	std::shared_ptr<TSPFile> DynamicArgsGDRun(size_t size, size_t ittr) {
-		auto tester = std::make_unique<DynamicArgsGD>(size, ittr);
+		auto tester = std::make_unique<DAGD::DynamicArgsGD>(size, ittr);
 		return tester->RunTests(1);
 	}
 

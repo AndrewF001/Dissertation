@@ -89,7 +89,7 @@ private:
 	rapidjson::Document m_doc;
 
 	bool readFile() {
-		auto file = readFromFile(m_name + FILEEXTENSION);
+		auto file = FileHandler::readFromFile(m_name + FILEEXTENSION);
 
 		if (!file.has_value()) {
 			Logger::log("File not found: " + m_name + "\n", 0);
@@ -169,7 +169,7 @@ private:
 
 	void _writeFile() {
 		auto file = jsonconversion::documentToString(m_doc);
-		writeToFile(m_name + FILEEXTENSION, file);
+		FileHandler::writeToFile(m_name + FILEEXTENSION, file);
 	};
 
     void createBlankDoc() {
