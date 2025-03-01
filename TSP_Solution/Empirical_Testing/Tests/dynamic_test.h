@@ -8,6 +8,28 @@ public:
 	~DynamicTest() = default;
 
 	void Test() override {
+#if DEMONSTRATION
+		if (m_max_size == 0)
+			_test<SIZES[0]>();
+		if (m_max_size == 1)
+			_test<SIZES[1]>();
+		if (m_max_size == 2)
+			_test<SIZES[2]>();
+		if (m_max_size == 3)
+			_test<SIZES[3]>();
+		if (m_max_size == 4)
+			_test<SIZES[4]>();
+		if (m_max_size == 5)
+			_test<SIZES[5]>();
+		if (m_max_size == 6)
+			_test<SIZES[6]>();
+		if (m_max_size == 7)
+			_test<SIZES[7]>();
+		if (m_max_size == 8)
+			_test<SIZES[8]>();
+		if (m_max_size == 9)
+			_test<SIZES[9]>();
+#else
 		if (m_max_size > 0)
 			_test<SIZES[0]>();
 		if (m_max_size > 1)
@@ -28,6 +50,7 @@ public:
 			_test<SIZES[8]>();
 		if (m_max_size > 9)
 			_test<SIZES[9]>();
+#endif
 	};
 
 private:
@@ -44,10 +67,17 @@ private:
 		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookahead, OptimisationType::TwoOpt>(seed, cities, args);
 		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 
+#if DEMONSTRATION
+		for (size_t i = 1; i < 8; i++) {
+			args.max_depth = i;
+			m_tester.TestAlgorithm<Size, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
+		}
+#else 
 		for (size_t i = 1; i < 9; i++) {
 			args.max_depth = i;
 			m_tester.TestAlgorithm<Size, ConstructionType::StaticLookahead,OptimisationType::TwoOpt>(seed, cities, args);
 			m_tester.TestAlgorithm<Size, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::TwoOpt>(seed, cities, args);
 		}
+#endif
 	}
 };

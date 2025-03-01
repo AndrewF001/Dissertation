@@ -37,8 +37,6 @@ public:
 	static TSPType generateRandomCity(const Square& size, GenerationType type, std::mt19937& seed);
 
 	/// Getters Methods
-	//const std::array<TSPType, Size>& getAllCities() const { return m_cities; };	// This is too much privalage
-	//inline const TSPType& getCity(const cityID city) const { return m_cities[city]; };
 	inline const Point2D& getCityPoint(const cityID city) const { return m_cities[city].getPoint(); };
 	inline const cityID getCityRoutePosition(const cityID city) const { return m_cities[city].getRoutePosition(); };
 	inline const size_t getNumberOfCities() const {	return m_city_count; };

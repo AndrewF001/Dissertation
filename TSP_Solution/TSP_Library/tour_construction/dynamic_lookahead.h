@@ -43,8 +43,9 @@ public:
 
 	static void dynamicLookaheadInsertion(TspDataTemplate<TSPType, Size, Caching, Partitioning>& data, size_t max_depth, DynamicArgs args) {
 		const size_t additions = Size - data.getRouteSize();
+		size_t depth = optimalDepth(additions, max_depth, args);
 		for (size_t i = additions; i > 0; i--) {
-			auto [closest_point, route_position] = StaticLookahead<TSPType, Size, Caching, Partitioning>::FindClosestPoints(data, optimalDepth(i, max_depth, args));
+			auto [closest_point, route_position] = StaticLookahead<TSPType, Size, Caching, Partitioning>::FindClosestPoints(data, depth);
 			data.setCityPos(closest_point, route_position + 1);
 		}
 	}

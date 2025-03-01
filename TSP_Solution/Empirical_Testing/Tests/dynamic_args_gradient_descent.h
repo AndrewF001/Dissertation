@@ -12,7 +12,6 @@ namespace DAGD {
 	double cost_function(const gsl_vector* v, void* params) {
 		double score = 0;
 		std::array<std::unique_ptr<std::array<Type2d, Size>>, NUMOFPROBLEMS>* m_cities = (std::array<std::unique_ptr<std::array<Type2d, Size>>, NUMOFPROBLEMS>*)params;
-		//assert(xval.size() == 3);
 		DynamicArgs d_args = { .multiplier = gsl_vector_get(v, 0), .logrithm = gsl_vector_get(v, 1), .constant = gsl_vector_get(v, 2) };
 		TSPArgs args{ .max_depth = 10, .timeout_ms = std::chrono::milliseconds(300000), .dynamic_args = d_args};
 

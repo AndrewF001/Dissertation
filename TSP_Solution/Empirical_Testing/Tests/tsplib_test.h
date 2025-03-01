@@ -5,11 +5,11 @@
 
 class TSPLib : public TestClass {
 public:
-	TSPLib(bool use_file) : TestClass("TSPLib", true, jsonconversion::JsonType::TSPVerboseResultDynamic) {};
+	TSPLib(bool use_file) : m_use_file(use_file), TestClass("TSPLib", use_file, jsonconversion::JsonType::TSPVerboseResultDynamic) {};
 	~TSPLib() = default;
 
 	void Test() override {
-		std::string path = "E:\\Dissertation\\CPP_Libraries\\TSPLib";
+		std::string path = "..\\..\\CPP_Libraries\\TSPLib";
 		//std::cout << "Path to .tsp directory: ";
 		//std::cin >> path;
 
@@ -24,7 +24,7 @@ public:
 	};
 
 private:
-
+	const bool m_use_file;
 	int selectTest(std::vector<std::filesystem::directory_entry>& files) {
 		std::cout << "Select test:\n";
 		std::cout << "1. All\n";
@@ -122,7 +122,8 @@ private:
 		std::cout << file.path().filename().string() << " = " << res.final_distance << "\n";
 		
 		addResult(std::move(res));
-		m_file->writeFile();
+		if(m_use_file)
+			m_file->writeFile();
 	}
 
 	template <typename T, T... ints>

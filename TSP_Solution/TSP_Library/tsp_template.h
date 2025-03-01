@@ -30,8 +30,6 @@ public:
 	~TspTemplate() = default;
 
 	TSPVerboseResultDynamic run(const TSPArgs& args) {
-		//_run(args);
-		//return m_output;
 		// package task to cancel if it takes too long
 		std::packaged_task<void()> task(std::bind(&TspTemplate::_run, this, args));
 

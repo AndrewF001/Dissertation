@@ -42,6 +42,8 @@ private:
 		m_tester.TestAlgorithm<Size, ConstructionType::ConvexHullInsertion, OptimisationType::TwoOpt>(seed, cities, args);
 		m_tester.TestAlgorithm<Size, ConstructionType::NearestNeighbour,OptimisationType::TwoOpt>(seed, cities, args);
 		m_tester.TestAlgorithm<Size, ConstructionType::ShortestInsertion,OptimisationType::TwoOpt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookahead,OptimisationType::TwoOpt>(seed, cities, args);
+		m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion,OptimisationType::TwoOpt>(seed, cities, args);
 
 		for (size_t i = 1; i < 9; i++) {
 			args.max_depth = i;
