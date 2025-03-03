@@ -28,6 +28,8 @@ Only tested on Windows but theortically can be built on Linux.
 
 [(Optional) libxlsxwriter](https://libxlsxwriter.github.io/getting_started.html)
 
+[(Optional) gsl](https://github.com/microsoft/GSL)
+
 ## Installation
 
 ### Required
@@ -53,13 +55,14 @@ Only tested on Windows but theortically can be built on Linux.
     2. `cd vcpkg`
     3. `./bootstrap-vcpkg.bat`
 2. Install libxlsxwriter: `./vcpkg install libxlsxwriter`
-3. Integrate with Visual Studio: `./vcpkg integrate install`
+3. Install GSL: `./vcpkg install ms-gsl`
+4. Integrate with Visual Studio: `./vcpkg integrate install`
 
 ## Building
 
 If you didn't install all additional build tools use the table below to unselect the building of certain projects in Visual Studio `Build->Configuration Manager`
 
-| Project            |  VS22 | QT6 |  libxlsxwriter |
+| Project            |  VS22 | QT6 |  CPP Libraries |
 | :------:           | :---: | :--:|  :--:          |
 | Empericial_Testing |   ✅ | ✅  | ✅             |
 | File_Reader        |   ❌ | ❌  | ✅             |
