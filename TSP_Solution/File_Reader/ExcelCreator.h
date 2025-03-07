@@ -195,12 +195,13 @@ private:
 			lxw_chart_series* series1 = chart_add_series(time_chart, names.c_str(), times.c_str());;
 			lxw_chart_line line = { .color = LXW_COLOR_BLUE, .width = 2 };
 			chart_series_set_line(series1, &line);
-			chart_series_set_trendline(series1, LXW_CHART_TRENDLINE_TYPE_POLY, 2);
+			chart_series_set_trendline(series1, LXW_CHART_TRENDLINE_TYPE_POLY, 3);
 			chart_series_set_trendline_equation(series1);
 			chart_series_set_trendline_r_squared(series1);
 			chart_series_set_name(series1, "Time");
 			chart_axis_set_name(time_chart->y_axis, "MicroSeconds");
 			chart_axis_set_name(time_chart->x_axis, "Cities");
+			chart_axis_set_min(time_chart->y_axis, 0);
 			worksheet_insert_chart(worksheet, lxw_row_t(start_row), 6, time_chart);
 
 			row += 3;

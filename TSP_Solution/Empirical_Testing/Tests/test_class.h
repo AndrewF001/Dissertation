@@ -11,7 +11,7 @@
 #include "multithread_tester.h"
 // TODO: MOVE ALL IMPLEMENTATION TO A .CPP FILE!!!
 
-#define DEMONSTRATION FALSE;
+#define DEMONSTRATION TRUE;
 
 BOOL __stdcall ConsoleCtrlHandler(DWORD ctrlType); // TODO: THIS IS HORRIBLE!!!
 
