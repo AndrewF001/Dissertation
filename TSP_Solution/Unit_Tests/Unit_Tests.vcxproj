@@ -108,6 +108,7 @@
   <ItemGroup>
     <ClCompile Include="dynamic_lookahead_test.cpp" />
     <ClCompile Include="json_converstion_test.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="quadtree_test.cpp" />
     <ClCompile Include="search_test.cpp" />
     <ClCompile Include="square_test.cpp" />

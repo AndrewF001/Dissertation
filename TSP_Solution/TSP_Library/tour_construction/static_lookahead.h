@@ -34,12 +34,15 @@ public:
 		double min_dist = DBL_MAX;
 		std::pair<cityID, size_t> output;
 
+		// Check if depth is greater than the number of cities left
 		if (Size - data.getRouteSize() < depth)
 			depth = Size - data.getRouteSize();
 
+		// Check each city
 		for (cityID idx = 0; idx < Size; idx++) {
-			if (data.isCityInRoute(idx)) continue;
+			if (data.isCityInRoute(idx)) continue; // If in route continue	
 
+			// Find the shortest partital route for the city
 			auto [distance, position] = ShortestRoute(data, idx, depth, min_dist);
 			if (distance < min_dist) {
 				min_dist = distance;
@@ -99,7 +102,8 @@ private:
 					}
 				}
 			}
-
+			
+			// Not deterministic behaviour if points are randomised!
 			if (add_point.first == SIZE_MAX)	// No point found
 				break;
 

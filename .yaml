@@ -1,0 +1,54 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Cache vcpkg packages
+      uses: actions/cache@v4
+      with:
+        path: |
+          C:\vcpkg\installed
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('**/vcpkg.json') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
+
+    - name: Cache build outputs
+      uses: actions/cache@v4
+      with:
+        path: |
+          TSP_Solution/**/x64/Release
+          TSP_Solution/**/x64/Debug
+          TSP_Solution/**/*.vcxproj.user
+          TSP_Solution/**/*.tlog
+        key: ${{ runner.os }}-build-${{ hashFiles('TSP_Solution/**/*.sln', 'TSP_Solution/**/*.vcxproj', 'TSP_Solution/**/*.cpp', 'TSP_Solution/**/*.h') }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+
+    - name: Build TSP_Solution.sln
+      run: |
+        cd TSP_Solution
+        msbuild TSP_Solution.sln /p:Configuration=Release
+
+    - name: Run Unit_Tests
+      run: |
+        cd TSP_Solution
+        $testExe = Get-ChildItem -Recurse -Filter Unit_Tests.exe | Select-Object -First 1
+        if ($null -eq $testExe) {
+          Write-Error "Unit_Tests.exe not found!"
+          exit 1
+        }
+        & $testExe.FullName
