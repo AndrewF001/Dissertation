@@ -38,6 +38,7 @@ private:
 		auto seed = Tester::seed_gen();
 		auto cities = Tester::generateCities<Size>(seed);
 		TSPArgs args;
+		args.max_depth = 8;
 
 		m_tester.TestAlgorithm<Size, ConstructionType::ConvexHullInsertion, OptimisationType::TwoOpt>(seed, cities, args);
 		m_tester.TestAlgorithm<Size, ConstructionType::NearestNeighbour,OptimisationType::TwoOpt>(seed, cities, args);

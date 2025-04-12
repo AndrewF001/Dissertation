@@ -3,8 +3,8 @@
 #include <tsp_template.h>
 
 TEST(DynamicLookaheadTest, depths) {
-	/*DynamicArgs args;
-
+/*
+	DynamicArgs args;
 	auto r = DynamicLookahead<Type2d, 10, CachingType::full, PartitioningType::quadTree>::optimalDepth(10, 10, args);
 	EXPECT_EQ(r, 1);
 

@@ -12,7 +12,8 @@ class Program
 
         double totalDistanceA = 0;
         double totalDistanceB = 0;
-
+        double totaldiff = 0;
+        int i = 0;
         Console.WriteLine("Numerical distances for matching names:");
         foreach (var entry in b)
         {
@@ -21,11 +22,15 @@ class Program
             totalDistanceB += match.Number;
             if (match != default)
             {
+                i++;
                 double distance = Math.Abs(entry.Number - match.Number);
-                Console.WriteLine($"Name: {entry.Name}, Difference: {distance}, percentage: {entry.Number / match.Number}");
+                totaldiff += (entry.Number / match.Number - 1) * 100;
+                Console.WriteLine($"{entry.Name} & {match.Number} & {entry.Number} & {Math.Round((entry.Number / match.Number-1)*100,3)}\\%  \\\\ \\hline");
+                //Console.WriteLine($"Name: {entry.Name}, Difference: {distance}, percentage: {entry.Number / match.Number}");
             }
         }
-
+        Console.WriteLine($"Average difference: {totaldiff / i} %");
+        Console.WriteLine($"Total number of matches: {i} out of {b.Count}");
         Console.WriteLine($"Distance total: {totalDistanceB}, My Distance: {totalDistanceA}, difference: {totalDistanceA / totalDistanceB}");
     }
 
