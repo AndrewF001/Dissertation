@@ -1,0 +1,110 @@
+\begin{center}
+\section{Unit Testing}
+\label{sec:unittesting}
+\end{center}
+
+Unit Testing is part of the waterfall development cycle(Section\ref{waterfall}) to ensure current components function as intended. The tests should follow the design principles(Section\ref{designUnit}) of keeping it simple with one independent variable for testing. GoogleTest\cite{googletest} was used as the testing framework, but it functions the same as most testing frameworks. The tests should focus on the smallest components possible to provide the greatest coverage across the system. The testing uses a result-driven approach by using $asserts()$ on the value produced against the expected value, providing long-standing coverage if the code unexpectedly changes behaviour.
+
+\subsection{Basic Types}
+
+The basic types such as point, edge, and square are used throughout the program and therefore should be robust. They are tested on creation and on each of their functions with boundary testing. Listing\ref{code:point} shows the unit testing of $Point2D$ class constructor and $gradient()$ function against predetermined values calculated manually.
+
+\begin{lstlisting}[caption={Point Unit Test},numbers=left,label={code:point}]
+TEST(PointTest, Creation) {
+	Point2D p1{ 0, 0 };
+	EXPECT_EQ(p1.m_x, 0);
+	EXPECT_EQ(p1.m_y, 0);
+
+	Point2D p2{ 10, 10 };
+	EXPECT_EQ(p2.m_x, 10);
+	EXPECT_EQ(p2.m_y, 10);
+}
+
+TEST(PointTest, Gradient) {
+	Point2D p1{ 0, 0 };
+	Point2D p2{ 10, 10 };
+	Point2D p3{ 10, 0 };
+	Point2D p4{ 0, 10 };
+	Point2D p5{ -10, -10 };
+
+	EXPECT_EQ(p1.gradient(p2), 1);	// Positive slope
+	EXPECT_EQ(p1.gradient(p5), 1);	// Same slop reverse position
+	EXPECT_EQ(p1.gradient(p3), 0);  // Horizontal line
+	EXPECT_EQ(p1.gradient(p4), INFINITY); // Virtical line
+}
+\end{lstlisting}
+
+\subsection{Quad Tree}
+
+The partitioning algorithms have more sophisticated functionality, with more complex data structures, which rely on the basic data types to function. Exhaustive boundary testing cannot be applied because there is a non-finite number of Quad Tree structures, but testing the sub-procedure can guarantee each step. Listing\ref{code:quad} shows the creation, insertion, and searching of a basic quad-tree to test its subdividing properties.
+
+\begin{lstlisting}[caption={Quad tree Unit Test},numbers=left,label={code:quad}]
+TEST(QuadTreeTest, BasicSearch) {
+	QuadTree tree(Square{ {0, 0}, 100, 100 });
+	tree.insert(0, Point2D{ 60, 60 }); // Root
+	tree.insert(1, Point2D{ 30, 30 }); // Top left
+	tree.insert(2, Point2D{ 70, 70 }); // Bottom right
+	tree.insert(3, Point2D{ 30, 70 }); // Bottom left
+	tree.insert(4, Point2D{ 70, 30 }); // Top right
+
+	auto found = tree.contains(Square{ {0, 0}, 40, 40 });
+	check_result(found, { 1 });
+}
+\end{lstlisting}
+
+\subsection{Look-Ahead Algorithm}
+
+Testing a look-ahead algorithm is infeasible as it requires doing a dry run of the algorithm manually. There are also too many parameters to cover all test cases exhaustively. Therefore, applying Stability Tests to ensure the code remains the same between versions and does not crash is acceptable. Listing\ref{code:looktest} confirms that the class compiles and runs without crashing for example data.
+
+
+{\hyphenpenalty=50\exhyphenpenalty=50
+\begin{lstlisting}[caption={SLACIH Stability Test},numbers=left,label={code:looktest}]
+TEST(StaticLookahead, Similarity) {
+	Square area = { {0, 0}, 1000, 1000 };
+	std::mt19937 engine(1);
+
+	auto cities = TspDataTemplate<Type2d, 50, CachingType::full, PartitioningType::quadTree>::generateCities(area, GenerationType::rectangle, engine);
+
+	auto lookahead = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::StaticLookaheadConvexHullInserstion, OptimisationType::None>>(area, cities)->run({1});
+	auto linear = std::make_unique<TspTemplate<Type2d, 50, CachingType::full, PartitioningType::linearSearch, ConstructionType::ConvexHullInsertion, OptimisationType::None>>(area, cities)->run({});
+
+	EXPECT_EQ(lookahead.route, linear.route);
+}
+\end{lstlisting}
+}
+
+\subsection{JSON Conversion}
+
+Testing on the JSON conversion code helps protect against file corruption. As the conversion is symmetric, round case testing can be used to compare the written and read data. Listing\ref{code:JSON} demonstrates the symmetrically properties by comparing the original object with the round case object to determine they are identical. 
+
+\begin{lstlisting}[caption={Json Round Case Test},numbers=left, label={code:JSON}]
+TEST(JsonConversionTest, RunModeTest) {
+	RunMode s; // Original value
+	s.num_cities = 10;
+	s.genType = GenerationType::rectangle;
+	s.Caching = CachingType::full;
+	s.Partitioning = PartitioningType::quadTree;
+	s.Construction = ConstructionType::StaticLookaheadConvexHullInserstion;
+	s.Optimisation = OptimisationType::TwoOpt;
+	s.args = { 1, 2, std::chrono::milliseconds(100) };
+
+	rapidjson::Document doc;
+	doc.SetObject();
+	rapidjson::Value val;
+	jsonconversion::runModeToJson(s, val, doc.GetAllocator()); // Write JSON
+	doc.AddMember("runMode", val, doc.GetAllocator());
+	RunMode r;
+	jsonconversion::JsonToRunMode(r, doc["runMode"]);  // Read JSON
+
+	EXPECT_EQ(s.num_cities, r.num_cities); // Round case testing
+	EXPECT_EQ(s.genType, r.genType);
+	EXPECT_EQ(s.Caching, r.Caching);
+	EXPECT_EQ(s.Partitioning, r.Partitioning);
+	EXPECT_EQ(s.Construction, r.Construction);
+	EXPECT_EQ(s.Optimisation, r.Optimisation);
+	EXPECT_EQ(s.args, r.args);
+}
+\end{lstlisting}
+
+%\subsection{CI/CD}
+%I need to do this

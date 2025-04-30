@@ -1,0 +1,246 @@
+\documentclass[a4paper,12pt]{article}
+
+% ----------------- Packages ----------------- %
+\usepackage{graphicx}      % For including images
+\graphicspath{{./sections/Images/}} % Set path for images
+\usepackage{float}         % Better floating support
+\usepackage[normalem]{ulem} % Underlining (suppress normal emphasis changes)
+\usepackage[super,square]{natbib} % Superscripted citations in brackets
+\usepackage{anysize}       % Custom margins
+\marginsize{2cm}{2cm}{1cm}{2cm} % (left, right, top, bottom)
+\usepackage{fancyhdr}      % Custom headers
+\renewcommand{\headrulewidth}{0pt} % Remove header rule
+\usepackage{soul}          % Highlighting
+\usepackage[dvipsnames]{xcolor} % Extended color options
+\usepackage{hyperref}      % Hyperlinks in document
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage[normalem]{ulem}
+\usepackage{booktabs,rotating}
+\usepackage{tabularx}
+\usepackage{pdflscape}
+\useunder{\uline}{\ul}{}
+\usepackage{float}
+\usepackage{makecell}
+\usepackage{siunitx}
+\usepackage{booktabs, makecell}
+\usepackage[referable]{threeparttablex}
+\usepackage{longtable}
+\usepackage{algorithm}
+\usepackage{array}
+\usepackage{tabulary}
+\usepackage[noend]{algpseudocode}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=CadetBlue,
+    filecolor=CadetBlue,      
+    urlcolor=CadetBlue,
+}
+
+\usepackage[none]{hyphenat}
+%\usepackage{ragged2e, microtype}
+%\righthyphenmin 10000
+%\lefthyphenmin 100000
+
+\definecolor{indigo}{RGB}{75,0,130}
+\usepackage{lipsum}        % Lorem ipsum filler text
+\usepackage{multicol}      % Multi-column support
+\usepackage{parskip}       % No indentation for paragraphs
+\setlength\columnsep{18pt} % Set column spacing
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\usepackage{tikz}
+\usepackage{pgfplots} % For plotting
+\usepackage{amsmath}  % For mathematical notation
+\pgfplotsset{compat=1.18}
+
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  numbersep=5pt,
+  stepnumber=1,
+  breaklines=true,
+  breakatwhitespace=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  tabsize=3
+}
+
+\usepackage{enumitem}
+
+\newlist{legal}{enumerate}{10}
+\setlist[legal]{label*=\arabic*.}
+
+\usepackage[big]{titlesec}
+
+\usepackage[most]{tcolorbox}
+\usepackage{mathtools}
+\usetikzlibrary{decorations.pathreplacing}
+
+\tcbset{
+    boxmath/.style 2 args={%
+        enhanced,
+        sharp corners, colback=white,
+        colframe=#1, remember as=#2, size=fbox}
+    }
+
+
+\setcounter{secnumdepth}{3}
+
+%\titleformat{\paragraph}
+%{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+%\titlespacing*{\paragraph}
+%{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+
+% ----------------- Abstract Formatting ----------------- %
+\renewenvironment{abstract}
+ {\noindent\textbf{\abstractname}\\}
+ {\medskip}
+
+% ----------------- Document Start ----------------- %
+\usepackage[a4paper]{geometry}
+\usepackage[myheadings]{fullpage}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{threeparttable}
+\usepackage{graphicx, wrapfig, subcaption, setspace, booktabs}
+\usepackage[T1]{fontenc}
+\usepackage[font=small, labelfont=bf]{caption}
+\usepackage{fourier}
+\usepackage[protrusion=true, expansion=true]{microtype}
+\usepackage[english]{babel}
+\usepackage{sectsty}
+\usepackage{url, lipsum}
+\usepackage{array}
+
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\onehalfspacing
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+
+%-------------------------------------------------------------------------------
+% HEADER & FOOTER
+%-------------------------------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\setlength\headheight{15pt}
+%\fancyhead[R]{Lookahead Heuristic}
+\fancyfoot[R]{\thepage}
+%-------------------------------------------------------------------------------
+% TITLE PAGE
+%-------------------------------------------------------------------------------
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=C++,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\usepackage{colortbl}%
+  \newcommand{\myrowcolour}{\rowcolor[gray]{0.925}}
+
+\newif\ifblackandwhite
+\ifblackandwhite
+  \newcommand{\cheading}[2]{\textbf{#1\hfill #2}}
+  \newcommand{\highest}[1]{\textbf{#1}}% == highest score for question
+\else
+  \newcommand{\cheading}[2]{\textcolor{Maroon}{\textbf{#1\hfill #2}}}
+  \newcommand{\highest}[1]{\textcolor{Maroon}{\textbf{#1}}}%
+\fi
+
+\begin{document}
+%\RaggedRight
+\pagenumbering{arabic}  % Start page numbering (page 1)
+\thispagestyle{empty}
+
+\begin{titlepage}
+    \centering
+
+    % Title section
+    \normalsize \textsc{MSci Final Year Project Thesis} \\ [2.0cm]
+    \HRule{0.5pt} \\ [0.5cm]
+    {\LARGE \textbf{\uppercase{New Look-Ahead Heuristic For the Travelling Salesman Problem}}} \\
+    \HRule{2pt} \\ [1.5cm]
+
+    \includegraphics[width=\textwidth]{sections/image/Front_page.png} \\
+    \vspace{2cm}
+    
+    % Author section
+    \normalsize
+    \textbf{Author:} Andrew Foot, 2177545 \\ [0.5cm]
+    \textbf{Supervised By:} Dr Rajesh Chitnis \\ [0.5cm]
+    Department of Computer Science \\
+    University of Birmingham \\ [2cm]
+    \textbf{Word Count:} 13,731 \\
+
+    % Date (optional)
+    \vfill
+    {\large \the\year}
+\end{titlepage}
+
+\newpage
+\setcounter{page}{2}  % Since title page was page 1, next is page 2
+
+% ----------------- Abstract ----------------- %
+
+\begin{abstract}
+    \input{./sections/0_abstract.tex}
+\end{abstract}
+
+\pagebreak
+\tableofcontents
+\pagebreak
+
+% ----------------- Main Content ----------------- %
+\input{./sections/1_intro.tex}
+\input{./sections/5_Legal.tex}
+\input{./sections/2_TSP.tex}
+\input{./sections/3_Lookahead.tex}
+\input{./sections/4_Methodology.tex}
+\input{./sections/6_System_Requirements.tex}
+\input{./sections/7_Design.tex}
+\input{./sections/8_Implementation.tex}
+\input{./sections/9_Project_Management.tex}
+\input{./sections/10_Testing.tex}
+\input{./sections/11_Evaluation.tex}
+\input{./sections/12_Conclusion.tex} 
+\pagebreak
+% ----------------- References ----------------- %
+%\nocite{*}
+\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,references}
+\end{document}

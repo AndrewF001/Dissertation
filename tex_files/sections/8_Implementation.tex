@@ -1,0 +1,302 @@
+\begin{center}
+\section{Implementation}
+\label{Implementation}
+\end{center}
+
+The code for this project was source-controlled using \href{https://github.com/}{GitHub}, and the repository can be found at \url{https://github.com/AndrewF001/Dissertation}. The concepts mentioned in the system requirement(Section\ref{sec:c++}), can be applied to the design of the system(Section\ref{design}), and were implemented multiple times throughout the project. A few principal elements from the code have been selected to highlight the concepts used and key features. Nevertheless, due to the complexity and large volume of code, not every advanced technique could be demonstrated.
+
+\subsection{Polymorphism}
+
+For the Testing Suites class(Figure\ref{fig:Emprical}), polymorphism ensures common functionality between test suites. Essential data is encapsulated between the classes, and pure virtual functions are defined to allow child classes to have individual functionality. Listing\ref{code:testing} is a stripped-down version of the code in \href{https://github.com/AndrewF001/Dissertation/blob/main/TSP_Solution/Empirical_Testing/Tests/test_class.h}{test\_class.h}. $TestClass$ is the pure virtual abstract parent class, and $RunTests()$ is the interface code for the GUI application. The interface code is split into public($RunTests()$) and private($\_test()$) functions, as the interface relies upon threads($std::packaged\_task$). Class $BasicTest$ is the child class of $TestClass$ and overrides the pure virtual function $Test()$ with the test suite definition(Table\ref{tab:testsuites}). 
+
+{\hyphenpenalty=50\exhyphenpenalty=50
+\begin{lstlisting}[caption={Testing Suites Polymorphic Classes}, label={code:testing},numbers=left]
+class TestClass
+{
+public:
+
+	std::shared_ptr<TSPFile> RunTests(size_t num_of_ittr = SIZE_MAX, std::chrono::seconds timeout = std::chrono::seconds::max()) {
+            // package task to cancel if it takes too long
+            std::packaged_task<void()> task(std::bind(&TestClass::_test, this, num_of_ittr));
+    
+            // Wait for the task to finish or timeout
+            if (future.wait_for(timeout) != std::future_status::timeout) {
+                // Task was successfully completed
+                thr.join();
+                future.get();
+            }
+            return m_file;
+	}
+
+private:
+	void _test(size_t num_of_ittr) {
+    		size_t i = 0;
+    		while (i < num_of_ittr) {
+    			Test();  // Uses Virtual Function
+    			i++;
+    		}
+	}
+	
+	virtual void Test() = 0;   // Virtual Function
+};
+
+class BasicTest : public TestClass {
+public:
+	void Test() override { // Override Function
+            // Control
+            auto seed = Tester::seed_gen();
+            auto cities = Tester::generateCities<Size>(seed);
+            TSPArgs args;
+    
+            m_tester.TestAlgorithm<Size, ConstructionType::ConvexHullInsertion, Opt>(seed, cities, args);
+            m_tester.TestAlgorithm<Size, ConstructionType::NearestNeighbour, Opt>(seed, cities, args);
+            m_tester.TestAlgorithm<Size, ConstructionType::ShortestInsertion ,Opt>(seed, cities, args);
+            m_tester.TestAlgmorithm<Size, ConstructionType::DynamicLookahead, Opt>(seed, cities, args);
+            m_tester.TestAlgorithm<Size, ConstructionType::DynamicLookaheadConvexHullInserstion, Opt>(seed, cities, args);
+    
+            for (size_t i = 1; i < 9; i++) {
+                args.max_depth = i;
+                m_tester.TestAlgorithm<Size, ConstructionType::StaticLookahead, Opt>(seed, cities, args);
+                m_tester.TestAlgorithm<Size, ConstructionType::StaticLookaheadConvexHullInserstion, Opt>(seed, cities, args);
+            }
+	};
+};
+\end{lstlisting}
+}
+
+\subsection{Template Metaprogramming}
+
+Template Metaprogramming(TMP)(Section\ref{template}) is a valuable tool for performance optimisation and compile-time polymorphism. One of the optimisations used in the program is to turn builder classes into monolithic classes if the type is known at compile time; this is how TSP\_Library is implemented and can be found in \href{https://github.com/AndrewF001/Dissertation/blob/main/TSP_Solution/TSP_Library/tsp_template.h}{tsp\_template.h}. Using Enums and $constexpr$ If statements, the choice selection of a child class can be decided at compile-time with compile-time polymorphism. Listing\ref{code:template}, an edited snippet of code from \href{https://github.com/AndrewF001/Dissertation/blob/main/TSP_Solution/TSP_Library/tsp_template.h}{tsp\_template.h}; looks at how this compile-time polymorphism is applied to $constructTour()$ with the use of $ConstructionType$ Enum and $Construction$ template variable. By assigning the template variable to the Enum values(Line12) and modifying the builder function($constructTour()$, Line24) to the creation of predefined children classes, the use of a V-Table is avoided. As templates are instantiated for each template variable(Section\ref{template}), there are 96 different versions of the $TspTemplate$ being compiled, but adding more algorithms increases the number rapidly:
+
+{\hyphenpenalty=50\exhyphenpenalty=50
+
+\begin{equation*}
+  \begin{aligned}
+    \text{\# of template instantiation} &=C\cdot O\cdot CT\cdot PT\cdot T\\
+    96 &=8\cdot 2\cdot 3\cdot 2\cdot 1
+  \end{aligned}
+\end{equation*}
+Where: $C$ is the number of $ConstructionType$, $O$ is the number of $OptimisationType$, $CT$ is the number of $CachingType$, $PT$ is the number of $PartitioningType$, $T$ is the number of $TSPType$.
+
+\begin{lstlisting}[caption={TSP Library Template Meta-Programming}, label={code:template},numbers=left]
+enum class ConstructionType {
+	DynamicLookahead,
+	DynamicLookaheadConvexHullInserstion,
+	StaticLookaheadConvexHullInserstion,
+	StaticLookahead,
+	NearestNeighbour,
+	ShortestInsertion,
+	ConvexHullInsertion,
+	ConvexHull,
+};
+
+template <class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning, ConstructionType Construction, OptimisationType Optimisation>
+class TspTemplate {
+public:
+    void run(const TSPArgs& args) {
+    	m_data.initalisePartition();
+    	m_data.initaliseCache();
+    	constructTour(args);
+    	optimiseTour(args);
+    	finaliseOutput();
+    };
+
+private:
+    void constructTour(const TSPArgs& args) {
+    	if constexpr (Construction == ConstructionType::StaticLookaheadConvexHullInserstion)
+    		StaticLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(args.max_depth).constructTour(m_data);
+    
+            ... Multiple If Statements for all the values of ConstructionType ...
+    
+    	if constexpr (Construction == ConstructionType::DynamicLookaheadConvexHullInserstion)
+    		DynamicLookaheadConvexHull<TSPType, Size, Caching, Partitioning>(args.max_depth, args.dynamic_args).constructTour(m_data);    		
+    };
+};
+\end{lstlisting}
+}
+\subsection{API}
+
+APIs are used everywhere but are mostly used in-depth by \href{https://github.com/AndrewF001/Dissertation/blob/main/TSP_Solution/TSP_Library/tsp_data/tsp_data_template.h}{TSP\_Data}. It is the central block that contains the Travelling Salesman Problem data and abides by its constraints. It also manages the interoperability of all the blocks and ensures software engineering optimisation is enforced. TSP\_Data has many public functions(Section\ref{tspData} \& Figure\ref{fig:TSP_Data}), but Listing\ref{code:Interface} looks at how caching(Section\ref{lit:Caching}) is managed for fetching the distance of an edge. Obscuring the caching mechanism behind an API call also requires that $m\_cities$(Line24) cannot be accessed from outside the class, potentially letting other classes bypass the caching mechanism.
+
+\begin{lstlisting}[caption={TSP Data Interface}, label={code:Interface},numbers=left]
+class TspDataTemplate {
+public:
+    double getDistance(cityID city1, cityID city2) {
+        if constexpr (Caching == CachingType::full)
+    		return m_cache[city1][city2];
+    
+        double result;
+        if constexpr (Caching == CachingType::partial) {
+            result = m_cache[city1][city2];
+            // Check if the value is already in the cache
+            if (result != DBL_MAX)						
+                return result;
+        }
+
+        // Calculate the distance and store result
+        result = m_cities[city1].getDistance(m_cities[city2]);	
+        if constexpr (Caching == CachingType::partial)
+            m_cache[city1][city2] = result;
+    
+        return result;
+    };
+
+private:
+    std::array<TSPType, Size> m_cities;		// Array of cities
+};
+\end{lstlisting}
+
+\pagebreak
+\begin{landscape}
+
+\subsection{Static Look-Ahead Cheapest Insertion Heuristic}
+
+The development and implementation of SLACIH(Section\ref{SLACIH}) is the project's main focus, and its implementation serves as the proof of work. As described above, it builds upon polymorphism, templates, and API calls to remain adaptable and optimised. It incorporates all the optimisations used by the other algorithms but also includes several unique algorithmic optimisation techniques:
+\begin{itemize}
+    \item Early exit if the current distance exceeds the best-known solution(Line88)
+    \item Use of closeness proximity(Section\ref{partitioning}) by only considering points within the distance of the current best solution(Line62)
+    \item Early exit if no points are within range of a partial\_route(Line83).
+\end{itemize}
+
+Listing\ref{code:SLACIH} shows the complete, mostly unedited, C++ code of the algorithm, which can also be found in \href{https://github.com/AndrewF001/Dissertation/blob/main/TSP_Solution/TSP_Library/tour_construction/static_lookahead.h}{static\_lookahead.h}.
+
+%The development and implementation of SLACIH(Section\ref{SLACIH}) is the main research of the project, and its implementation is the proof of work. It builds upon the polymorphism, templates, and API calls shown above to be adaptable and optimised. It uses all the optimisation as the other algorithms but has a few unique algorithmic optimisation techniques: early exit if the current distance is over the current best solution(Line88), using closeness proximity(Section\ref{partitioning}) by only considering points within distance of current best solution(Line62), and early exit if no points are within range of a $partail\_route$(Line83). Listing\ref{code:SLACIH} shows the complete, mostly unedited, C++ code of the algorithm, which can also be found in \href{https://github.com/AndrewF001/Dissertation/blob/main/TSP_Solution/TSP_Library/tour_construction/static_lookahead.h}{static\_lookahead.h}.
+{\hyphenpenalty=50\exhyphenpenalty=50
+\begin{lstlisting}[caption={Static Look-Ahead Cheapest Insertion Heuristic}, label={code:SLACIH},numbers=left]
+template<class TSPType, size_t Size, CachingType Caching, PartitioningType Partitioning>
+class StaticLookahead : public ConstructionBase<TSPType, Size, Caching, Partitioning>
+public:
+void _constructTour(TspDataTemplate& data) override {
+    data.setCityPos(0, 0);	// Randomly select the first city
+    lookaheadInsertion(data, m_depth);
+};
+
+static void lookaheadInsertion(TspDataTemplate& data, size_t depth) {
+    const size_t additions = Size - data.getRouteSize();
+    for (size_t i = 0; i < additions; i++) {
+        auto [closest_point, route_position] = FindClosestPoints(data, depth);
+        data.setCityPos(closest_point, route_position + 1);
+    }
+}
+
+static std::pair<cityID, size_t> FindClosestPoints(TspDataTemplate& data, size_t depth) {
+    double min_dist = DBL_MAX;
+    std::pair<cityID, size_t> output;
+
+    // Check if depth is greater than the number of cities left
+    if (Size - data.getRouteSize() < depth)
+        depth = Size - data.getRouteSize();
+    // Check each city
+    for (cityID idx = 0; idx < Size; idx++) {
+        if (data.isCityInRoute(idx)) 
+            continue; // If in route continue	
+
+        // Find the shortest partital route for the city
+        auto [distance, position] = ShortestRoute(data, idx, depth, min_dist);
+        if (distance < min_dist) {
+            min_dist = distance;
+            output = { idx, position };
+        }
+    }
+    return output;
+}
+private:
+const size_t m_depth;
+static std::pair<double, cityID> ShortestRoute(TspDataTemplate& data, cityID point, size_t depth, const double best_distance) {
+    std::pair<double, cityID> output = { DBL_MAX, SIZE_MAX };	// distance, position
+    std::vector<cityID> partail_route(3);
+    partail_route[1] = point;
+    
+    // find the best place to insert the point
+    const auto& route = data.getRoute();
+    for (size_t i = 0; i < data.getRouteSize(); i++) {
+        double distance = data.calcDeivation(partail_route[1], data.getRouteCityID(route[i]), data.getRouteCityID(route[i + 1]));
+        if (distance < output.first) {
+            output.first = distance;
+            output.second = i;
+        }
+    }
+    // Add it to partail route
+    partail_route[0] = data.getRouteCityID(route[output.second]);
+    partail_route[2] = data.getRouteCityID(route[output.second + 1]);
+    // Repeat for lookaheads
+    // Find closest point that is a part of partial route
+    double offset = best_distance * best_distance;
+    std::vector<cityID> city_search = data.getCitiesInArea(partail_route[1], offset);
+
+    for (size_t i = 0; i < depth - 1; i++) {
+        double min_dist = DBL_MAX;
+        std::pair<cityID, size_t> add_point = { SIZE_MAX, SIZE_MAX };
+        for (const auto& city : city_search) {
+            if (data.isCityInRoute(city))
+                continue;
+            // Check if point is already in partail route
+            if (std::any_of(partail_route.begin() + 1, partail_route.end() - 1, [city](const auto& route_point) { return route_point == city; }))
+                continue;
+
+            for (size_t j = 0; j < partail_route.size() - 1; j++) {
+                double distance = data.calcDeivation(city, partail_route[j], partail_route[j + 1]);
+                if (distance < min_dist) {
+                    min_dist = distance;
+                    add_point = { city, j };
+                }
+            }
+        }
+        if (add_point.first == SIZE_MAX)	// No point found
+            break;
+        // add closest point to partail route
+        partail_route.insert(partail_route.begin() + add_point.second + 1, add_point.first);
+        output.first += min_dist;
+        if (output.first > best_distance)
+            break;
+    }
+    return output;
+}
+};
+\end{lstlisting}
+}
+\end{landscape}
+\subsection{Dynamic Look-Ahead Cheapest Insertion Heuristic}
+
+DLACIH expands on SLACIH with a optimal depth function(Listing\ref{code:DLACIH}), afterwards it is unchanged from the base algorithm. The cost function is defined in Equation\ref{depth_form}, which can be seen in Function $optimalDepth()$(line7) with the arguments being determined by the struct $DynamicArgs$.
+{\hyphenpenalty=50\exhyphenpenalty=50
+\begin{lstlisting}[caption={Dynamic Look-Ahead Cheapest Insertion Heuristic Depth Function}, label={code:DLACIH},numbers=left]
+struct DynamicArgs {	// Numbers are from Gradient Descent analysis
+	double multiplier = 1.2348586676954691;
+	double logrithm = 0.90649189814814557;
+	double constant = -1.6065204475308614;
+};
+
+static size_t optimalDepth(size_t size, size_t max_depth, DynamicArgs& args) {
+    size_t optimal = (size_t)std::round(args.multiplier * std::log(args.logrithm * size) - args.constant);
+    
+    if (optimal == 0)
+        optimal = 1;
+    
+    return std::min(optimal, max_depth);
+}
+\end{lstlisting}
+}
+
+\subsection{Gradient Descent}
+
+Gradient descent is a useful tool for optimising the depth function arguments with empirical data as the cost function is convex. To obtain better results that are not hyper-optimised, taking the summation of a set of problems is beneficial, as displayed by Listing\ref{code:graident} where the $NumOfProblems=5$(Line1). How the gradient descent is set up can be seen in \href{https://github.com/AndrewF001/Dissertation/blob/main/TSP_Solution/Empirical_Testing/Tests/dynamic_args_gradient_descent.h}{dynamic\_args\_gradient\_descent.h}.
+{\hyphenpenalty=50\exhyphenpenalty=50
+\begin{lstlisting}[caption={Graident Descent Cost Function}, label={code:graident},numbers=left]
+NumOfProblems = 5;
+double cost_function(const gsl_vector* v, void* params) {
+    double score = 0;
+    std::array<std::unique_ptr<std::array<Type2d, Size>>, NUMOFPROBLEMS>* m_cities = (std::array<std::unique_ptr<std::array<Type2d, Size>>, NUMOFPROBLEMS>*)params;
+    
+    DynamicArgs d_args = { .multiplier = gsl_vector_get(v, 0), .logrithm = gsl_vector_get(v, 1), .constant = gsl_vector_get(v, 2) };
+    
+    TSPArgs args{ .max_depth = 10, .timeout_ms = std::chrono::milliseconds(300000), .dynamic_args = d_args};
+
+    for (size_t i = 0; i < NUMOFPROBLEMS; i++) {
+        auto algorithm = std::make_unique<TspTemplate<Type2d, Size, CachingType::full, PartitioningType::quadTree, ConstructionType::DynamicLookaheadConvexHullInserstion, OptimisationType::TwoOpt>>(AREA, *((*m_cities)[i]), GenerationType::rectangle, 0);
+        score += algorithm->run(args).final_distance;
+    }
+    return score;
+}
+\end{lstlisting}
+}

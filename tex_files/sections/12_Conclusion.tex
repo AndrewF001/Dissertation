@@ -1,0 +1,58 @@
+\begin{center}
+\section{Conclusions}
+\label{conc:aims}
+\end{center}
+
+Overall, this project has demonstrated that the Look-Ahead Cheapest Insertion Heuristic is a worthy heuristic in solving the Travelling Salesman Problem.
+
+The project findings demonstrated consistent and significant gains in the solution result by applying a look-ahead design to the Cheapest Insertion Heuristic to avoid local pitfalls. A new algorithm, Dynamic Look-Ahead Convex Hull Cheapest Insertion Heuristic(DLACHCIH), produced a better result than conventional heuristics on average:
+
+\begin{table}[H]
+\centering
+\begin{threeparttable}
+\begin{tabular}{|l|l|}
+\hline
+\rowcolor[HTML]{EFEFEF} 
+\textbf{Algorithm}                       & \textbf{Performance Difference} \\ \hline
+Convex Hull Cheapest Insertion Heuristic & 1.1482\%                        \\ \hline
+Cheapest Insertion Heuristic             & 4.8412\%                        \\ \hline
+Nearest Neighbour Search                 & 3.4912\%                        \\ \hline
+\end{tabular}
+\begin{tablenotes}[flushleft]
+\small
+\item \textit{Note:} higher \% is better
+\end{tablenotes}
+\caption{Performance Of DLACHCIH vs Conventional Heuristics}
+\end{threeparttable}
+\end{table}
+
+In the research of TSP, any gains are a great accomplishment to theorists, and the difference is better than expected. It proved the project motivation that a look-ahead design can be used to get a better solution result at the cost of computational performance.
+
+DLACHCIH was only 7.2345\% off of the exact solutions to TSPLIB(Table\ref{tab:TSPLibResult}), which proves it could be used as valuable inputs as the starting solution to the Concorde TSP Solver(Section\ref{Concorde}). Practitioners particularly care about optimal solutions for the time-saving benefits gained by providing a better lower bound for the TSP Concorde Solver. The time complexity has been thoroughly evaluated at Big O of $O(n^5)$, but a more practical complexity of $n^3$ is realistic(Figure\ref{chart:depth}), which is in line with other heuristics. The algorithms presented in this report are suitable replacements for CIH and classical heuristic; however, they should not be used in real-world use cases(explained below).
+
+Software engineering principles and advanced designs(Section\ref{sec:system}) have been applied to all areas of the codebase to solve the project's needs. Essential challenges in C++(Section\ref{design}) and features(Section\ref{Implementation}) have been solved to ensure the validity of the work. Careful consideration into its development with the use of waterfall project management(Section\ref{waterfall}) and extensive value boundary unit testing(Section\ref{sec:unittesting}) ensured the project's success. The software is robust, interoperable, and highly efficient, is valuable in benchmarking research. Multiple aims(Table\ref{tab:functionalreq}) have been asked for to provide validity and functionality to the project, which have been solved with extensive continuous development over eight months of work. The core C++ template library is optimised, functional, and easily supports various configurations. It could be configured in 96 unique setups, but only seven were evaluated because of a lack of computational resources. 
+
+Most important was the in-depth research(Section\ref{lit}) into the Travelling Salesman Problem and algorithmic design. Using the proper methodology(Section\ref{method}) to approach a meaningful and unbiased evaluation(Section\ref{sec:eval}) was crucial. The evaluation draws many valuable conclusions about the time complexity and solution quality. Even after solving 114,000 TSP problems, it was not as in-depth as it could have been due to the lengthy run times on the available hardware that the project had to supply itself.
+
+Referring back to the aims(Section\ref{sec:aims}) laid out for this report, each goal has been achieved:
+\begin{enumerate}
+  \item SLACIH and DLACIH have been designed, implemented, and tested. Both run in polynomial time and are based upon the Cheapest Insertion Heuristic.
+  \item A testing framework has been built that records distance \& time fairly for every TSP algorithm. Empirical testing and ubiquitous TSPLIB are used for objective data collection against other heuristic and exact solutions.
+  \item A sizeable and intricate system for fulfilling many needs with interoperability in mind. Multiple algorithms can be run with no crashes or faults.
+\end{enumerate}
+
+The algorithms presented in this report should not be used for real-world cases; it was purely researched to explore the possibility of improving greedy algorithms. It was known before the project that no technological advancements would be made due to the fierce research focus on the Travelling Salesman Problem. The current leading benchmarking heuristic, Lin-Kernigham Heuristic(LKH)\cite{Lin1973}, supersedes this research. Their heuristic runs in $O(n^3)$ and achieves a solution within 0.5\% of an exact solution\cite{HELSGAUN2000106}. However, the aim of this project was to improve upon classical heuristics and prove that a look-ahead design is beneficial to the Cheapest Insertion Heuristic, which has been the case.
+
+\subsection{Future Work}
+
+With unlimited resources, I would be able to do the following addition of multi-threaded and high-performance computing features to the algorithm. The algorithm's iterative nature allows for parallelisation at multiple stages, and with libraries like OpenMP\cite{openmp2023}, development would be quick and easy. The difficulty lies in having the hardware and time required to gather the large amount of data needed.
+
+Although DLACHCIH matched the best result of SLACHCIH(Table\ref{tab:DistanceResult}), this was only done with the simplest design for doing dynamic look-ahead. Gradient descent was used to optimise DLACHCIH but was far from optimally implemented and had room for improvement. Other AI techniques(two-stage neural networks) could be used to evaluate the best depth and explore the different designs proposed in Section\ref{Dynamic}, specifically the adaptive dynamic look-ahead, which would almost certainly see better results.
+
+A significant reason for the research into heuristics is the use as a starting solution for the Concorde TSP Solver. Attaching the Concorde API to the code base and measuring the timing difference between LKH would provide more meaningful research to practitioners, but would require building a system to the University of Waterloo's specifications.
+
+The algorithm design is challenging to follow intuitively, and the static GUI outputs and low graphic fidelity could be improved to help illustrate the design. Applying animation would be a worthwhile addition to the project, but would present a difficult challenge.
+
+\subsection{Closing Remark}
+
+I am proud of the work I produced; it has expanded my knowledge, skills, and work ethics. I want to thank my supervisor, Dr Rajish Chitnis, for his constant support and guidance in the project. Also, I want to thank my family and friends for their support. 
